@@ -2,18 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
-import 'package:freezlotto/screens/home_screen.dart';
 
-String _Name,_Phone,_Reference,_Code;
-final TextStyle style = TextStyle(color: SubHeadTextColor,fontWeight: FontWeight.normal,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
+final TextStyle style = TextStyle(color: white,fontWeight: FontWeight.w700,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(color: SubHeadTextColor,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
 
-class LoginScreen extends StatefulWidget{
+class HomeScreen extends StatefulWidget{
 
   @override
-  _LoginScreenState createState() => new _LoginScreenState();
+  _HomeScreenState createState() => new _HomeScreenState();
   }
-class _LoginScreenState extends State<LoginScreen>{
+class _HomeScreenState extends State<HomeScreen>{
 
   @override
   void initState(){
@@ -25,7 +23,35 @@ class _LoginScreenState extends State<LoginScreen>{
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: new PreferredSize(
+        child: new Container(
+          padding: new EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top
+          ),
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/rectangle_33.png'),
+                  fit: BoxFit.cover),
+          ),
+        ),
+        preferredSize: new Size(
+            MediaQuery.of(context).size.width,
+            100.0
+        ),
+      ),
       backgroundColor: white,
+      bottomNavigationBar: Container(
+        height: 73,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight:Radius.circular(16) ),
+            image: DecorationImage(
+                image: AssetImage('assets/images/rectangle_33.png'),
+                fit: BoxFit.cover),
+          ),
+        child: Center(child: Text('GIFT BOARD',style: style,)),
+      ),
       body:
       getFullView(),
 
@@ -39,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen>{
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            getTopContainer(),
+            // getTopContainer(),
             getMiddleContainer(),
             getBottomContainer(),
             SizedBox(height: 60,)
@@ -49,16 +75,21 @@ class _LoginScreenState extends State<LoginScreen>{
     );
   }
   Widget getTopContainer(){
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(top:72),
-        height:172,
-        width: 172,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/bg_icon.png'),
-              fit: BoxFit.cover),
-        ),
+    return Container(
+      height:150,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
+        image: DecorationImage(
+            image: AssetImage('assets/images/rectangle_33.png'),
+            fit: BoxFit.cover),
+      ),
+      child: TabBar(
+        tabs: [
+          Tab(icon: Icon(Icons.flight)),
+          Tab(icon: Icon(Icons.directions_transit)),
+          Tab(icon: Icon(Icons.directions_car)),
+        ],
       ),
     );
   }
@@ -82,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen>{
                   image: AssetImage('assets/images/rectangle_3.png'),
                   fit: BoxFit.cover),
             ),
-            child: nameField,
+
           ),
           Padding(
             padding: const EdgeInsets.only(top: 15),
@@ -98,10 +129,10 @@ class _LoginScreenState extends State<LoginScreen>{
             child:Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width:35,child: countryCodeField),
+                SizedBox(width:35,),
                 SizedBox(height:25,width: 1,child: VerticalDivider(width: 1,color:Colors.black.withOpacity(0.3))),
                 SizedBox(width:MediaQuery.of(context).size.width-100,
-                    child: phoneField),
+                   ),
               ],
             ),
           ),
@@ -120,10 +151,10 @@ class _LoginScreenState extends State<LoginScreen>{
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width:35,child: countryCodeField),
+                SizedBox(width:35,),
                 SizedBox(height:25,width: 1,child: VerticalDivider(width: 1,color:Colors.black.withOpacity(0.3))),
                 SizedBox(width:MediaQuery.of(context).size.width-132,
-                    child: referenceField),
+                   ),
                 SizedBox(
                   width: 36,
                   height: 46,
@@ -143,22 +174,16 @@ class _LoginScreenState extends State<LoginScreen>{
               ],
             ),
           ),
-          InkWell(
-            onTap: (){
-              Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-            },
-            child: Container(
-              height: 43,
-              margin: EdgeInsets.only(left: 45,right:45,top: 20),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/images/rectangle_10.png'),
-                    fit: BoxFit.cover),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(child: Text('SUBMIT',style:TextStyle(fontSize: 15,color:white,fontWeight:FontWeight.w500,fontFamily: REGULAR_FONT,letterSpacing: 1.5),)),
+          Container(
+            height: 43,
+            margin: EdgeInsets.only(left: 45,right:45,top: 20),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/rectangle_10.png'),
+                  fit: BoxFit.cover),
+              borderRadius: BorderRadius.circular(5),
             ),
+            child: Center(child: Text('SUBMIT',style:TextStyle(fontSize: 15,color:white,fontWeight:FontWeight.w500,fontFamily: REGULAR_FONT,letterSpacing: 1.5),)),
           )
         ],
       ),
@@ -237,135 +262,14 @@ class _LoginScreenState extends State<LoginScreen>{
       ),
     );
   }
-
-  final nameField = TextFormField(
-    obscureText: false,
-    onSaved: (value) {
-      _Name = value;
-    },
-    style: style,
-    validator: (value) {
-      if (value.trim().isEmpty) {
-        return 'This field is required';
-        // } else if (!RegExp(
-        //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        //     .hasMatch(value)) {
-        //   return 'Invalid email';
-      } else {
-        return null;
-      }
-    },
-    maxLines:2,
-    minLines: 1,
-    keyboardType: TextInputType.multiline,
-    textInputAction: TextInputAction.newline,
-
-    decoration: InputDecoration(
-      contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      hintText: "Sarath V",
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-    ),
-  ); 
-  final phoneField = TextFormField(
-    obscureText: false,
-    onSaved: (value) {
-      _Phone = value;
-    },
-    style: style,
-    validator: (value) {
-      if (value.trim().isEmpty) {
-        return 'This field is required';
-        // } else if (!RegExp(
-        //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        //     .hasMatch(value)) {
-        //   return 'Invalid email';
-      } else {
-        return null;
-      }
-    },
-    maxLines: 1,
-    minLines: 1,
-    keyboardType: TextInputType.multiline,
-    textInputAction: TextInputAction.newline,
-    decoration: InputDecoration(
-      contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      hintText: "987456321",
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-      
-    ),
-  );
-  final countryCodeField = TextFormField(
-    obscureText: false,
-    onSaved: (value) {
-      _Code = value;
-    },
-    style: style,
-    validator: (value) {
-      if (value.trim().isEmpty) {
-        return 'This field is required';
-        // } else if (!RegExp(
-        //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        //     .hasMatch(value)) {
-        //   return 'Invalid email';
-      } else {
-        return null;
-      }
-    },
-    maxLines: 1,
-    minLines: 1,
-    keyboardType: TextInputType.number,
-    textInputAction: TextInputAction.done,
-    decoration: InputDecoration(
-      contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      hintText: "91",
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-
-    ),
-  );
-  final referenceField = TextFormField(
-    obscureText: false,
-    onSaved: (value) {
-      _Reference = value;
-    },
-    style: style,
-    validator: (value) {
-      if (value.trim().isEmpty) {
-        return 'This field is required';
-        // } else if (!RegExp(
-        //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        //     .hasMatch(value)) {
-        //   return 'Invalid email';
-      } else {
-        return null;
-      }
-    },
-    maxLines: 1,
-    minLines: 1,
-    keyboardType: TextInputType.multiline,
-    textInputAction: TextInputAction.newline,
-    decoration: InputDecoration(
-      contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      hintText: "987456321",
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-      // suffixIcon: Image.asset('assets/images/gradient_circle')
-    ),
-  );
-
+  Widget getTabs(){
+    return TabBarView(
+        children: [
+        Icon(Icons.flight, size: 350),
+    Icon(Icons.directions_transit, size: 350),
+    Icon(Icons.directions_car, size: 350),
+    ]
+    );
+  }
 
 }
