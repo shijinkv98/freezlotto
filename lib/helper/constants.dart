@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:ui';
 
 
@@ -16,3 +15,10 @@ const APP_TAG = "DRIVER_APP";
 //Color Related
 
 const Color primaryTextColor = const Color(0xFF929292);
+const Color BoldTextColor = const Color(0xFF474747);
+const Color HeadTextColor = const Color(0xFF3F3F3F);
+const Color SubHeadTextColor = const Color(0xFF929292);
+const Color white = const Color(0xFFFFFFFF);
+const Color background = const Color(0xFFE5E5E5);
+const Color boxLoginColor = const Color(0xFFEFEFEF);
+const Color dividerColor = const Color(0xFF000000);

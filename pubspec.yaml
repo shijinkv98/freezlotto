@@ -47,6 +47,34 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  fonts:
+    - family: black_font
+      fonts:
+        - asset: fonts/black_font.ttf
+    - family: bold_font
+      fonts:
+        - asset: fonts/bold_font.ttf
+    - family: extra_bold_font
+      fonts:
+        - asset: fonts/extra_bold_font.ttf
+    - family: extra_light_font
+      fonts:
+        - asset: fonts/extra_light_font.ttf
+    - family: light_font
+      fonts:
+        - asset: fonts/light_font.ttf
+    - family: medium_font
+      fonts:
+        - asset: fonts/medium_font.ttf
+    - family: regular_font
+      fonts:
+        - asset: fonts/regular_font.ttf
+    - family: semi_bold_font
+      fonts:
+        - asset: fonts/semi_bold_font.ttf
+    - family: thin_font
+      fonts:
+        - asset: fonts/thin_font.ttf
 
   uses-material-design: true
   assets:

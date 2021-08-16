@@ -1,0 +1,9 @@
+const String FONT_BOLD="bold_font";
+const String BLACK_FONT="black_font";
+const String EXTRA_BOLD_FONT="extra_bold_font";
+const String EXTRA_LIGHT_FONT="extra_light_font";
+const String LIGHT_FONT="light_font";
+const String MEDIUM_FONT="medium_font";
+const String REGULAR_FONT="regular_font";
+const String SEMI_BOLD_FONT="semi_bold_font";
+const String THIN_FONT="thin_font";
