@@ -1,0 +1,299 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:freezlotto/helper/constants.dart';
+import 'package:freezlotto/helper/font_styles.dart';
+
+final TextStyle style = TextStyle(color: white,fontWeight: FontWeight.w700,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
+final TextStyle style2 = TextStyle(color:textColor,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
+
+class HomeScreenVideo extends StatefulWidget{
+
+  @override
+  _HomeScreenVideoState createState() => new _HomeScreenVideoState();
+  }
+class _HomeScreenVideoState extends State<HomeScreenVideo>{
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: new PreferredSize(
+          child: new Container(
+            padding: new EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top
+            ),
+            decoration: new BoxDecoration(
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/rectangle_33.png'),
+                    fit: BoxFit.cover),
+            ),
+
+            child:Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 10),
+                Text('FREEZLOTTO',style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: SEMI_BOLD_FONT,letterSpacing: 2),),
+                SizedBox(height: 20),
+                Container(
+                  height: 40,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 25,right: 25),
+                    child: TabBar(
+                      unselectedLabelColor: white,
+                      isScrollable: false,
+                      labelColor: Colors.black,
+                      labelStyle: style2,
+
+                      indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: white),
+                      tabs: [
+
+                        Tab(
+                          child: Container(
+                          height: 40,
+                          decoration:BoxDecoration(
+                          border: Border.all(color: white),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+
+                    ),
+                          child: Center(child: Text('Home',)),)),
+                        Tab(child: Container(
+                          height: 40,
+                          decoration:BoxDecoration(
+                              border: Border.all(color: white),
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+
+                          ),child: Center(child: Text('Newsfeed',)),)),
+                        Tab(child: Container(
+                          height: 40,
+                          decoration:BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                            border: Border.all(color: white),
+                          ),child: Center(child: Text('Gallery',)),)),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20,)
+              ],
+            ),
+          ),
+          preferredSize: new Size(
+              MediaQuery.of(context).size.width,
+              125.0
+          ),
+        ),
+
+        backgroundColor: white,
+        bottomNavigationBar: Container(
+          height: 73,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight:Radius.circular(16) ),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/rectangle_33.png'),
+                  fit: BoxFit.cover),
+            ),
+          child: Center(child: Text('GIFT BOARD',style: style,)),
+        ),
+        body:
+        getFullView(),
+
+      ),
+    );
+  }
+
+  Widget getFullView() {
+    return TabBarView(
+      children: [
+        getMiddleContainer(),
+        getMiddleContainer(),
+        getMiddleContainer(),
+        // newsfeedPage();
+        // gallery();
+      ],
+    );
+
+  }
+  Widget getMiddleContainer(){
+    return SingleChildScrollView(
+      child: Container(
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 300,
+              child:
+              Stack(
+                children: <Widget>[
+                  Container(
+                    margin:EdgeInsets.only(left:30,right:30,top: 50),
+                    width: MediaQuery.of(context).size.width,
+                    height: 221,
+                    decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(23))),
+                    child: Image.asset('assets/images/probg.png',fit: BoxFit.fill,),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(margin:EdgeInsets.only(right: 35),height: 45,width:45,
+                    decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(60)),
+                    image: DecorationImage(
+                          image: AssetImage('assets/images/play.png'),
+                          fit: BoxFit.cover),
+
+                    ))),
+
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(margin:EdgeInsets.only(right: 35),height: 65,width:65,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
+                        color:flottingButtonColor,
+                      ),
+
+                      child:
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('8',style: TextStyle(color:flottingTextColor,fontFamily: MEDIUM_FONT,fontWeight: FontWeight.w400,fontSize: 22),),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Image.asset('assets/images/Vector.png',width: 30.83,height: 20.83,),
+                          ),
+                        ],
+                      ),                  ),
+                  ),
+
+
+                ], //<Widget>[]
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 83,
+              margin: EdgeInsets.only(left: 30,right: 30,top: 30),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/rectangle_10.png'),
+                      fit: BoxFit.cover),
+                ),
+              child: Center(child: Text('Click here to Upload Advertisement',style: style,)),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 67,
+              margin: EdgeInsets.only(left: 30,right: 30,top: 24),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Color(0xFFB1B1B1),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/rectangle_dotted.png',),
+                    fit: BoxFit.cover),
+              ),
+              child: Center(child: Container(
+                  width: MediaQuery.of(context).size.width-61.5,
+                  height: 65.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: white,
+
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(left: 26),
+                          width:30,height: 30,child: Image.asset('assets/images/thumb.png',color: iconColor,fit: BoxFit.fill,)),
+                      Container(
+                          margin: EdgeInsets.only(left: 14),
+                          width:MediaQuery.of(context).size.width-140,child: Text('Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.',style: style2,)),
+                    ],
+                  ))),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 67,
+              margin: EdgeInsets.only(left: 30,right: 30,top: 15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Color(0xFFB1B1B1),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/rectangle_dotted.png',),
+                    fit: BoxFit.cover),
+              ),
+              child: Center(child: Container(
+                  width: MediaQuery.of(context).size.width-61.5,
+                  height: 65.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: white,
+
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(left: 26),
+                          width:30,height: 30,child: Image.asset('assets/images/mark.png',color: iconColor,fit: BoxFit.fill,)),
+                      Container(
+                          margin: EdgeInsets.only(left: 14),
+                          width:MediaQuery.of(context).size.width-140,child: Text('Only funny and happy videos within 10 minutes will be considered.',style: style2,)),
+                    ],
+                  ))),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 67,
+              margin: EdgeInsets.only(left: 30,right: 30,top: 15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Color(0xFFB1B1B1),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/rectangle_dotted.png',),
+                    fit: BoxFit.cover),
+              ),
+              child: Center(child: Container(
+                  width: MediaQuery.of(context).size.width-61.5,
+                  height: 65.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: white,
+
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(left: 26),
+                          width:30,height: 30,child: Image.asset('assets/images/close.png',color: iconColor,fit: BoxFit.fill,)),
+                      Container(
+                          margin: EdgeInsets.only(left: 14),
+                          width:MediaQuery.of(context).size.width-140,child: Text('Accounts that post sex and hate contents will be banned.',style: style2,)),
+                    ],
+                  ))),
+            ),
+            SizedBox(height: 24)
+
+
+          ],
+        ),
+      ),
+    );
+  }
+
+}

@@ -22,3 +22,9 @@ const Color white = const Color(0xFFFFFFFF);
 const Color background = const Color(0xFFE5E5E5);
 const Color boxLoginColor = const Color(0xFFEFEFEF);
 const Color dividerColor = const Color(0xFF000000);
+const Color flottingButtonColor = const Color(0xFF698aff);
+const Color flottingTextColor = const Color(0xFFFFFEFE);
+const Color flottingRedTextColor = const Color(0xFFFA5252);
+const Color iconColor = const Color(0xFF868686);
+const Color textColor = const Color(0xFF484848);
+

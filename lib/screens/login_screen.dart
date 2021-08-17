@@ -128,7 +128,8 @@ class _LoginScreenState extends State<LoginScreen>{
                   width: 36,
                   height: 46,
                   child: Center(
-                    child: Stack(
+                    child:
+                    Stack(
                       children: <Widget>[
                         SizedBox(height: 35,width: 35,
                           child: Center(child: Image.asset('assets/images/gradient_circle.png',fit: BoxFit.fill,)),),
