@@ -5,6 +5,10 @@ import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_screen_red.dart';
 import 'package:freezlotto/screens/newsfeed_screen.dart';
 
+import 'gallery_screen.dart';
+import 'home_page_screen.dart';
+import 'home_screen_video.dart';
+
 final TextStyle style = TextStyle(color: white,fontWeight: FontWeight.w700,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 
@@ -24,106 +28,28 @@ class _HomeScreenState extends State<HomeScreen>{
   @override
   Widget build(BuildContext context) {
 
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: new PreferredSize(
-          child: new Container(
-            padding: new EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top
-            ),
-            decoration: new BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
-                image: DecorationImage(
-                    image: AssetImage('assets/images/rectangle_33.png'),
-                    fit: BoxFit.cover),
-            ),
-
-            child:Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: 10),
-                Text('FREEZLOTTO',style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: SEMI_BOLD_FONT,letterSpacing: 2),),
-                SizedBox(height: 20),
-                Container(
-                  height: 40,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 25,right: 25),
-                    child: TabBar(
-                      unselectedLabelColor: white,
-                      isScrollable: false,
-                      labelColor: Colors.black,
-                      labelStyle: style2,
-
-                      indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: white),
-                      tabs: [
-
-                        Tab(
-                          child: Container(
-                          height: 40,
-                          decoration:BoxDecoration(
-                          border: Border.all(color: white),
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-
-                    ),
-                          child: Center(child: Text('Home',)),)),
-                        Tab(child: Container(
-                          height: 40,
-                          decoration:BoxDecoration(
-                              border: Border.all(color: white),
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
-
-                          ),child: Center(child: Text('Newsfeed',)),)),
-                        Tab(child: Container(
-                          height: 40,
-                          decoration:BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(color: white),
-                          ),child: Center(child: Text('Gallery',)),)),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20,)
-              ],
-            ),
-          ),
-          preferredSize: new Size(
-              MediaQuery.of(context).size.width,
-              125.0
-          ),
-        ),
-        backgroundColor: white,
-        body:
-        getFullView(),
-
-      ),
-    );
+    return getTabController(context,getHOMEpage(),0);
   }
-
-  Widget getFullView() {
+  Widget getHOMEpage() {
     return TabBarView(
       children: [
-        homePage(),
+        HomePageScreen(),
         NewsFeedScreen(),
-        homePage(),
-        // newsfeedPage();
-        // gallery();
+        GalleryScreen(),
       ],
     );
 
   }
+
   Widget homePage(){
     return InkWell(
       onTap: (){
-        Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreenRed()),
+        Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreenVideo()),
         );
 
       },
-      child: Container(
+      child:
+      Container(
          height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [

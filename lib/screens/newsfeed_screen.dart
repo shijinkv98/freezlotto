@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/screens/home_screen_video.dart';
+import 'package:freezlotto/screens/upload_news_feeds.dart';
 
 final TextStyle style = TextStyle(color: white,fontWeight: FontWeight.w700,fontFamily: SEMI_BOLD_FONT,fontSize: 22,letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(color:textColor,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
@@ -30,7 +32,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen>{
   }
 
   Widget getFullView() {
-    return Column(
+    return
+      Column(
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
@@ -50,20 +53,27 @@ class _NewsFeedScreenState extends State<NewsFeedScreen>{
                 padding: const EdgeInsets.only(left: 30),
                 child: Text('Rs. 25000',style: style),
               ),
-              Container(
-                width: 80,
-                height: 40,
-                margin: EdgeInsets.only(right: 15),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/rectangle_8.png'),
-                        fit: BoxFit.cover)
-                ),
-                child: Container(
-                    width: 16,
-                    height: 13,
-                    child:Image(image: AssetImage('assets/images/right.png'))
-                  // Image.asset('assets/images/right.png',fit: BoxFit.fitWidth,width: 16,height: 13,)
+              InkWell(
+                onTap: (){
+    Navigator.push(context,MaterialPageRoute(builder: (context) => UploadNewsFeeds()),
+    );
+    },
+
+    child: Container(
+                  width: 80,
+                  height: 40,
+                  margin: EdgeInsets.only(right: 15),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/rectangle_8.png'),
+                          fit: BoxFit.cover)
+                  ),
+                  child: Container(
+                      width: 16,
+                      height: 13,
+                      child:Image(image: AssetImage('assets/images/right.png'))
+                    // Image.asset('assets/images/right.png',fit: BoxFit.fitWidth,width: 16,height: 13,)
+                  ),
                 ),
               )
             ],
