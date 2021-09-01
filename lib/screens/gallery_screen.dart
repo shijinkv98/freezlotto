@@ -64,97 +64,100 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton: ,
       body: getFullView(),
     );
   }
 
   Widget getFullView() {
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 108,
-          margin: EdgeInsets.only(left: 30, right: 30, top: 30),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(14)),
-            image: DecorationImage(
-                image: AssetImage('assets/images/rectangle_10.png'),
-                fit: BoxFit.cover),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 27, right: 27),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Account Money', style: style2),
-                    Text('Rs. 25000', style: style)
-                  ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 108,
+            margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(14)),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/rectangle_10.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 27, right: 27),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Account Money', style: style2),
+                      Text('Rs. 25000', style: style)
+                    ],
+                  ),
                 ),
-              ),
-              Divider(height: 1, color: white),
-              Padding(
-                padding: const EdgeInsets.only(left: 27, right: 27),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Account Prize', style: style2),
-                    Container(
-                       width: 135,
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: const Icon(Icons.keyboard_arrow_down_sharp,color: white,),
-                        iconSize: 24,
-                        elevation: 5,
-                        // style: style,
-                        isDense: true,
-                        underline: Container(
-                          height: 2,
-                          color: Colors.transparent,
+                Divider(height: 1, color: white),
+                Padding(
+                  padding: const EdgeInsets.only(left: 27, right: 27),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Account Prize', style: style2),
+                      Container(
+                         width: 135,
+                        child: DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: const Icon(Icons.keyboard_arrow_down_sharp,color: white,),
+                          iconSize: 24,
+                          elevation: 5,
+                          // style: style,
+                          isDense: true,
+                          underline: Container(
+                            height: 2,
+                            color: Colors.transparent,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                            });
+                          },
+                          items: <String>['Laptop', 'Television', 'Smartphone', 'WashinMachine','Furniture','Refrigerator','Sports Cycle','Air Conditioner']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownValue = newValue;
-                          });
-                        },
-                        items: <String>['Laptop', 'Television', 'Smartphone', 'WashinMachine','Furniture','Refrigerator','Sports Cycle','Air Conditioner']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        getMiddleContainer(),
-        Container(
-          height: 49,
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.only(left: 55, right: 55, top: 73),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            image: DecorationImage(
-                image: AssetImage('assets/images/rectangle_10.png'),
-                fit: BoxFit.cover),
-          ),
-          child: Center(
-              child: Text(
-            "ACTIVITY LOG",
-            style: style3,
-          )),
-        )
-      ],
+          getMiddleContainer(),
+          Container(
+            height: 49,
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(left: 55, right: 55, top: 50,bottom: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/rectangle_10.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Center(
+                child: Text(
+              "ACTIVITY LOG",
+              style: style3,
+            )),
+          )
+        ],
+      ),
     );
   }
 
@@ -165,14 +168,18 @@ class _GalleryScreenState extends State<GalleryScreen> {
     return Container(
       margin: EdgeInsets.only(left: 33, right: 33, top: 33),
       child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 150,
-              childAspectRatio: 1.0,
+          itemCount: 9,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisExtent:110 ,
+              childAspectRatio:0.8,
               mainAxisSpacing: 9,
               crossAxisSpacing: 9),
           semanticChildCount: 3,
-          itemCount: 9,
+
+
           shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext ctx, index) {
             return _itemsBuilder();
           }),
@@ -181,6 +188,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   Widget _itemsBuilder() {
     return Container(
+
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           image: new DecorationImage(

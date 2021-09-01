@@ -32,7 +32,39 @@ const Color flottingTextColor = const Color(0xFFFFFEFE);
 const Color flottingRedTextColor = const Color(0xFFFA5252);
 const Color iconColor = const Color(0xFF868686);
 const Color textColor = const Color(0xFF484848);
-final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
+final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
+
+BoxDecoration buttongradient= BoxDecoration(
+  gradient:  LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [0.1, 0.5, 0.9],
+    colors: [
+      Color(0xFF1FA2FF),
+      Color(0xFF12D8FA),
+      Color(0xFFA6FFE6),
+    ],
+  ),
+  borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight:Radius.circular(16) ),
+
+);
+BoxDecoration bggradient= BoxDecoration(
+  gradient:  LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [0.1, 0.5, 0.9],
+    colors: [
+      Color(0xFF1FA2FF),
+      Color(0xFF12D8FA),
+      Color(0xFFA6FFE6),
+    ],
+  ),
+  borderRadius: BorderRadius.only(topLeft: Radius.circular(-19),
+      topRight: Radius.circular(50.78),
+      bottomRight:Radius.circular(99),
+      bottomLeft: Radius.circular(90)
+  ),
+);
 
 Widget getTabController(BuildContext context,Widget page,int number){
   return DefaultTabController(
@@ -99,13 +131,13 @@ Widget getTabController(BuildContext context,Widget page,int number){
                   ),
                 ),
               ),
-              SizedBox(height: 20,)
+              SizedBox(height: 18,)
             ],
           ),
         ),
         preferredSize: new Size(
             MediaQuery.of(context).size.width,
-            125.0
+            130.0
         ),
       ),
       backgroundColor: white,

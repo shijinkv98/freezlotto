@@ -39,70 +39,73 @@ class _NewsFeedScreenState extends State<HomePageScreen>{
       child:
       Container(
         height: MediaQuery.of(context).size.height,
+
         child: Stack(
           children: [
             Align(
+              alignment: Alignment.center,
+              child:
+              Container(
+                margin: EdgeInsets.only(bottom: 65),
+                height: MediaQuery.of(context).size.height/2.3,
+                width: MediaQuery.of(context).size.width,
+               child:Image.asset("assets/images/bg.png",fit: BoxFit.fill,),
+
+              ),
+            ),
+            Align(
               alignment: Alignment.topCenter,
               child: Container(
+                margin: EdgeInsets.only(bottom: 65),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child:Stack(
-                  children: <Widget>[
-                    SizedBox(height: MediaQuery.of(context).size.height-263,width: MediaQuery.of(context).size.width,
-                      child: Center(child: Image.asset('assets/images/bg.png',fit: BoxFit.fill,)),),
-                    Container(margin:EdgeInsets.only(bottom:50,top: 40),height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,
-                      child: Stack(
-                        children: [
-                          Align(
-                              alignment:Alignment.topCenter,
-                              child: Image.asset('assets/images/bg_dummy.png',fit: BoxFit.fill,)),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child:Container(
-                              width: 72,
-                              height: 72,
-                              margin: EdgeInsets.only(right: 45,bottom: 40),
-                              child: FloatingActionButton(
-                                onPressed: () {},
-                                child:Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('8',style: TextStyle(color:flottingTextColor,fontFamily: MEDIUM_FONT,fontWeight: FontWeight.w400,fontSize: 22),),
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 10),
-                                      child: Image.asset('assets/images/Vector.png',width: 37,height: 25,),
-                                    ),
-                                  ],
-                                ),
-                                mini: false,
-                                backgroundColor: flottingButtonColor,
-
-                              ),
-                            ) ,
-                          )
-                        ],
-                      ),),
-
-
-                  ], //<Widget>[]
+                child:Container(margin:EdgeInsets.only(bottom:50,top: 40,left: 30,right: 30),
+                     height: MediaQuery.of(context).size.height,
+                     width: MediaQuery.of(context).size.width,
+                     decoration: BoxDecoration(
+                       borderRadius: BorderRadius.all(Radius.circular(31)),
+                       image: DecorationImage(
+                           image: AssetImage('assets/images/bg_dummy.png'),
+                           fit: BoxFit.cover),
+                     ),
                 ),
               ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child:Container(
+                width: 72,
+                height: 72,
+                margin: EdgeInsets.only(right: 45,bottom: 80),
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  child:Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('8',style: TextStyle(color:flottingTextColor,fontFamily: MEDIUM_FONT,fontWeight: FontWeight.w400,fontSize: 22),),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset('assets/images/Vector.png',width: 30,height: 20,),
+                      ),
+                    ],
+                  ),
+                  mini: false,
+                  backgroundColor: flottingButtonColor,
+
+                ),
+              ) ,
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                 height: 73,
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight:Radius.circular(16) ),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/rectangle_33.png'),
-                      fit: BoxFit.cover),
-                ),
+                decoration: buttongradient,
                 child: Center(child: Text('GIFT BOARD',style: style,)),
               ),
-            )
+            ),
+
           ],
         ),
       ),
