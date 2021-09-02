@@ -32,7 +32,11 @@ const Color flottingTextColor = const Color(0xFFFFFEFE);
 const Color flottingRedTextColor = const Color(0xFFFA5252);
 const Color iconColor = const Color(0xFF868686);
 const Color textColor = const Color(0xFF484848);
+const Color settingTitletextColor = const Color(0xFF606060);
+const Color dropdowntextColor = const Color(0xFF656565);
+const Color forwardIconColor = const Color(0xFF35479D);
 final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
+final TextStyle appBarTitle = TextStyle(fontWeight: FontWeight.w500,fontFamily: SEMI_BOLD_FONT,fontSize: 21,letterSpacing: 0.8,color: white);
 
 BoxDecoration buttongradient= BoxDecoration(
   gradient:  LinearGradient(
@@ -48,7 +52,21 @@ BoxDecoration buttongradient= BoxDecoration(
   borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight:Radius.circular(16) ),
 
 );
+BoxDecoration iconGradient = BoxDecoration(
+  borderRadius: BorderRadius.all(Radius.circular(6))   ,
+      gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+  stops: [0.1, 0.5, 0.9],
+       colors: [
+          Color(0xFF1FA2FF),
+          Color(0xFF12D8FA),
+          Color(0xFFA6FFE6),
+   ]
+)
+);
 BoxDecoration bggradient= BoxDecoration(
+  shape: BoxShape.circle,
   gradient:  LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
@@ -59,12 +77,50 @@ BoxDecoration bggradient= BoxDecoration(
       Color(0xFFA6FFE6),
     ],
   ),
-  borderRadius: BorderRadius.only(topLeft: Radius.circular(-19),
-      topRight: Radius.circular(50.78),
-      bottomRight:Radius.circular(99),
-      bottomLeft: Radius.circular(90)
-  ),
+  // borderRadius: BorderRadius.only(topLeft: Radius.circular(-19),
+  //     topRight: Radius.circular(50.78),
+  //     bottomRight:Radius.circular(99),
+  //     bottomLeft: Radius.circular(90)
+  // ),
 );
+Widget getAppBar(BuildContext context,String title,Widget body){
+  return Scaffold(
+
+    appBar: new PreferredSize(
+
+      child:new Container(
+
+      padding: new EdgeInsets.only(
+      top: MediaQuery.of(context).padding.top
+  ),
+  decoration: new BoxDecoration(
+  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
+  image: DecorationImage(
+  image: AssetImage('assets/images/rectangle_33.png'),
+  fit: BoxFit.cover),
+  ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Image.asset('assets/images/back_ios.png',width: 14,height: 23,),
+            )      ,
+            Center(child: Text(title,style: appBarTitle,)),
+            Container(padding: EdgeInsets.only(right: 30),)
+          ],
+        ),
+      ),
+
+      preferredSize: new Size(
+        MediaQuery.of(context).size.width,
+       80.0
+    ),
+    ),
+    body: body,
+  );
+}
 
 Widget getTabController(BuildContext context,Widget page,int number){
   return DefaultTabController(

@@ -41,15 +41,14 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
   }
 
   Widget getMiddleContainer(){
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child:  Container(
-
+    return Container(
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child:  SingleChildScrollView(
+              child: Container(
+                // height: MediaQuery.of(context).size.height,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,9 +69,10 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                           ),
                           Align(
                               alignment: Alignment.center,
-                              child: Container(margin:EdgeInsets.only(right: 35),height: 45,width:45,
+                              child: Container(margin:EdgeInsets.only(right: 0),height: 45,width:45,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(60)),
+                                    shape: BoxShape.circle,
+                                    // borderRadius: BorderRadius.all(Radius.circular(60)),
                                     image: DecorationImage(
                                         image: AssetImage('assets/images/play.png'),
                                         fit: BoxFit.cover),
@@ -81,9 +81,10 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
 
                           Align(
                             alignment: Alignment.bottomRight,
-                            child: Container(margin:EdgeInsets.only(right: 35),height: 65,width:65,
+                            child: Container(margin:EdgeInsets.only(right: 40),height: 70,width:70,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(60)),
+                                shape: BoxShape.circle,
+
                                 color:flottingButtonColor,
                               ),
 
@@ -94,8 +95,8 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                                 children: [
                                   Text('8',style: TextStyle(color:flottingTextColor,fontFamily: MEDIUM_FONT,fontWeight: FontWeight.w400,fontSize: 22),),
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 4),
-                                    child: Image.asset('assets/images/Vector.png',width: 30.83,height: 20.83,),
+                                    padding: const EdgeInsets.only(bottom: 5),
+                                    child: Image.asset('assets/images/Vector.png',width: 30.83,height: 18.83,),
                                   ),
                                 ],
                               ),                  ),
@@ -207,36 +208,31 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                             ],
                           ))),
                     ),
+                    SizedBox(
+                      height: 100,
+
+                    ),
                     // SizedBox(height: 24)
 
 
                   ],
                 ),
               ),
-
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 73,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight:Radius.circular(16) ),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/rectangle_33.png'),
-                      fit: BoxFit.cover),
-                ),
-                child: Center(child: Text('GIFT BOARD',style: style,)),
-              ),
-            )
-          ],
-        ),
-      )
 
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 73,
+              width: MediaQuery.of(context).size.width,
+              decoration: buttongradient,
+              child: Center(child: Text('GIFT BOARD',style: style,)),
+            ),
+          ),
 
-
-
-
+        ],
+      ),
     );
   }
 

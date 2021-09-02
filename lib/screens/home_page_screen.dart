@@ -77,7 +77,8 @@ class _NewsFeedScreenState extends State<HomePageScreen>{
                 width: 72,
                 height: 72,
                 margin: EdgeInsets.only(right: 45,bottom: 80),
-                child: FloatingActionButton(
+                child:
+                FloatingActionButton(
                   onPressed: () {},
                   child:Column(
                     crossAxisAlignment: CrossAxisAlignment.center,

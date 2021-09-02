@@ -44,7 +44,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
   Widget getMiddleContainer(){
     return SingleChildScrollView(
       child: Container(
-        height: MediaQuery.of(context).size.height-100,
+        // height: MediaQuery.of(context).size.height-100,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +170,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
                       ],
                     ))),
               ),
-              // SizedBox(height: 24)
+              SizedBox(height: 24)
 
 
             ],
