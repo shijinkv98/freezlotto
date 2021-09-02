@@ -103,9 +103,14 @@ Widget getAppBar(BuildContext context,String title,Widget body){
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Image.asset('assets/images/back_ios.png',width: 14,height: 23,),
+            InkWell(
+              onTap:(){
+                 Navigator.pop(context);
+      }         ,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Image.asset('assets/images/back_ios.png',width: 14,height: 23,),
+              ),
             )      ,
             Center(child: Text(title,style: appBarTitle,)),
             Container(padding: EdgeInsets.only(right: 30),)
