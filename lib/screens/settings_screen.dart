@@ -4,6 +4,7 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/profile_screen.dart';
+import 'package:freezlotto/screens/switch_to_admin_screen.dart';
 
 import 'newsfeed_screen.dart';
 
@@ -51,13 +52,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfileScreen()),
-                  );
+                nextPagePush(context, ProfileScreen());
                 },
                 child: getContent('assets/images/profile.png', 'Profile')),
-            getContent('assets/images/app.png', 'Switch to admin app'),
+            InkWell(
+                onTap: () {
+                  nextPagePush(context, SwitchToAdminScreen());
+                },
+                child: getContent('assets/images/app.png', 'Switch to admin app')),
             getContent('assets/images/share_white.png', 'Share'),
             getContent('assets/images/about.png', 'About us & ads'),
             getContent('assets/images/terms.png', 'Terms and conditions'),
@@ -94,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         margin: EdgeInsets.only(right: 10),
                         decoration: iconGradient,
                         child: Padding(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Image.asset(
                             assetImage,
                             width: 16,

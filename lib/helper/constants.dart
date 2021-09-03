@@ -10,7 +10,7 @@ import 'package:freezlotto/screens/newsfeed_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const SUCCESS_MESSAGE = "You will be contacted by us very soon.";
-const APP_TAG = "DRIVER_APP";
+const APP_TAG = "FREEEZLOTTO";
 
 // Api related
 // const BASE_URL = "https://2ccart.webdemos.cf/newdemo/api/api_driver/";
@@ -20,6 +20,7 @@ const APP_TAG = "DRIVER_APP";
 
 const Color primaryTextColor = const Color(0xFF929292);
 const Color BoldTextColor = const Color(0xFF474747);
+const Color BoldTextColor2 = const Color(0xFF575757);
 const Color HeadTextColor = const Color(0xFF3F3F3F);
 const Color SubHeadTextColor = const Color(0xFF929292);
 const Color white = const Color(0xFFFFFFFF);
@@ -35,8 +36,11 @@ const Color textColor = const Color(0xFF484848);
 const Color settingTitletextColor = const Color(0xFF606060);
 const Color dropdowntextColor = const Color(0xFF656565);
 const Color forwardIconColor = const Color(0xFF35479D);
+const Color dateColor = const Color(0xFFADADAD);
 final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
 final TextStyle appBarTitle = TextStyle(fontWeight: FontWeight.w500,fontFamily: SEMI_BOLD_FONT,fontSize: 21,letterSpacing: 0.8,color: white);
+
+//Box Decorations Related
 
 BoxDecoration buttongradient= BoxDecoration(
   gradient:  LinearGradient(
@@ -83,6 +87,37 @@ BoxDecoration bggradient= BoxDecoration(
   //     bottomLeft: Radius.circular(90)
   // ),
 );
+BoxDecoration couponOuter= BoxDecoration(
+  gradient:  LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    // stops: [0.1, 0.5, 0.9],
+    colors: [
+      Color(0xFFFFB347),
+      Color(0xFFFFCC33),
+    ],
+  ),
+  borderRadius: BorderRadius.all(Radius.circular(10)),
+);
+BoxDecoration couponInner= BoxDecoration(
+  gradient:  LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    // stops: [0.1, 0.5, 0.9],
+    colors: [
+      Color(0xFFFFCC33),
+      Color(0xFFFFB347),
+    ],
+  ),
+  borderRadius: BorderRadius.all(Radius.circular(10)),
+);
+BoxDecoration couponInnerWhite= BoxDecoration(
+  color: white,
+  borderRadius: BorderRadius.all(Radius.circular(10)),
+);
+
+//Widgets Related
+
 Widget getAppBar(BuildContext context,String title,Widget body){
   return Scaffold(
 
@@ -106,6 +141,7 @@ Widget getAppBar(BuildContext context,String title,Widget body){
             InkWell(
               onTap:(){
                  Navigator.pop(context);
+
       }         ,
               child: Padding(
                 padding: const EdgeInsets.only(left: 30),
@@ -124,9 +160,9 @@ Widget getAppBar(BuildContext context,String title,Widget body){
     ),
     ),
     body: body,
+    backgroundColor: white,
   );
 }
-
 Widget getTabController(BuildContext context,Widget page,int number){
   return DefaultTabController(
     length: 3,
@@ -205,5 +241,19 @@ Widget getTabController(BuildContext context,Widget page,int number){
       body: page,
 
     ),
+  );
+}
+
+//Next Page  Related
+
+void nextPagePush(BuildContext context,Widget nextPage){
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => nextPage),
+  );
+}void nextPagePushReplacement(BuildContext context,Widget nextPage){
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => nextPage),
   );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/screens/coupon_page.dart';
 import 'package:freezlotto/screens/home_screen_video.dart';
 import 'package:freezlotto/screens/settings_screen.dart';
 import 'package:freezlotto/screens/upload_news_feeds.dart';
@@ -78,11 +79,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         height: 72,
         child: FloatingActionButton(
           onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsScreen()),
-              );
-              // getMiddleContainer();
+            nextPagePush(context, SettingsScreen());
             },
 
           child: Container(
@@ -273,40 +270,40 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   Widget _itemsBuilder() {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          image: new DecorationImage(
-            image: new AssetImage("assets/images/rectangle_18.png"),
-            fit: BoxFit.fill,
-          )),
-      child: Container(
-        margin: EdgeInsets.all(4),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            image: new DecorationImage(
-              image: new AssetImage("assets/images/rectangle_21.png"),
-              fit: BoxFit.fill,
-            )),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'DISCOUNT',
-              style: couponDis,
+    return
+      InkWell(
+        onTap: (){
+          nextPagePush(context, CouponScreen());
+        },
+        child: Container(
+        decoration:couponOuter,
+        child: Container(
+          margin: EdgeInsets.all(2),
+          decoration: couponInnerWhite,
+          child: Container(
+            margin: EdgeInsets.all(0.3),
+            decoration: couponInner,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'DISCOUNT',
+                  style: couponDis,
+                ),
+                Text(
+                  'COUPON',
+                  style: couponDis,
+                ),
+                Text(
+                  '30% OFF',
+                  style: redText,
+                ),
+              ],
             ),
-            Text(
-              'COUPON',
-              style: couponDis,
-            ),
-            Text(
-              '30% OFF',
-              style: redText,
-            ),
-          ],
+          ),
         ),
-      ),
-    );
+    ),
+      );
   }
 }
