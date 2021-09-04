@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/screens/aboutus_screen.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
@@ -61,7 +62,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
                 child: getContent('assets/images/app.png', 'Switch to admin app')),
             getContent('assets/images/share_white.png', 'Share'),
-            getContent('assets/images/about.png', 'About us & ads'),
+            InkWell(
+                onTap: () {
+                  nextPagePush(context, AboutUscreen());
+                },
+                child: getContent('assets/images/about.png', 'About us & ads')),
             getContent('assets/images/terms.png', 'Terms and conditions'),
             getContent('assets/images/exit.png', 'Exit'),
           ],

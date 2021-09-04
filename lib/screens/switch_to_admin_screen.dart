@@ -27,14 +27,10 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
     return getAppBar(context, " Switch to Admin App",getBody());
   }
   Widget getBody(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SingleChildScrollView(
-          child: getContentVideo(),
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Container(
+        child: Center(child: getContentVideo()),
+      ),
     );
 }
 
@@ -44,8 +40,9 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
         nextPagePush(context, UploadAdvertisement());
       },
       child: Container(
-        margin: EdgeInsets.only(left: 30,right: 30),
+        margin: EdgeInsets.only(left: 30,right: 30,top: 100,bottom: 20),
         width: MediaQuery.of(context).size.width,
+
         decoration: BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/switchbg.png'),
@@ -112,7 +109,8 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
                   )
                 ],
               ),
-            ),Container(
+            ),
+            Container(
               margin: EdgeInsets.only(top: 13,left: 27,right: 27,bottom: 45),
               width: MediaQuery.of(context).size.width,
               height: 57,
@@ -132,13 +130,17 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 25),
                     child: Icon(Icons.arrow_forward_ios,color: white,size: 15,),
-                  )
+                  ),
+
                 ],
               ),
             ),
+
           ],
         ),
+
       ),
+
     );
   }
 

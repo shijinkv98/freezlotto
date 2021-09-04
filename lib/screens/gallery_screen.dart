@@ -171,7 +171,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
                             primaryColor: Colors.black,
                             accentColor: Colors.white,
                           ),
-                          child: DropdownButton<String>(
+                          child:
+                          DropdownButton<String>(
                             // value: dropdownValue,
                             // style: style,
 

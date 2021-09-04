@@ -37,6 +37,9 @@ const Color settingTitletextColor = const Color(0xFF606060);
 const Color dropdowntextColor = const Color(0xFF656565);
 const Color forwardIconColor = const Color(0xFF35479D);
 const Color dateColor = const Color(0xFFADADAD);
+const Color admin_subtitle = const Color(0xFF757575);
+const Color bubbleColor = const Color(0xFFC4C4C4);
+const Color dropdowndividerColor = const Color(0xFFE5E5E5);
 final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
 final TextStyle appBarTitle = TextStyle(fontWeight: FontWeight.w500,fontFamily: SEMI_BOLD_FONT,fontSize: 21,letterSpacing: 0.8,color: white);
 
@@ -115,9 +118,25 @@ BoxDecoration couponInnerWhite= BoxDecoration(
   color: white,
   borderRadius: BorderRadius.all(Radius.circular(10)),
 );
+BoxDecoration bubble= BoxDecoration(
+  shape: BoxShape.circle,
+  color:bubbleColor
+  // borderRadius: BorderRadius.only(topLeft: Radius.circular(-19),
+  //     topRight: Radius.circular(50.78),
+  //     bottomRight:Radius.circular(99),
+  //     bottomLeft: Radius.circular(90)
+  // ),
+);
 
 //Widgets Related
 
+Widget getBubble(){
+  return Container(
+    margin: EdgeInsets.only(top: 8),
+    height: 8,width: 8,
+    decoration: bubble,
+  );
+}
 Widget getAppBar(BuildContext context,String title,Widget body){
   return Scaffold(
 
@@ -251,7 +270,8 @@ void nextPagePush(BuildContext context,Widget nextPage){
     context,
     MaterialPageRoute(builder: (context) => nextPage),
   );
-}void nextPagePushReplacement(BuildContext context,Widget nextPage){
+}
+void nextPagePushReplacement(BuildContext context,Widget nextPage){
   Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: (context) => nextPage),
