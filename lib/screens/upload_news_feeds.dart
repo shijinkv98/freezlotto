@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/screens/gallery_screen.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 
 import 'newsfeed_screen.dart';
@@ -35,7 +36,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
       children: [
         HomePageScreen(),
         getMiddleContainer(),
-        NewsFeedScreen(),
+        GalleryScreen(),
       ],
     );
 
@@ -53,7 +54,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
                 child: Column(
                   children: [
                     SizedBox(height: 25),
-                    Image.asset('assets/images/newsfeed_icon.png',width: 216,height: 216,),
+                    Image.asset('assets/images/switchupload.png',width: 216,height: 216,),
                     Text('Upload Newsfeed Youtube video',style: style3,),
                     Container(
                       margin: EdgeInsets.only(left: 30,right: 30,top: 19),
@@ -83,13 +84,13 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 67,
-                margin: EdgeInsets.only(left: 30,right: 30,top: 43),
+                margin: EdgeInsets.only(left: 30,right: 30,top: 24),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   color: Color(0xFFB1B1B1),
                   image: DecorationImage(
-                      image: AssetImage('assets/images/rectangle_dotted.png',),
-                      fit: BoxFit.cover),
+                      image: AssetImage('assets/images/dotted.png',),
+                      fit: BoxFit.fill),
                 ),
                 child: Center(child: Container(
                     width: MediaQuery.of(context).size.width-61.5,
@@ -118,8 +119,8 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   color: Color(0xFFB1B1B1),
                   image: DecorationImage(
-                      image: AssetImage('assets/images/rectangle_dotted.png',),
-                      fit: BoxFit.cover),
+                      image: AssetImage('assets/images/dotted.png',),
+                      fit: BoxFit.fill),
                 ),
                 child: Center(child: Container(
                     width: MediaQuery.of(context).size.width-61.5,
@@ -133,7 +134,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
                       children: [
                         Container(
                             margin: EdgeInsets.only(left: 26),
-                            width:30,height: 30,child: Image.asset('assets/images/mark.png',color: iconColor,fit: BoxFit.fill,)),
+                            width:30,height: 30,child: Image.asset('assets/images/notess.png',color: iconColor,fit: BoxFit.fill,)),
                         Container(
                             margin: EdgeInsets.only(left: 14),
                             width:MediaQuery.of(context).size.width-140,child: Text('Only funny and happy videos within 10 minutes will be considered.',style: style2,)),
@@ -148,8 +149,8 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   color: Color(0xFFB1B1B1),
                   image: DecorationImage(
-                      image: AssetImage('assets/images/rectangle_dotted.png',),
-                      fit: BoxFit.cover),
+                      image: AssetImage('assets/images/dotted.png',),
+                      fit: BoxFit.fill),
                 ),
                 child: Center(child: Container(
                     width: MediaQuery.of(context).size.width-61.5,
@@ -163,7 +164,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds>{
                       children: [
                         Container(
                             margin: EdgeInsets.only(left: 26),
-                            width:30,height: 30,child: Image.asset('assets/images/close.png',color: iconColor,fit: BoxFit.fill,)),
+                            width:30,height: 30,child: Image.asset('assets/images/close_round.png',color: iconColor,fit: BoxFit.fill,)),
                         Container(
                             margin: EdgeInsets.only(left: 14),
                             width:MediaQuery.of(context).size.width-140,child: Text('Accounts that post sex and hate contents will be banned.',style: style2,)),

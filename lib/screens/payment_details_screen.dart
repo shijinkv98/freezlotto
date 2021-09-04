@@ -80,7 +80,7 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                     ),
                     Divider(color: white,height: 1,),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15,bottom: 20),
+                      padding: const EdgeInsets.only(top: 15,bottom: 20,left: 10,right: 10),
                       child: Text('Pay money via GPAY, PHONEPE, PAYTM to 6238000694',style: style6,textAlign: TextAlign.center,),
                     )
                   ],

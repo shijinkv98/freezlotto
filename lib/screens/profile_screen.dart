@@ -152,11 +152,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             'assets/images/notes.png'
                           ),width: 15,height: 14,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Text(
-                            '07/05/2021: 3.30PM',
-                            style: style4,
+                        Container(
+                          height: 60,
+                          width: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Text(
+                              '07/05/2021: 3.30PM',
+                              style: style4,
+                            ),
                           ),
                         )
                       ],
@@ -505,11 +509,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               'assets/images/notes.png'
                           ),width: 15,height: 14,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Text(
-                            '07/05/2021: 3.30PM',
-                            style: style4,
+                        Container(
+                          height: 60,
+                          width: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Text(
+                              '07/05/2021: 3.30PM',
+                              style: style4,
+                            ),
                           ),
                         )
                       ],

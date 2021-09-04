@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/aboutus_screen.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
+import 'package:freezlotto/screens/terms_conditions_screen.dart';
 
+import 'login_screen.dart';
 import 'newsfeed_screen.dart';
 
 final TextStyle style = TextStyle(
@@ -61,24 +64,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   nextPagePush(context, SwitchToAdminScreen());
                 },
                 child: getContent('assets/images/app.png', 'Switch to admin app')),
-            getContent('assets/images/share_white.png', 'Share'),
+            InkWell(
+                onTap: () {
+                  share('www.google.com', 'test');
+                },
+                child: getContent('assets/images/share_white.png', 'Share')),
             InkWell(
                 onTap: () {
                   nextPagePush(context, AboutUscreen());
                 },
                 child: getContent('assets/images/about.png', 'About us & ads')),
-            getContent('assets/images/terms.png', 'Terms and conditions'),
-            getContent('assets/images/exit.png', 'Exit'),
+            InkWell(
+                onTap: () {
+                  nextPagePush(context, TermsConditionsScreen());
+                },
+                child: getContent('assets/images/terms.png', 'Terms and conditions')),
+            InkWell(
+                onTap: () {
+                  getAlertLogout(context);
+                  Navigator.pop(context);
+                },
+                child: getContent('assets/images/exit.png', 'Exit')),
           ],
         ),
       ),
     );
   }
 
-  Widget getContent(
-    String assetImage,
-    String title,
-  ) {
+  Widget getContent(String assetImage,String title,) {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Container(
@@ -133,4 +146,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+  Future<void> logout(BuildContext context)
+  async {
+    // SharedPreferences preferences = await SharedPreferences.getInstance();
+    // await preferences.clear();
+    nextPagePushReplacement(context, LoginScreen());
+  }
+  Widget getAlertLogout(BuildContext context){
+    return  showDialog(
+      builder: (context) => AlertDialog(
+        title: Center(child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Logout ?', style:TextStyle(color: textColor,fontSize: 18,fontWeight: FontWeight.bold),),
+            SizedBox(height: 10),
+            Text('Are you sure you want to exit ?' , style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal),)
+          ],
+        )),
+        // content: Center(child: Text('Are you sure you want to exit ?')),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              print("you choose no");
+              Navigator.of(context).pop(false);
+            },
+            child: Text('No',style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal)),
+          ),
+          FlatButton(
+            onPressed: () {
+              logout(context);
+            },
+            child: Text('Yes',style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal)),
+          ),
+        ],
+      ), context: context,
+    ) ??
+        false;
+  }
+
+  Future<void> share(dynamic link, String title) async{
+    await FlutterShare.share(
+      title: 'title 1',
+      text: title,
+      linkUrl: link,
+      chooserTitle: 'chooser title'
+    );
+  }
+
 }
+

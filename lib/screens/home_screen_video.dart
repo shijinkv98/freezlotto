@@ -126,8 +126,8 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Color(0xFFB1B1B1),
                         image: DecorationImage(
-                            image: AssetImage('assets/images/rectangle_dotted.png',),
-                            fit: BoxFit.cover),
+                            image: AssetImage('assets/images/dotted.png',),
+                            fit: BoxFit.fill),
                       ),
                       child: Center(child: Container(
                           width: MediaQuery.of(context).size.width-61.5,
@@ -156,8 +156,8 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Color(0xFFB1B1B1),
                         image: DecorationImage(
-                            image: AssetImage('assets/images/rectangle_dotted.png',),
-                            fit: BoxFit.cover),
+                            image: AssetImage('assets/images/dotted.png',),
+                            fit: BoxFit.fill),
                       ),
                       child: Center(child: Container(
                           width: MediaQuery.of(context).size.width-61.5,
@@ -171,7 +171,7 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                             children: [
                               Container(
                                   margin: EdgeInsets.only(left: 26),
-                                  width:30,height: 30,child: Image.asset('assets/images/mark.png',color: iconColor,fit: BoxFit.fill,)),
+                                  width:30,height: 30,child: Image.asset('assets/images/notess.png',color: iconColor,fit: BoxFit.fill,)),
                               Container(
                                   margin: EdgeInsets.only(left: 14),
                                   width:MediaQuery.of(context).size.width-140,child: Text('Only funny and happy videos within 10 minutes will be considered.',style: style2,)),
@@ -186,8 +186,8 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Color(0xFFB1B1B1),
                         image: DecorationImage(
-                            image: AssetImage('assets/images/rectangle_dotted.png',),
-                            fit: BoxFit.cover),
+                            image: AssetImage('assets/images/dotted.png',),
+                            fit: BoxFit.fill),
                       ),
                       child: Center(child: Container(
                           width: MediaQuery.of(context).size.width-61.5,
@@ -201,7 +201,7 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
                             children: [
                               Container(
                                   margin: EdgeInsets.only(left: 26),
-                                  width:30,height: 30,child: Image.asset('assets/images/close.png',color: iconColor,fit: BoxFit.fill,)),
+                                  width:30,height: 30,child: Image.asset('assets/images/close_round.png',color: iconColor,fit: BoxFit.fill,)),
                               Container(
                                   margin: EdgeInsets.only(left: 14),
                                   width:MediaQuery.of(context).size.width-140,child: Text('Accounts that post sex and hate contents will be banned.',style: style2,)),
