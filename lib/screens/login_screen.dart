@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:freezlotto/helper/api_params.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/notifier/loginnotifier.dart';
 import 'package:freezlotto/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 String _Name,_Phone,_Reference,_Code;
 final TextStyle style = TextStyle(color: SubHeadTextColor,fontWeight: FontWeight.normal,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
@@ -15,10 +18,27 @@ class LoginScreen extends StatefulWidget{
   }
 class _LoginScreenState extends State<LoginScreen>{
 
+  final GlobalKey<FormState> _userNameKey = GlobalKey();
+  final GlobalKey<FormState> _usermobileKey = GlobalKey();
+
+  LoginUpdateNotifier _updateNotifier;
   @override
-  void initState(){
+  void initState() {
+    _updateNotifier =
+        Provider.of<LoginUpdateNotifier>(context, listen: false);
     super.initState();
   }
+  @override
+  void dispose() {
+    _updateNotifier.reset();
+    super.dispose();
+  }
+
+
+  // @override
+  // void initState(){
+  //   super.initState();
+  // }
 
 
   @override
@@ -82,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen>{
                   image: AssetImage('assets/images/rectangle_3.png'),
                   fit: BoxFit.cover),
             ),
-            child: nameField,
+            child: getNameField(),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 15),
@@ -101,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen>{
                 SizedBox(width:35,child: countryCodeField),
                 SizedBox(height:25,width: 1,child: VerticalDivider(width: 1,color:Colors.black.withOpacity(0.3))),
                 SizedBox(width:MediaQuery.of(context).size.width-100,
-                    child: phoneField),
+                    child: getphoneFiled()),
               ],
             ),
           ),
@@ -146,8 +166,13 @@ class _LoginScreenState extends State<LoginScreen>{
           ),
           InkWell(
             onTap: (){
-              Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
+              // Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()),
+              //           );
+              if (_userNameKey.currentState.validate()&&_usermobileKey.currentState.validate()){
+                _userNameKey.currentState.save();
+                _usermobileKey.currentState.save();
+                login(_Name,_Phone,_Reference);
+              }
             },
             child: Container(
               height: 43,
@@ -239,6 +264,43 @@ class _LoginScreenState extends State<LoginScreen>{
     );
   }
 
+  Widget getNameField(){
+    return Form(
+        key: _userNameKey,
+        child: TextFormField(
+          obscureText: false,
+          onSaved: (value) {
+            _Name = value;
+          },
+          style: style,
+          validator: (value) {
+            if (value.trim().isEmpty) {
+              return 'This field is required';
+              // } else if (!RegExp(
+              //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              //     .hasMatch(value)) {
+              //   return 'Invalid email';
+            } else {
+              return null;
+            }
+          },
+          maxLines:2,
+          minLines: 1,
+          keyboardType: TextInputType.multiline,
+          textInputAction: TextInputAction.newline,
+
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+            hintText: "Sarath V",
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+          ),
+        )
+    );
+  }
   final nameField = TextFormField(
     obscureText: false,
     onSaved: (value) {
@@ -270,7 +332,52 @@ class _LoginScreenState extends State<LoginScreen>{
       errorBorder: InputBorder.none,
       disabledBorder: InputBorder.none,
     ),
-  ); 
+  );
+
+
+  Widget getphoneFiled(){
+
+    return Form(
+
+      key: _usermobileKey,
+      child:  TextFormField(
+        obscureText: false,
+        onSaved: (value) {
+          _Phone = value;
+        },
+        style: style,
+        validator: (value) {
+          if (value.trim().isEmpty) {
+            return 'This field is required';
+            // } else if (!RegExp(
+            //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            //     .hasMatch(value)) {
+            //   return 'Invalid email';
+          } else {
+            return null;
+          }
+        },
+        maxLines: 1,
+        minLines: 1,
+        keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.newline,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+          hintText: "987456321",
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+
+        ),
+      ),
+
+    );
+
+  }
+
+
   final phoneField = TextFormField(
     obscureText: false,
     onSaved: (value) {
@@ -367,6 +474,22 @@ class _LoginScreenState extends State<LoginScreen>{
       // suffixIcon: Image.asset('assets/images/gradient_circle')
     ),
   );
+
+
+  Future<void> login(String username,String mobile,String refnumber)
+  async {
+    _updateNotifier.isProgressShown = true;
+
+   Map body = {
+
+     USER_NAME : username,
+     USER_PHONE : mobile,
+     REF_NUM : refnumber
+
+   };
+
+
+  }
 
 
 }

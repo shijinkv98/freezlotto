@@ -3,6 +3,7 @@ import 'dart:io';
 
 
 import 'package:flutter/material.dart';
+import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/network/user.dart';
 import 'package:http/http.dart';
 
@@ -11,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 class ApiCall {
-  static const API_URL = 'BASE_URL';
+  static const API_URL = BASE_URL;
 
   // static final ApiCall _singleton = ApiCall._internal();
   // factory ApiCall() {
@@ -220,8 +221,64 @@ class ApiCall {
     if (json is Iterable) {
       return _fromJsonList<K>(json) as T;
     }
-
- }
+    // else if (T == LoginResponse) {
+    //   return LoginResponse.fromJson(json) as T;
+    // } else if (T == ForgotPasswordResponse) {
+    //   return ForgotPasswordResponse.fromJson(json) as T;
+    // } else if (T == ProfileUpdateResponse) {
+    //   return ProfileUpdateResponse.fromJson(json) as T;
+    // }else if (T == ProfileGetResponse) {
+    //   return ProfileGetResponse.fromJson(json) as T;
+    // } else if (T == VehicleResponse) {
+    //   return VehicleResponse.fromJson(json) as T;
+    // } else if (T == HomeScreenResponse) {
+    //   return HomeScreenResponse.fromJson(json) as T;
+    // }else if (T == DriverNewOrderResponse) {
+    //   return DriverNewOrderResponse.fromJson(json) as T;
+    // }else {
+    //   if (T == OrderAccptResponse) {
+    //     return OrderAccptResponse.fromJson(json) as T;
+    //   }else if (T == CodBalanceResponse) {
+    //     return CodBalanceResponse.fromJson(json) as T;
+    //   }else if (T == OrderDetailsResponse) {
+    //     return OrderDetailsResponse.fromJson(json) as T;
+    //   } else if (T == ReasonForReturnResponse) {
+    //     return ReasonForReturnResponse.fromJson(json) as T;
+    //   } else if (T == DeliveryConfirmResponse) {
+    //     return DeliveryConfirmResponse.fromJson(json) as T;
+    //   }else if (T == NotificationResponse) {
+    //     return NotificationResponse.fromJson(json) as T;
+    //   }else if (T == ProceedResponse) {
+    //     return ProceedResponse.fromJson(json) as T;
+    //   }else if (T == DeliveryPaymentResponse) {
+    //     return DeliveryPaymentResponse.fromJson(json) as T;
+    //   }else if (T == DriverDutyResponse) {
+    //     return DriverDutyResponse.fromJson(json) as T;
+    //   } else if (T == ReportReAssignResponse) {
+    //     return ReportReAssignResponse.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //     // } else if (T == Message) {
+    //     //   return Message.fromJson(json) as T;
+    //   } else {
+    //     showToast("Something went wrong!");
+    //     throw Exception("Unknown class");
+    //     // Future.error(Exception('Unknown class'));
+    //   }
+    // }
+  }
 
   void showToast(String message) {
     if (message == null ||

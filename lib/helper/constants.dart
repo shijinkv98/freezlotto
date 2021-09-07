@@ -13,7 +13,7 @@ const SUCCESS_MESSAGE = "You will be contacted by us very soon.";
 const APP_TAG = "FREEEZLOTTO";
 
 // Api related
-// const BASE_URL = "https://2ccart.webdemos.cf/newdemo/api/api_driver/";
+const BASE_URL = "http://freezelotto.alisonsdemo.online/api/";
 
 
 //Color Related
