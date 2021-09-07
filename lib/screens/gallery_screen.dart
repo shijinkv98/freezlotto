@@ -132,7 +132,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
@@ -144,7 +144,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       SizedBox(
                           width: MediaQuery.of(context).size.width / 3.5,
                           child: Text('Account Money', style: style2)),
-                      SizedBox(width: 30),
+                      // SizedBox(width: 30),
                       Text('Rs. 25000', style: style)
                     ],
                   ),
@@ -154,7 +154,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                   padding: const EdgeInsets.only(
                       left: 27, right: 27, top: 5, bottom: 5),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
@@ -162,9 +162,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
                           child: Text('Account Prize', style: style2)),
                       // SizedBox(width: 45),
                       Container(
-                        margin: EdgeInsets.only(left: 30),
-                        width: 100,
-                        height: 40,
+                        // margin: EdgeInsets.only(left: 30),
+                        padding: EdgeInsets.all(10),
+                        width: MediaQuery.of(context).size.width/2-67,
                         child: Theme(
                           data: new ThemeData(
                             canvasColor: Colors.white,
