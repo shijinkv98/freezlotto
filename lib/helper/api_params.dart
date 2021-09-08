@@ -7,6 +7,6 @@ const String FREE_OR_PAID = "free_or_paid";
 const String DURATION = "duration";
 const String CATEGORY = "category";
 const String FEED = "newsfeed";
-
+const String CUSTOMER_ID = "customerId";
 
 

@@ -3,7 +3,9 @@ import 'dart:io';
 
 
 import 'package:flutter/material.dart';
+import 'package:freezlotto/helper/api_params.dart';
 import 'package:freezlotto/helper/constants.dart';
+import 'package:freezlotto/network/response/loginresponse.dart';
 import 'package:freezlotto/network/user.dart';
 import 'package:http/http.dart';
 
@@ -149,11 +151,10 @@ class ApiCall {
 
   }
 
-
   Future saveUserToken(String usertoken) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //debugPrint('save user resp: $userResponse');
-    bool success = await prefs.setString("drivertoken", usertoken);
+    bool success = await prefs.setString(CUSTOMER_ID, usertoken);
     return success;
   }
   Future saveLoginResponse(String userResponse) async {
@@ -162,10 +163,21 @@ class ApiCall {
     bool success = await prefs.setString('login_response', userResponse);
     return success;
   }
+
+  Future<LoginResponse> getLoginResponse() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user =
+    prefs.getString('login_response') == null ? "" : prefs.getString('login_response');
+    if (user == null || user.trim().isEmpty) {
+      return null;
+    }
+    return LoginResponse.fromJson(json.decode(user == null ? "" : user));
+  }
+
   Future saveUserMobile(String mobile) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //debugPrint('save user resp: $userResponse');
-    bool success = await prefs.setString("mobile", mobile);
+    bool success = await prefs.setString(USER_PHONE, mobile);
     return success;
   }
   Future saveUserName(String userName) async {
@@ -221,9 +233,10 @@ class ApiCall {
     if (json is Iterable) {
       return _fromJsonList<K>(json) as T;
     }
-    // else if (T == LoginResponse) {
-    //   return LoginResponse.fromJson(json) as T;
-    // } else if (T == ForgotPasswordResponse) {
+    else if (T == LoginResponse) {
+      return LoginResponse.fromJson(json) as T;
+    }
+    // else if (T == ForgotPasswordResponse) {
     //   return ForgotPasswordResponse.fromJson(json) as T;
     // } else if (T == ProfileUpdateResponse) {
     //   return ProfileUpdateResponse.fromJson(json) as T;

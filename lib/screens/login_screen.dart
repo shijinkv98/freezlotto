@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/api_params.dart';
+import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/network/ApiCall.dart';
+import 'package:freezlotto/network/response/loginresponse.dart';
 import 'package:freezlotto/notifier/loginnotifier.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -143,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen>{
                 SizedBox(width:35,child: countryCodeField),
                 SizedBox(height:25,width: 1,child: VerticalDivider(width: 1,color:Colors.black.withOpacity(0.3))),
                 SizedBox(width:MediaQuery.of(context).size.width-132,
-                    child: referenceField),
+                    child: getReferenceField()),
                 SizedBox(
                   width: 36,
                   height: 46,
@@ -171,6 +174,9 @@ class _LoginScreenState extends State<LoginScreen>{
               if (_userNameKey.currentState.validate()&&_usermobileKey.currentState.validate()){
                 _userNameKey.currentState.save();
                 _usermobileKey.currentState.save();
+                
+                // print(_Reference);
+                
                 login(_Name,_Phone,_Reference);
               }
             },
@@ -377,6 +383,44 @@ class _LoginScreenState extends State<LoginScreen>{
 
   }
 
+  Widget getReferenceField(){
+
+    return Form(
+        child: TextFormField(
+          obscureText: false,
+          onSaved: (value) {
+            _Reference = value;
+          },
+          style: style,
+          validator: (value) {
+            if (value.trim().isEmpty) {
+              return 'This field is required';
+              // } else if (!RegExp(
+              //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              //     .hasMatch(value)) {
+              //   return 'Invalid email';
+            } else {
+              return null;
+            }
+          },
+          maxLines: 1,
+          minLines: 1,
+          keyboardType: TextInputType.multiline,
+          textInputAction: TextInputAction.newline,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+            hintText: "987456321",
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            // suffixIcon: Image.asset('assets/images/gradient_circle')
+          ),
+        )
+    );
+
+  }
 
   final phoneField = TextFormField(
     obscureText: false,
@@ -479,15 +523,30 @@ class _LoginScreenState extends State<LoginScreen>{
   Future<void> login(String username,String mobile,String refnumber)
   async {
     _updateNotifier.isProgressShown = true;
-
    Map body = {
-
      USER_NAME : username,
      USER_PHONE : mobile,
-     REF_NUM : refnumber
-
+     REF_NUM : refnumber ?? ''
    };
+    ApiCall()
+        .execute<LoginResponse, Null>(LOGIN_URL, body).then((LoginResponse result) {
+      _updateNotifier.isProgressShown = false;
+      // if(result.success==null)
+      // {
+      //   if(result.error!=null)
+      //     ApiCall().showToast(result.error);
+      // }
+      ApiCall().showToast(result.message!=null?result.message:"");
+      if(result.success=="1")
+      {
+        print(result);
+         ApiCall().saveUserToken(result.customerId.toString());
+         ApiCall().saveLoginResponse(result.toJson().toString());
+         ApiCall().saveUserMobile(result.customerMobile);
+        nextPagePush(context, HomeScreen());
+      }
 
+    });
 
   }
 
