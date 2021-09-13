@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezlotto/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:freezlotto/blocs/home_bloc.dart';
 
 import 'notifier/loginnotifier.dart';
 
@@ -20,9 +21,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
 
           providers:[
-            ChangeNotifierProvider(
-              create: (context) => LoginUpdateNotifier(),
-            ),
+         ChangeNotifierProvider(create: (_) => HomeBloc()),
           ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

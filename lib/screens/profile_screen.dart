@@ -49,7 +49,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return getListVideo();
   }
   Widget getListVideo() {
-    return ListView.builder(
+    return
+      ListView.builder(
         itemCount: 1,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),

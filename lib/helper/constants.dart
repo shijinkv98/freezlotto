@@ -3,17 +3,19 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/newsfeed_screen.dart';
+import 'package:freezlotto/screens/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const SUCCESS_MESSAGE = "You will be contacted by us very soon.";
 const APP_TAG = "FREEEZLOTTO";
 
 // Api related
-const BASE_URL = "http://freezelotto.alisonsdemo.online/api/";
+// const BASE_URL = "https://freezelotto.alisonsdemo.online/api/";
 
 
 //Color Related
@@ -297,3 +299,44 @@ void nextPagePushReplacement(BuildContext context,Widget nextPage){
     MaterialPageRoute(builder: (context) => nextPage),
   );
 }
+
+//Shared preference related
+
+Future<String> getAdminPhone() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('mobile_number');
+}
+
+Widget progressBar = InkWell(
+  child: SafeArea(
+    child: Center(
+      child: SizedBox(
+        child: CircularProgressIndicator( valueColor:AlwaysStoppedAnimation<Color>(Colors.red),),
+        width: 60,
+        height: 60,
+      ),
+    ),
+  ),
+);
+Widget errorScreen(String errorTitle) => Center(
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Icon(
+        Icons.error_outline,
+        color: Colors.red,
+        size: 60,
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: Text(errorTitle),
+      )
+    ],
+  ),
+);
+kMoveToLogin(BuildContext context) {
+  Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (BuildContext context) => RegisterScreen()));
+}
+

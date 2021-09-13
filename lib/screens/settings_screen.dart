@@ -9,7 +9,7 @@ import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
 import 'package:freezlotto/screens/terms_conditions_screen.dart';
 
-import 'login_screen.dart';
+import 'register_screen.dart';
 import 'newsfeed_screen.dart';
 
 final TextStyle style = TextStyle(
@@ -150,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
     // await preferences.clear();
-    nextPagePushReplacement(context, LoginScreen());
+    nextPagePushReplacement(context, RegisterScreen());
   }
   Widget getAlertLogout(BuildContext context){
     return  showDialog(

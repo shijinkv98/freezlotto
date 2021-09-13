@@ -5,35 +5,42 @@ import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/network/ApiCall.dart';
-import 'package:freezlotto/network/response/loginresponse.dart';
+import 'package:freezlotto/network/response/register_response.dart';
+import 'package:freezlotto/network/response/response.dart';
 import 'package:freezlotto/notifier/loginnotifier.dart';
 import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/utils/alert_utils.dart';
+import 'package:freezlotto/utils/api_services.dart';
+import 'package:freezlotto/utils/app_utils.dart';
+import 'package:freezlotto/utils/preferences.dart';
 import 'package:provider/provider.dart';
 
-String _Name,_Phone,_Reference,_Code;
 final TextStyle style = TextStyle(color: SubHeadTextColor,fontWeight: FontWeight.normal,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(color: SubHeadTextColor,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
+String _Name,_Phone,_Reference,_Code;
 
-class LoginScreen extends StatefulWidget{
+class RegisterScreen extends StatefulWidget{
 
   @override
-  _LoginScreenState createState() => new _LoginScreenState();
+  _RegisterScreenState createState() => new _RegisterScreenState();
   }
-class _LoginScreenState extends State<LoginScreen>{
+class _RegisterScreenState extends State<RegisterScreen>{
 
   final GlobalKey<FormState> _userNameKey = GlobalKey();
   final GlobalKey<FormState> _usermobileKey = GlobalKey();
+  final GlobalKey<FormState> _userReferenceKey = GlobalKey();
+  bool _isLoading = false;
+  RegisterResponse _signupData = new RegisterResponse();
 
-  LoginUpdateNotifier _updateNotifier;
   @override
   void initState() {
-    _updateNotifier =
-        Provider.of<LoginUpdateNotifier>(context, listen: false);
+    // _updateNotifier =
+    //     Provider.of<LoginUpdateNotifier>(context, listen: false);
     super.initState();
   }
   @override
   void dispose() {
-    _updateNotifier.reset();
+    // _updateNotifier.reset();
     super.dispose();
   }
 
@@ -124,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen>{
                 SizedBox(width:35,child: countryCodeField),
                 SizedBox(height:25,width: 1,child: VerticalDivider(width: 1,color:Colors.black.withOpacity(0.3))),
                 SizedBox(width:MediaQuery.of(context).size.width-100,
-                    child: getphoneFiled()),
+                    child: getphoneField()),
               ],
             ),
           ),
@@ -171,14 +178,15 @@ class _LoginScreenState extends State<LoginScreen>{
             onTap: (){
               // Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()),
               //           );
-              if (_userNameKey.currentState.validate()&&_usermobileKey.currentState.validate()){
-                _userNameKey.currentState.save();
-                _usermobileKey.currentState.save();
-                
+              // if (_userNameKey.currentState.validate()&&_usermobileKey.currentState.validate()){
+              //   _userNameKey.currentState.save();
+              //   _usermobileKey.currentState.save();
+              //   _userReferenceKey.currentState.save();
+
                 // print(_Reference);
-                
-                login(_Name,_Phone,_Reference);
-              }
+                _signupTapped();
+                // login(_Name,_Phone,_Reference);
+              // }
             },
             child: Container(
               height: 43,
@@ -297,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen>{
 
           decoration: InputDecoration(
             contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-            hintText: "Sarath V",
+            hintText: "Enter your Name",
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
@@ -307,44 +315,11 @@ class _LoginScreenState extends State<LoginScreen>{
         )
     );
   }
-  final nameField = TextFormField(
-    obscureText: false,
-    onSaved: (value) {
-      _Name = value;
-    },
-    style: style,
-    validator: (value) {
-      if (value.trim().isEmpty) {
-        return 'This field is required';
-        // } else if (!RegExp(
-        //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        //     .hasMatch(value)) {
-        //   return 'Invalid email';
-      } else {
-        return null;
-      }
-    },
-    maxLines:2,
-    minLines: 1,
-    keyboardType: TextInputType.multiline,
-    textInputAction: TextInputAction.newline,
-
-    decoration: InputDecoration(
-      contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      hintText: "Sarath V",
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-    ),
-  );
 
 
-  Widget getphoneFiled(){
+  Widget getphoneField(){
 
     return Form(
-
       key: _usermobileKey,
       child:  TextFormField(
         obscureText: false,
@@ -365,11 +340,11 @@ class _LoginScreenState extends State<LoginScreen>{
         },
         maxLines: 1,
         minLines: 1,
-        keyboardType: TextInputType.multiline,
+        keyboardType: TextInputType.phone,
         textInputAction: TextInputAction.newline,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-          hintText: "987456321",
+          hintText: "Enter your Mobile number",
           border: InputBorder.none,
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -384,8 +359,8 @@ class _LoginScreenState extends State<LoginScreen>{
   }
 
   Widget getReferenceField(){
-
     return Form(
+      key: _userReferenceKey,
         child: TextFormField(
           obscureText: false,
           onSaved: (value) {
@@ -405,11 +380,11 @@ class _LoginScreenState extends State<LoginScreen>{
           },
           maxLines: 1,
           minLines: 1,
-          keyboardType: TextInputType.multiline,
+          keyboardType: TextInputType.phone,
           textInputAction: TextInputAction.newline,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-            hintText: "987456321",
+            hintText: "Enter your Reference number",
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
@@ -422,38 +397,6 @@ class _LoginScreenState extends State<LoginScreen>{
 
   }
 
-  final phoneField = TextFormField(
-    obscureText: false,
-    onSaved: (value) {
-      _Phone = value;
-    },
-    style: style,
-    validator: (value) {
-      if (value.trim().isEmpty) {
-        return 'This field is required';
-        // } else if (!RegExp(
-        //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        //     .hasMatch(value)) {
-        //   return 'Invalid email';
-      } else {
-        return null;
-      }
-    },
-    maxLines: 1,
-    minLines: 1,
-    keyboardType: TextInputType.multiline,
-    textInputAction: TextInputAction.newline,
-    decoration: InputDecoration(
-      contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      hintText: "987456321",
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-      
-    ),
-  );
   final countryCodeField = TextFormField(
     obscureText: false,
     onSaved: (value) {
@@ -486,69 +429,79 @@ class _LoginScreenState extends State<LoginScreen>{
 
     ),
   );
-  final referenceField = TextFormField(
-    obscureText: false,
-    onSaved: (value) {
-      _Reference = value;
-    },
-    style: style,
-    validator: (value) {
-      if (value.trim().isEmpty) {
-        return 'This field is required';
-        // } else if (!RegExp(
-        //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        //     .hasMatch(value)) {
-        //   return 'Invalid email';
-      } else {
-        return null;
+
+  _signupTapped() {
+    if (_userNameKey.currentState.validate() &&
+        _usermobileKey.currentState.validate()) {
+      _userNameKey.currentState.save();
+      _usermobileKey.currentState.save();
+      _userReferenceKey.currentState.save();
+
+      if(_validateFields()){
+        AppUtils.isConnectedToInternet(context).then((isConnected) {
+          if (isConnected) {
+            setState(() => _isLoading = true);
+            APIService().signUpUser(_Name,_Phone,_Reference,'91','91').then((response) {
+              setState(() => _isLoading = false);
+              if (response.statusCode == 200) {
+                RegisterResponse _signupResponse = RegisterResponse.fromJson(response.data);
+                Preferences.save(PrefKey.phone, _signupResponse.customerMobile);
+                Preferences.save(PrefKey.customerID, _signupResponse.customerId);
+                if (_signupResponse.success != 1) {
+
+                  AlertUtils.showToast(_signupResponse.message, context);
+                   } else {
+                  AlertUtils.showToast("Registration Successfull", context);
+
+
+                }
+              } else {
+                AlertUtils.showToast("Registration Failed", context);
+              }
+              nextPagePushReplacement(context, HomeScreen());
+            });
+          }
+        });
+
       }
-    },
-    maxLines: 1,
-    minLines: 1,
-    keyboardType: TextInputType.multiline,
-    textInputAction: TextInputAction.newline,
-    decoration: InputDecoration(
-      contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      hintText: "987456321",
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-      // suffixIcon: Image.asset('assets/images/gradient_circle')
-    ),
-  );
-
-
-  Future<void> login(String username,String mobile,String refnumber)
-  async {
-    _updateNotifier.isProgressShown = true;
-   Map body = {
-     USER_NAME : username,
-     USER_PHONE : mobile,
-     REF_NUM : refnumber ?? ''
-   };
-    ApiCall()
-        .execute<LoginResponse, Null>(LOGIN_URL, body).then((LoginResponse result) {
-      _updateNotifier.isProgressShown = false;
-      // if(result.success==null)
-      // {
-      //   if(result.error!=null)
-      //     ApiCall().showToast(result.error);
-      // }
-      ApiCall().showToast(result.message!=null?result.message:"");
-      if(result.success=="1")
-      {
-        print(result);
-         ApiCall().saveUserToken(result.customerId.toString());
-         ApiCall().saveLoginResponse(result.toJson().toString());
-         ApiCall().saveUserMobile(result.customerMobile);
-        nextPagePush(context, HomeScreen());
-      }
-
-    });
-
+    }
   }
+  bool _validateFields() {
+    return true;
+  }
+  //
+  // Future<void> login(String username,String mobile,String refnumber)
+  // async {
+  //   _updateNotifier.isProgressShown = true;
+  //  Map body = {
+  //    USER_NAME : username,
+  //    USER_PHONE : mobile,
+  //    REF_NUM : refnumber,
+  //    PHONE_COUNTRY_CODE:"91",
+  //    REFERAL_COUNTRY_CODE:"91"
+  //  };
+  //   ApiCall()
+  //       .execute<LoginResponse, Null>(LOGIN_URL, body).then((LoginResponse result) {
+  //     _updateNotifier.isProgressShown = false;
+  //     if(result.success==null)
+  //     {
+  //       if(result.error!=null)
+  //         ApiCall().showToast(result.error);
+  //     }
+  //     ApiCall().showToast(result.message!=null?result.message:"");
+  //     if(result.success=="1")
+  //     {
+  //       print(result);
+  //        Preferences().saveUserToken(result.customerId.toString());
+  //       Preferences().saveLoginResponse(result.toJson().toString());
+  //       Preferences().saveUserMobile(result.customerMobile).toString();
+  //       Preferences().saveCustomerID(result.customerId).toString();
+  //
+  //     }
+  //     nextPagePush(context, HomeScreen());
+  //   });
+  //
+  // }
 
 
 }

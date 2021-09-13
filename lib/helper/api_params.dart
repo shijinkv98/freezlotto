@@ -8,5 +8,7 @@ const String DURATION = "duration";
 const String CATEGORY = "category";
 const String FEED = "newsfeed";
 const String CUSTOMER_ID = "customerId";
+const String PHONE_COUNTRY_CODE = "phone_country_code";
+const String REFERAL_COUNTRY_CODE = "referal_country_code";
 
 

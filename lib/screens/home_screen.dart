@@ -4,6 +4,7 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_screen_red.dart';
 import 'package:freezlotto/screens/newsfeed_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'gallery_screen.dart';
 import 'home_page_screen.dart';
@@ -18,10 +19,11 @@ class HomeScreen extends StatefulWidget{
   _HomeScreenState createState() => new _HomeScreenState();
   }
 class _HomeScreenState extends State<HomeScreen>{
-
+  String _customer_id;
   @override
   void initState(){
     super.initState();
+    _loadCustomerID();
   }
 
 
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen>{
   }
   Widget getHOMEpage() {
     return TabBarView(
+      physics: NeverScrollableScrollPhysics(),
       children: [
         HomePageScreen(),
         NewsFeedScreen(),
@@ -39,6 +42,12 @@ class _HomeScreenState extends State<HomeScreen>{
       ],
     );
 
+  }
+  _loadCustomerID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _customer_id = (prefs.getString('customer_id') ?? '');
+    });
   }
 
 

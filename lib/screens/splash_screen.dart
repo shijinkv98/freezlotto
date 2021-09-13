@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/main.dart';
+import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/screens/register_screen.dart';
 import 'package:freezlotto/screens/splash_screen_second.dart';
+import 'package:freezlotto/utils/preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,24 +15,45 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String stringValue;
   @override
   void initState() {
     super.initState();
+    getStringValuesSF();
     new Future.delayed(
-      const Duration(seconds: 3),
-      () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SplashScreenSecond()),
-          )
-          // ApiCall().getUserToken().then((token) => {
-          //   if (token != null &&
-          //       token.trim().isNotEmpty)
-          //     {
-          //       debugPrint("token: "+token),
-          //       Navigator.of(context).pushReplacementNamed('/homenew')}
-          //   else
-          //     {Navigator.of(context).pushReplacementNamed('/login')}
-          // }),
+        const Duration(seconds: 2),(){
+          Preferences.get(PrefKey.phone).then((userPhone) {
+            if(userPhone == null){
+              nextPagePushReplacement(context, RegisterScreen());
+            }
+            else{
+              nextPagePushReplacement(context, SplashScreenSecond());
+            }
+          });
+    }
+
+        // () =>{
+        //   if(stringValue == null)
+        //     {
+        //       nextPagePushReplacement(context, SplashScreenSecond())
+        //     }
+        //   else{
+        //     nextPagePushReplacement(context, RegisterScreen())
+        //   }
+        // });
+        //     () => Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => SplashScreenSecond()),
+        // )
+      // ApiCall().getUserToken().then((token) => {
+      //   if (token != null &&
+      //       token.trim().isNotEmpty)
+      //     {
+      //       debugPrint("token: "+token),
+      //       Navigator.of(context).pushReplacementNamed('/homenew')}
+      //   else
+      //     {Navigator.of(context).pushReplacementNamed('/login')}
+      // }),
       // () => Navigator.push(
       //       context,
       //       MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -66,5 +91,11 @@ class _SplashScreenState extends State<SplashScreen> {
             ],
           )),
     );
+  }
+  getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    stringValue = prefs.getString(PrefKey.phone.toString());
+    return stringValue;
   }
 }
