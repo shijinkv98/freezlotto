@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freezlotto/blocs/gallery_block.dart';
 import 'package:freezlotto/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
@@ -22,6 +23,7 @@ class _MyAppState extends State<MyApp> {
 
           providers:[
          ChangeNotifierProvider(create: (_) => HomeBloc()),
+            ChangeNotifierProvider(create: (_) => GalleryBloc()),
           ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

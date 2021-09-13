@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:freezlotto/blocs/gallery_block.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/payment_details_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'newsfeed_screen.dart';
 
@@ -24,6 +26,8 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<GalleryBloc>(context, listen: false).getTermsData(context);
+
     return getAppBar(context, "Terms and Conditions",getBody());
   }
   Widget getBody(){
