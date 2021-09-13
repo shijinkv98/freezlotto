@@ -30,14 +30,12 @@ class _NewsFeedScreenState extends State<HomePageScreen>{
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
   String videoUrl = "";
+  String videoPath =" ";
   @override
   void initState(){
     getUserInfo();
-    _controller = VideoPlayerController.network(
-        '${APIClient.Ad_Asset_Location}${videoUrl}');
-    _initializeVideoPlayerFuture = _controller.initialize();
-    _controller.setLooping(true);
-    _controller.setVolume(1.0);
+
+
     super.initState();
 
   }
@@ -100,6 +98,12 @@ class _NewsFeedScreenState extends State<HomePageScreen>{
                   physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     videoUrl = homeBloc.advertisementList[index].advertisement;
+                    videoPath = APIClient.Ad_Asset_Location + homeBloc.advertisementList[index].advertisement;
+                    _controller = VideoPlayerController.network(
+                        videoPath);
+                    _initializeVideoPlayerFuture = _controller.initialize();
+                    _controller.setLooping(true);
+                    _controller.setVolume(1.0);
                     return  Container(
 
                       margin: EdgeInsets.only(bottom: 65),
@@ -140,6 +144,7 @@ class _NewsFeedScreenState extends State<HomePageScreen>{
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
+                                      // Text(videoPath),
                                       Container(
                                         width: MediaQuery.of(context).size.width,
                                         height: 300,
@@ -197,10 +202,6 @@ class _NewsFeedScreenState extends State<HomePageScreen>{
                                                 ),
                                               ),
                                             ),
-
-
-
-
                                           ], //<Widget>[]
                                         ),
                                       ),

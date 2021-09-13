@@ -1,13 +1,15 @@
 class HomeScreenResponse {
   String success;
   String message;
+  String advertisement_url;
   List<AdvertisementList> advertisementList;
 
-  HomeScreenResponse({this.success, this.message, this.advertisementList});
+  HomeScreenResponse({this.success, this.message, this.advertisementList,this.advertisement_url});
 
   HomeScreenResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'].toString();
     message = json['message'].toString();
+    advertisement_url = json['advertisement_url'].toString();
     if (json['advertisement_list'] != null) {
       advertisementList = new List<AdvertisementList>();
       json['advertisement_list'].forEach((v) {
@@ -20,6 +22,7 @@ class HomeScreenResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     data['message'] = this.message;
+    data['advertisement_url'] = this.advertisement_url;
     if (this.advertisementList != null) {
       data['advertisement_list'] =
           this.advertisementList.map((v) => v.toJson()).toList();
