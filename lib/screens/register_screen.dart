@@ -469,39 +469,6 @@ class _RegisterScreenState extends State<RegisterScreen>{
   bool _validateFields() {
     return true;
   }
-  //
-  // Future<void> login(String username,String mobile,String refnumber)
-  // async {
-  //   _updateNotifier.isProgressShown = true;
-  //  Map body = {
-  //    USER_NAME : username,
-  //    USER_PHONE : mobile,
-  //    REF_NUM : refnumber,
-  //    PHONE_COUNTRY_CODE:"91",
-  //    REFERAL_COUNTRY_CODE:"91"
-  //  };
-  //   ApiCall()
-  //       .execute<LoginResponse, Null>(LOGIN_URL, body).then((LoginResponse result) {
-  //     _updateNotifier.isProgressShown = false;
-  //     if(result.success==null)
-  //     {
-  //       if(result.error!=null)
-  //         ApiCall().showToast(result.error);
-  //     }
-  //     ApiCall().showToast(result.message!=null?result.message:"");
-  //     if(result.success=="1")
-  //     {
-  //       print(result);
-  //        Preferences().saveUserToken(result.customerId.toString());
-  //       Preferences().saveLoginResponse(result.toJson().toString());
-  //       Preferences().saveUserMobile(result.customerMobile).toString();
-  //       Preferences().saveCustomerID(result.customerId).toString();
-  //
-  //     }
-  //     nextPagePush(context, HomeScreen());
-  //   });
-  //
-  // }
 
 
 }
