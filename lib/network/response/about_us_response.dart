@@ -1,17 +1,17 @@
-class TermsResponse {
+class AboutUsResponse {
   int success;
   String message;
-  List<TermsDetails> termsDetails;
+  List<AboutDetails> aboutDetails;
 
-  TermsResponse({this.success, this.message, this.termsDetails});
+  AboutUsResponse({this.success, this.message, this.aboutDetails});
 
-  TermsResponse.fromJson(Map<String, dynamic> json) {
+  AboutUsResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    if (json['terms_details'] != null) {
-      termsDetails = new List<TermsDetails>();
-      json['terms_details'].forEach((v) {
-        termsDetails.add(new TermsDetails.fromJson(v));
+    if (json['about_details'] != null) {
+      aboutDetails = new List<AboutDetails>();
+      json['about_details'].forEach((v) {
+        aboutDetails.add(new AboutDetails.fromJson(v));
       });
     }
   }
@@ -20,14 +20,14 @@ class TermsResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     data['message'] = this.message;
-    if (this.termsDetails != null) {
-      data['terms_details'] = this.termsDetails.map((v) => v.toJson()).toList();
+    if (this.aboutDetails != null) {
+      data['about_details'] = this.aboutDetails.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class TermsDetails {
+class AboutDetails {
   int id;
   String page;
   String fieldName;
@@ -39,7 +39,7 @@ class TermsDetails {
   String createdAt;
   String updatedAt;
 
-  TermsDetails(
+  AboutDetails(
       {this.id,
         this.page,
         this.fieldName,
@@ -51,7 +51,7 @@ class TermsDetails {
         this.createdAt,
         this.updatedAt});
 
-  TermsDetails.fromJson(Map<String, dynamic> json) {
+  AboutDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     page = json['page'];
     fieldName = json['field_name'];

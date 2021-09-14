@@ -5,6 +5,7 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/payment_details_screen.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
 import 'newsfeed_screen.dart';
@@ -31,33 +32,34 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
     return getAppBar(context, "Terms and Conditions",getBody());
   }
   Widget getBody(){
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30,top: 40,right: 30,bottom: 19),
-            child: Text('Terms and Conditions',style: style2,),
+
+    return Consumer<GalleryBloc>(
+      builder: (context, galleryBloc,child)=>ModalProgressHUD(
+          inAsyncCall: galleryBloc.isLoading,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 30,top: 40,right: 30,bottom: 19),
+                  child: Text('Terms and Conditions',style: style2,),
+                ),
+                ListView.builder(
+                  itemCount: galleryBloc.termsDetails.length,
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index){
+                       return getTerms(galleryBloc.termsDetails[index].fieldValue);
+                    }
+                )
+
+
+                // getTerms(galleryBloc),
+              ],
+            ),
           ),
-          getTerms(terms_one),
-          getTerms(terms_two),
-          getTerms(terms_three),
-          getTerms(terms_four),
-          getTerms(terms_five),
-          getTerms(terms_six),
-          getTerms(terms_seven),
-          getTerms(terms_eight),
-          getTerms(terms_nine),
-          getTerms(terms_ten),
-          getTerms(terms_eleven),
-          getTerms(terms_twelve),
-          getTerms(terms_thirteen),
-          getTerms(terms_fourteen),
-          getTerms(terms_fivteen),
-          getTerms(terms_sixteen),
-          getTerms(terms_seventeen),
-        ],
+
       ),
     );
 }
