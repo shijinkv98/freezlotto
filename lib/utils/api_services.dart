@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:freezlotto/helper/api_params.dart';
@@ -64,6 +65,22 @@ class APIService {
     var queryParams = {
       CUS_ID: '57',
       NEWSFEED: "$newsfeed",
+      // CUS_ID: await Preferences.get(PrefKey.customerID)
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
+  ///upload ads///
+  Future<Response> uploadAds(File add,String type,String duration,String category) async {
+    var url = APIClient.ADD;
+    var queryParams = {
+      CUS_ID: '1',
+      ADD: "$add",
+      FREE_OR_PAID:"$type",
+      DURATION:"$duration",
+      CATEGORY:"$category"
       // CUS_ID: await Preferences.get(PrefKey.customerID)
     };
     print("URL:::" + url + queryParams.toString());

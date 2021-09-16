@@ -9,7 +9,9 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/network/ApiCall.dart';
 import 'package:freezlotto/network/response/home_response.dart';
+import 'package:freezlotto/screens/chewie_list_item.dart';
 import 'package:freezlotto/screens/home_screen_video.dart';
+import 'package:freezlotto/screens/switch_to_admin_screen.dart';
 import 'package:freezlotto/utils/preferences.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +39,6 @@ class HomePageScreen extends StatefulWidget {
 class _NewsFeedScreenState extends State<HomePageScreen> {
   DateTime currentBackPressTime;
   VideoPlayerController _controller;
-
   Future<void> _initializeVideoPlayerFuture;
   String videoUrl = "";
   String videoPath = " ";
@@ -103,7 +104,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                           homeBloc.advertisementList[index].advertisement;
                       videoPath = APIClient.Ad_Asset_Location +
                           homeBloc.advertisementList[index].advertisement;
-                      _controller = VideoPlayerController.network(videoPath);
+                      _controller = VideoPlayerController.network(
+                          'https://freezelotto.alisonsdemo.online/images/advertisement/SampleVideo_1280x720_1mb.mp4');
                       _initializeVideoPlayerFuture = _controller.initialize();
                       _controller.setLooping(false);
                       _controller.setVolume(1.0);
@@ -112,415 +114,416 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                           margin: EdgeInsets.only(bottom: 65),
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height - 230,
-                          child:
-                              homeBloc.advertisementList[index].fileType ==
-                                      "image"
-                                  ? Container(
-                                      margin: EdgeInsets.only(
-                                          bottom: 50,
-                                          top: 40,
-                                          left: 30,
-                                          right: 30),
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                      width: MediaQuery.of(context).size.width,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(31)),
-                                        // image: DecorationImage(
-                                        //  image: AssetImage('assets/images/bg_dummy.png'),
-                                        //     fit: BoxFit.cover),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(31)),
-                                        child: FadeInImage.assetNetwork(
-                                          fit: BoxFit.fitHeight,
-                                          placeholder:
-                                              'assets/images/bg_dummy.png',
-                                          image:
-                                              '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      color: white,
-                                      child: Stack(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.topCenter,
-                                            child: SingleChildScrollView(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              child: Container(
-                                                // height: MediaQuery.of(context).size.height,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    // Text(videoPath),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
+                          child: homeBloc.advertisementList[index].fileType ==
+                                  "image"
+                              ? Container(
+                                  margin: EdgeInsets.only(
+                                      bottom: 50, top: 40, left: 30, right: 30),
+                                  height: MediaQuery.of(context).size.height,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(31)),
+                                    // image: DecorationImage(
+                                    //  image: AssetImage('assets/images/bg_dummy.png'),
+                                    //     fit: BoxFit.cover),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(31)),
+                                    child: FadeInImage.assetNetwork(
+                                      fit: BoxFit.fitHeight,
+                                      placeholder: 'assets/images/bg_dummy.png',
+                                      image:
+                                          '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  color: white,
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: SingleChildScrollView(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          child: Container(
+                                            // height: MediaQuery.of(context).size.height,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                // Text(videoPath),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 300,
+                                                  child: Stack(
+                                                    children: <Widget>[
+                                                      Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 30,
+                                                                  right: 30,
+                                                                  top: 50),
+                                                          width: MediaQuery.of(
+                                                                  context)
                                                               .size
                                                               .width,
-                                                      height: 300,
-                                                      child: Stack(
-                                                        children: <Widget>[
-                                                          Container(
+                                                          height: 221,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          23))),
+                                                          child: ClipRRect(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          23)),
+                                                              child:
+                                                                  ChewieListItem(
+                                                                videoPlayerController:
+                                                                    VideoPlayerController
+                                                                        .network(
+                                                                            'https://freezelotto.alisonsdemo.online/images/advertisement/SampleVideo_1280x720_1mb.mp4'),
+                                                              )
+                                                              // FutureBuilder(
+                                                              //     future:
+                                                              //         _initializeVideoPlayerFuture,
+                                                              //     builder:
+                                                              //         (context,
+                                                              //             snapshot) {
+                                                              //       if (snapshot.connectionState ==
+                                                              //           ConnectionState.done) {
+                                                              //         // ignore: missing_return, missing_return, missing_return
+                                                              //         return AspectRatio(
+                                                              //             aspectRatio: _controller.value.aspectRatio,
+                                                              //             child: VideoPlayer(_controller)
+                                                              //
+                                                              //             // Image.asset('assets/images/probg.png',fit: BoxFit.fill,),
+                                                              //
+                                                              //             );
+                                                              //       } else {
+                                                              //         return Center(
+                                                              //           child: CircularProgressIndicator(),
+                                                              //         );
+                                                              //       }
+                                                              //     }),
+                                                              )),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            if (_controller
+                                                                .value
+                                                                .isPlaying) {
+                                                              _controller
+                                                                  .pause();
+                                                            } else {
+                                                              _controller
+                                                                  .play();
+                                                            }
+                                                          });
+                                                        },
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Container(
                                                               margin: EdgeInsets
                                                                   .only(
-                                                                      left: 30,
-                                                                      right: 30,
-                                                                      top: 50),
-                                                              width: MediaQuery
-                                                                      .of(
-                                                                          context)
+                                                                      right: 0),
+                                                              height: 45,
+                                                              width: 45,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                color: Colors
+                                                                    .transparent,
+                                                              ),
+                                                              child: Icon(
+                                                                _controller
+                                                                        .value
+                                                                        .isPlaying
+                                                                    ? Icons
+                                                                        .pause_circle_filled_outlined
+                                                                    : Icons
+                                                                        .play_circle_filled_outlined,
+                                                                color: white,
+                                                                size: 55,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                    ], //<Widget>[]
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    nextPagePush(context,
+                                                        SwitchToAdminScreen());
+                                                  },
+                                                  child: Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height: 83,
+                                                    margin: EdgeInsets.only(
+                                                        left: 30,
+                                                        right: 30,
+                                                        top: 30),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  15)),
+                                                      image: DecorationImage(
+                                                          image: AssetImage(
+                                                              'assets/images/rectangle_10.png'),
+                                                          fit: BoxFit.cover),
+                                                    ),
+                                                    child: Center(
+                                                        child: Text(
+                                                      'Click here to Upload Advertisement',
+                                                      style: style,
+                                                    )),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 67,
+                                                  margin: EdgeInsets.only(
+                                                      left: 30,
+                                                      right: 30,
+                                                      top: 24),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                    color: Color(0xFFB1B1B1),
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                          'assets/images/dotted.png',
+                                                        ),
+                                                        fit: BoxFit.fill),
+                                                  ),
+                                                  child: Center(
+                                                      child: Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
                                                                   .size
-                                                                  .width,
-                                                              height: 221,
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius.all(Radius
-                                                                          .circular(
-                                                                              23))),
-                                                              child: ClipRRect(
-                                                                borderRadius: BorderRadius
+                                                                  .width -
+                                                              61.5,
+                                                          height: 65.5,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
                                                                     .all(Radius
                                                                         .circular(
-                                                                            23)),
-                                                                child:
-                                                                    FutureBuilder(
-                                                                        future:
-                                                                            _initializeVideoPlayerFuture,
-                                                                        builder:
-                                                                            (context,
-                                                                                snapshot) {
-                                                                          if (snapshot.connectionState ==
-                                                                              ConnectionState.done) {
-                                                                            // ignore: missing_return, missing_return, missing_return
-                                                                            return AspectRatio(
-                                                                                aspectRatio: _controller.value.aspectRatio,
-                                                                                child: VideoPlayer(_controller)
-
-                                                                                // Image.asset('assets/images/probg.png',fit: BoxFit.fill,),
-
-                                                                                );
-                                                                          } else {
-                                                                            return Center(
-                                                                              child: CircularProgressIndicator(),
-                                                                            );
-                                                                          }
-                                                                        }),
-                                                              )),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                if (_controller
-                                                                    .value
-                                                                    .isPlaying) {
-                                                                  _controller
-                                                                      .pause();
-                                                                } else {
-                                                                  _controller
-                                                                      .play();
-                                                                }
-                                                              });
-                                                            },
-                                                            child: Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              child: Container(
+                                                                            10)),
+                                                            color: white,
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Container(
                                                                   margin: EdgeInsets
                                                                       .only(
-                                                                          right:
-                                                                              0),
-                                                                  height: 45,
-                                                                  width: 45,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    color: Colors
-                                                                        .transparent,
-                                                                  ),
-                                                                  child: Icon(
-                                                                    _controller
-                                                                            .value
-                                                                            .isPlaying
-                                                                        ? Icons
-                                                                            .pause_circle_filled_outlined
-                                                                        : Icons
-                                                                            .play_circle_filled_outlined,
+                                                                          left:
+                                                                              26),
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  child: Image
+                                                                      .asset(
+                                                                    'assets/images/thumb.png',
                                                                     color:
-                                                                        white,
-                                                                    size: 55,
+                                                                        iconColor,
+                                                                    fit: BoxFit
+                                                                        .fill,
                                                                   )),
-                                                            ),
-                                                          ),
-                                                        ], //<Widget>[]
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: 83,
-                                                      margin: EdgeInsets.only(
-                                                          left: 30,
-                                                          right: 30,
-                                                          top: 30),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    15)),
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                                'assets/images/rectangle_10.png'),
-                                                            fit: BoxFit.cover),
-                                                      ),
-                                                      child: Center(
-                                                          child: Text(
-                                                        'Click here to Upload Advertisement',
-                                                        style: style,
-                                                      )),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: 67,
-                                                      margin: EdgeInsets.only(
-                                                          left: 30,
-                                                          right: 30,
-                                                          top: 24),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        color:
-                                                            Color(0xFFB1B1B1),
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                              'assets/images/dotted.png',
-                                                            ),
-                                                            fit: BoxFit.fill),
-                                                      ),
-                                                      child: Center(
-                                                          child: Container(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width -
-                                                                  61.5,
-                                                              height: 65.5,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10)),
-                                                                color: white,
-                                                              ),
-                                                              child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                      margin: EdgeInsets.only(
-                                                                          left:
-                                                                              26),
-                                                                      width: 30,
-                                                                      height:
-                                                                          30,
-                                                                      child: Image
-                                                                          .asset(
-                                                                        'assets/images/thumb.png',
-                                                                        color:
-                                                                            iconColor,
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                      )),
-                                                                  Container(
-                                                                      margin: EdgeInsets.only(
+                                                              Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
                                                                           left:
                                                                               14),
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width -
-                                                                          140,
-                                                                      child:
-                                                                          Text(
-                                                                        'Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.',
-                                                                        style:
-                                                                            style2,
-                                                                      )),
-                                                                ],
-                                                              ))),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: 67,
-                                                      margin: EdgeInsets.only(
-                                                          left: 30,
-                                                          right: 30,
-                                                          top: 15),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        color:
-                                                            Color(0xFFB1B1B1),
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                              'assets/images/dotted.png',
-                                                            ),
-                                                            fit: BoxFit.fill),
-                                                      ),
-                                                      child: Center(
-                                                          child: Container(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width -
-                                                                  61.5,
-                                                              height: 65.5,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10)),
-                                                                color: white,
-                                                              ),
-                                                              child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                      margin: EdgeInsets.only(
-                                                                          left:
-                                                                              26),
-                                                                      width: 30,
-                                                                      height:
-                                                                          30,
-                                                                      child: Image
-                                                                          .asset(
-                                                                        'assets/images/notess.png',
-                                                                        color:
-                                                                            iconColor,
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                      )),
-                                                                  Container(
-                                                                      margin: EdgeInsets.only(
-                                                                          left:
-                                                                              14),
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width -
-                                                                          140,
-                                                                      child:
-                                                                          Text(
-                                                                        'Only funny and happy videos within 10 minutes will be considered.',
-                                                                        style:
-                                                                            style2,
-                                                                      )),
-                                                                ],
-                                                              ))),
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: 67,
-                                                      margin: EdgeInsets.only(
-                                                          left: 30,
-                                                          right: 30,
-                                                          top: 15),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        color:
-                                                            Color(0xFFB1B1B1),
-                                                        image: DecorationImage(
-                                                            image: AssetImage(
-                                                              'assets/images/dotted.png',
-                                                            ),
-                                                            fit: BoxFit.fill),
-                                                      ),
-                                                      child: Center(
-                                                          child: Container(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width -
-                                                                  61.5,
-                                                              height: 65.5,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10)),
-                                                                color: white,
-                                                              ),
-                                                              child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                      margin: EdgeInsets.only(
-                                                                          left:
-                                                                              26),
-                                                                      width: 30,
-                                                                      height:
-                                                                          30,
-                                                                      child: Image
-                                                                          .asset(
-                                                                        'assets/images/close_round.png',
-                                                                        color:
-                                                                            iconColor,
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                      )),
-                                                                  Container(
-                                                                      margin: EdgeInsets.only(
-                                                                          left:
-                                                                              14),
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width -
-                                                                          140,
-                                                                      child:
-                                                                          Text(
-                                                                        'Accounts that post sex and hate contents will be banned.',
-                                                                        style:
-                                                                            style2,
-                                                                      )),
-                                                                ],
-                                                              ))),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 100,
-                                                    ),
-                                                    // SizedBox(height: 24)
-                                                  ],
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width -
+                                                                      140,
+                                                                  child: Text(
+                                                                    'Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.',
+                                                                    style:
+                                                                        style2,
+                                                                  )),
+                                                            ],
+                                                          ))),
                                                 ),
-                                              ),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 67,
+                                                  margin: EdgeInsets.only(
+                                                      left: 30,
+                                                      right: 30,
+                                                      top: 15),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                    color: Color(0xFFB1B1B1),
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                          'assets/images/dotted.png',
+                                                        ),
+                                                        fit: BoxFit.fill),
+                                                  ),
+                                                  child: Center(
+                                                      child: Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width -
+                                                              61.5,
+                                                          height: 65.5,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            10)),
+                                                            color: white,
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              26),
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  child: Image
+                                                                      .asset(
+                                                                    'assets/images/notess.png',
+                                                                    color:
+                                                                        iconColor,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                  )),
+                                                              Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              14),
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width -
+                                                                      140,
+                                                                  child: Text(
+                                                                    'Only funny and happy videos within 10 minutes will be considered.',
+                                                                    style:
+                                                                        style2,
+                                                                  )),
+                                                            ],
+                                                          ))),
+                                                ),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 67,
+                                                  margin: EdgeInsets.only(
+                                                      left: 30,
+                                                      right: 30,
+                                                      top: 15),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                    color: Color(0xFFB1B1B1),
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                          'assets/images/dotted.png',
+                                                        ),
+                                                        fit: BoxFit.fill),
+                                                  ),
+                                                  child: Center(
+                                                      child: Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width -
+                                                              61.5,
+                                                          height: 65.5,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            10)),
+                                                            color: white,
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              26),
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  child: Image
+                                                                      .asset(
+                                                                    'assets/images/close_round.png',
+                                                                    color:
+                                                                        iconColor,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                  )),
+                                                              Container(
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              14),
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width -
+                                                                      140,
+                                                                  child: Text(
+                                                                    'Accounts that post sex and hate contents will be banned.',
+                                                                    style:
+                                                                        style2,
+                                                                  )),
+                                                            ],
+                                                          ))),
+                                                ),
+                                                SizedBox(
+                                                  height: 100,
+                                                ),
+                                                // SizedBox(height: 24)
+                                              ],
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ));
+                                    ],
+                                  ),
+                                ));
                     })),
             Align(
               alignment: Alignment.bottomRight,
@@ -535,7 +538,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '8',
+                        homeBloc.referal_count,
                         style: TextStyle(
                             color: flottingTextColor,
                             fontFamily: MEDIUM_FONT,
@@ -553,7 +556,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                     ],
                   ),
                   mini: false,
-                  backgroundColor: flottingButtonColor,
+                  backgroundColor: homeBloc.commission_amount =="0"?flottingButtonColor:flottingRedTextColor,
                 ),
               ),
             ),
@@ -639,230 +642,6 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           ],
         ),
       );
-  Widget homePage() {
-    return Text('response.message');
-  }
-
-  Widget getMiddleContainer() {
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 300,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(left: 30, right: 30, top: 50),
-                    width: MediaQuery.of(context).size.width,
-                    height: 221,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(23))),
-                    child: Image.asset(
-                      'assets/images/probg.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                          margin: EdgeInsets.only(right: 35),
-                          height: 45,
-                          width: 45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(60)),
-                            image: DecorationImage(
-                                image: AssetImage('assets/images/play.png'),
-                                fit: BoxFit.cover),
-                          ))),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      margin: EdgeInsets.only(right: 35),
-                      height: 65,
-                      width: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(60)),
-                        color: flottingButtonColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '8',
-                            style: TextStyle(
-                                color: flottingTextColor,
-                                fontFamily: MEDIUM_FONT,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 22),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Image.asset(
-                              'assets/images/Vector.png',
-                              width: 30.83,
-                              height: 20.83,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ], //<Widget>[]
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 83,
-              margin: EdgeInsets.only(left: 30, right: 30, top: 30),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                image: DecorationImage(
-                    image: AssetImage('assets/images/rectangle_10.png'),
-                    fit: BoxFit.cover),
-              ),
-              child: Center(
-                  child: Text(
-                'Click here to Upload Advertisement',
-                style: style,
-              )),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 67,
-              margin: EdgeInsets.only(left: 30, right: 30, top: 24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Color(0xFFB1B1B1),
-                image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/rectangle_dotted.png',
-                    ),
-                    fit: BoxFit.cover),
-              ),
-              child: Center(
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 61.5,
-                      height: 65.5,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                              margin: EdgeInsets.only(left: 26),
-                              width: 30,
-                              height: 30,
-                              child: Image.asset(
-                                'assets/images/thumb.png',
-                                color: iconColor,
-                                fit: BoxFit.fill,
-                              )),
-                          Container(
-                              margin: EdgeInsets.only(left: 14),
-                              width: MediaQuery.of(context).size.width - 140,
-                              child: Text(
-                                'Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.',
-                                style: style2,
-                              )),
-                        ],
-                      ))),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 67,
-              margin: EdgeInsets.only(left: 30, right: 30, top: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Color(0xFFB1B1B1),
-                image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/rectangle_dotted.png',
-                    ),
-                    fit: BoxFit.cover),
-              ),
-              child: Center(
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 61.5,
-                      height: 65.5,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                              margin: EdgeInsets.only(left: 26),
-                              width: 30,
-                              height: 30,
-                              child: Image.asset(
-                                'assets/images/mark.png',
-                                color: iconColor,
-                                fit: BoxFit.fill,
-                              )),
-                          Container(
-                              margin: EdgeInsets.only(left: 14),
-                              width: MediaQuery.of(context).size.width - 140,
-                              child: Text(
-                                'Only funny and happy videos within 10 minutes will be considered.',
-                                style: style2,
-                              )),
-                        ],
-                      ))),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 67,
-              margin: EdgeInsets.only(left: 30, right: 30, top: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Color(0xFFB1B1B1),
-                image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/rectangle_dotted.png',
-                    ),
-                    fit: BoxFit.cover),
-              ),
-              child: Center(
-                  child: Container(
-                      width: MediaQuery.of(context).size.width - 61.5,
-                      height: 65.5,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                              margin: EdgeInsets.only(left: 26),
-                              width: 30,
-                              height: 30,
-                              child: Image.asset(
-                                'assets/images/close.png',
-                                color: iconColor,
-                                fit: BoxFit.fill,
-                              )),
-                          Container(
-                              margin: EdgeInsets.only(left: 14),
-                              width: MediaQuery.of(context).size.width - 140,
-                              child: Text(
-                                'Accounts that post sex and hate contents will be banned.',
-                                style: style2,
-                              )),
-                        ],
-                      ))),
-            ),
-            SizedBox(height: 24)
-          ],
-        ),
-      ),
-    );
-  }
 
   var customerID = "";
   void getUserInfo() async {

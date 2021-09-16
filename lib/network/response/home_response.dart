@@ -2,13 +2,17 @@ class HomeScreenResponse {
   String success;
   String message;
   String advertisement_url;
+  String referal_count;
+  String commission_amount;
   List<AdvertisementList> advertisementList;
 
-  HomeScreenResponse({this.success, this.message, this.advertisementList,this.advertisement_url});
+  HomeScreenResponse({this.success, this.message, this.advertisementList,this.advertisement_url,this.commission_amount,this.referal_count});
 
   HomeScreenResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'].toString();
     message = json['message'].toString();
+    referal_count = json['referal_count'].toString();
+    commission_amount = json['commission_amount'].toString();
     advertisement_url = json['advertisement_url'].toString();
     if (json['advertisement_list'] != null) {
       advertisementList = new List<AdvertisementList>();
@@ -22,6 +26,8 @@ class HomeScreenResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     data['message'] = this.message;
+    data['referal_count'] = this.referal_count;
+    data['commission_amount'] = this.commission_amount;
     data['advertisement_url'] = this.advertisement_url;
     if (this.advertisementList != null) {
       data['advertisement_list'] =

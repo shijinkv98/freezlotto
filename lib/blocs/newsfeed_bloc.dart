@@ -4,6 +4,7 @@ import 'package:freezlotto/network/response/newsfeed_like_response.dart';
 import 'package:freezlotto/network/response/newsfeed_list_response.dart';
 import 'package:freezlotto/network/response/newsfeed_upload_response.dart';
 import 'package:freezlotto/network/response/response.dart';
+import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/upload_news_feeds.dart';
 import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
@@ -95,6 +96,37 @@ class NewsFeedBloc extends ChangeNotifier {
         });
       }
     });
+  }
+
+  uploadLink(BuildContext context,String _Link)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        // notifyListeners();
+        APIService().uploadNewsfeed(_Link).then((response) {
+          isLoading = false;
+          // notifyListeners();
+          if (response.statusCode == 200) {
+            NewsFeedUploadResponse newsFeedUploadResponse = NewsFeedUploadResponse
+                .fromJson(response.data);
+            nextPagePushReplacement(context, HomeScreen());
+            if (newsFeedUploadResponse.success == 1) {
+              AlertUtils.showToast(
+                  "NewsFeed successfully updated", context);
+              // getAddressList(context);
+              Navigator.of(context).pop();
+            } else if (newsFeedUploadResponse.success == 3) {
+              kMoveToLogin(context);
+            } else {
+              AlertUtils.showToast(newsFeedUploadResponse.message, context);
+            }
+          } else {
+            AlertUtils.showToast("Failed", context);
+          }
+        });
+      }
+    });
+
   }
 
   void nextButtonTapped(BuildContext context,NewsFeedBloc newsFeedBloc,String value){

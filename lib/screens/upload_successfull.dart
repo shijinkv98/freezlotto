@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
+import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/payment_screen.dart';
 
 import 'newsfeed_screen.dart';
@@ -18,12 +19,12 @@ class _UploadSuccessState extends State<UploadSuccess> {
   @override
   void initState() {
     super.initState();
-    new Future.delayed(
+    new     Future.delayed(
         const Duration(seconds: 2),
             () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PaymentScreen()),
-        )
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        ));
       // ApiCall().getUserToken().then((token) => {
       //   if (token != null &&
       //       token.trim().isNotEmpty)
@@ -37,7 +38,7 @@ class _UploadSuccessState extends State<UploadSuccess> {
       //       context,
       //       MaterialPageRoute(builder: (context) => LoginScreen()),
       //     )
-    );
+    // );
   }
 
 

@@ -114,8 +114,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds> {
                           ),
                           InkWell(
                             onTap: () {
-                              // newsfeedBloc.uploadButtonTapped(context, _Link);
-                              uploadButtonTapped(context);
+                              uploadButtonTapped(context,newsfeedBloc);
                             },
                             child: Container(
                               width: MediaQuery
@@ -284,38 +283,12 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds> {
     return true;
   }
 
-  uploadButtonTapped(BuildContext context) {
+  uploadButtonTapped(BuildContext context,NewsFeedBloc newsFeedBloc) {
     if (_linkKey.currentState.validate()) {
       _linkKey.currentState.save();
 
       if (_validateFields()) {
-        AppUtils.isConnectedToInternet(context).then((isConnected) {
-          if (isConnected) {
-            isLoading = true;
-            // notifyListeners();
-            APIService().uploadNewsfeed(_Link).then((response) {
-              isLoading = false;
-              // notifyListeners();
-              if (response.statusCode == 200) {
-                NewsFeedUploadResponse newsFeedUploadResponse = NewsFeedUploadResponse
-                    .fromJson(response.data);
-                nextPagePushReplacement(context, HomeScreen());
-                if (newsFeedUploadResponse.success == 1) {
-                  AlertUtils.showToast(
-                      "NewsFeed successfully updated", context);
-                  // getAddressList(context);
-                  Navigator.of(context).pop();
-                } else if (newsFeedUploadResponse.success == 3) {
-                  kMoveToLogin(context);
-                } else {
-                  AlertUtils.showToast(newsFeedUploadResponse.message, context);
-                }
-              } else {
-                AlertUtils.showToast("Failed", context);
-              }
-            });
-          }
-        });
+        newsFeedBloc.uploadLink(context, _Link);
       }
     }
   }

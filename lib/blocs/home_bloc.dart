@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:freezlotto/network/response/ads_uploaded_response.dart';
 import 'package:freezlotto/network/response/home_response.dart';
 import 'package:freezlotto/network/response/response.dart';
+import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/screens/upload_successfull.dart';
 import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
 import 'package:freezlotto/helper/constants.dart';
@@ -8,6 +13,8 @@ import 'package:freezlotto/utils/alert_utils.dart';
 
 class HomeBloc extends ChangeNotifier {
   bool isLoading = false;
+  String referal_count = "";
+  String commission_amount = "";
   // AdvertisementList _advertisementList = new AdvertisementList();
   // AdvertisementList get homeData => _advertisementList;
   // set homeData(AdvertisementList data){
@@ -28,6 +35,8 @@ class HomeBloc extends ChangeNotifier {
             HomeScreenResponse homeScreenResponse =
             HomeScreenResponse.fromJson(response.data);
             advertisementList = homeScreenResponse.advertisementList;
+            referal_count = homeScreenResponse.referal_count;
+            commission_amount = homeScreenResponse.commission_amount;
             // notifyListeners();
 
           if (homeScreenResponse.success == 0) {
@@ -52,5 +61,39 @@ class HomeBloc extends ChangeNotifier {
         });
       }
     });
+  }
+
+  uploadAds(BuildContext context,File file,String type,String duration,String category)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        // notifyListeners();
+        APIService().uploadAds(file,type,duration,category).then((response) {
+          isLoading = false;
+          // notifyListeners();
+          if (response.statusCode == 200) {
+            AdsUploadedResponse adsUploadedResponse = AdsUploadedResponse.fromJson(response.data);
+            nextPagePushReplacement(context, UploadSuccess());
+            if (adsUploadedResponse.success == 1) {
+
+              AlertUtils.showToast(
+                  "NewsFeed successfully updated", context);
+              nextPagePushReplacement(context, UploadSuccess());
+              // getAddressList(context);
+              Navigator.of(context).pop();
+            } else if (adsUploadedResponse.success == 3) {
+              kMoveToLogin(context);
+            } else {
+              AlertUtils.showToast(adsUploadedResponse.message, context);
+            }
+          } else {
+            AlertUtils.showToast("Failed", context);
+          }
+        }
+
+        );
+      }
+    });
+
   }
 }
