@@ -99,7 +99,11 @@ class NewsFeedBloc extends ChangeNotifier {
 
   void nextButtonTapped(BuildContext context,NewsFeedBloc newsFeedBloc,String value){
     newsFeedBloc.newsfeedspresent == value?
-    nextPagePushReplacement(context, UploadNewsFeeds()):Container();
+    nextPagePushReplacement(context, UploadNewsFeeds()):updateUI(context);
+  }
+  void updateUI(BuildContext context) {
+    getNextData(context);
+      //You can also make changes to your state here.
   }
 
   void onLikeButtonTapped(BuildContext context,String newsfeedid) {

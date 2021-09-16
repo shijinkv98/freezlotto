@@ -55,7 +55,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds> {
         onSaved: (value) {
           _Link = value;
         },
-        style: style,
+        style: style2,
         validator: (value) {
           if (value.trim().isEmpty) {
             return 'This field is required';

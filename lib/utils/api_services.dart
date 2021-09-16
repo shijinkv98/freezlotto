@@ -75,7 +75,7 @@ class APIService {
   Future<Response> getNewsFeedListData() async {
     var url = APIClient.NEWS_FEEDS_LIST;
     var queryParams = {
-      CUS_ID: '57',
+      CUS_ID: '58',
       NEXT:'0'
       // CUS_ID: await Preferences.get(PrefKey.customerID)
     };
@@ -88,7 +88,7 @@ class APIService {
   Future<Response> getNextListData() async {
     var url = APIClient.NEWS_FEEDS_LIST;
     var queryParams = {
-      CUS_ID: '1',
+      CUS_ID: '58',
       NEXT:'1'
       // CUS_ID: await Preferences.get(PrefKey.customerID)
     };

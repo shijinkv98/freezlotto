@@ -152,7 +152,11 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
       ),
     );
   }
-
+  void updateUI() {
+    setState(() {
+      //You can also make changes to your state here.
+    });
+  }
   Widget getMiddleContainer(NewsFeedBloc newsFeedBloc) {
     return Container(
         margin: EdgeInsets.only(bottom: 10), child: getList(newsFeedBloc));
@@ -292,8 +296,5 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
           );
         });
   }
-
-  // }
-
 }
 
