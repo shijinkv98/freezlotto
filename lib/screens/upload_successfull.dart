@@ -4,6 +4,7 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/screens/payment_details_screen.dart';
 import 'package:freezlotto/screens/payment_screen.dart';
 
 import 'newsfeed_screen.dart';
@@ -11,20 +12,20 @@ import 'newsfeed_screen.dart';
 final TextStyle style = TextStyle(color: BoldTextColor2,fontWeight: FontWeight.w600,fontFamily: SEMI_BOLD_FONT,fontSize: 30,letterSpacing: 0.8);
 final TextStyle style4 = TextStyle(color: textColor,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 class UploadSuccess extends StatefulWidget{
-
+ String type;
   @override
-  _UploadSuccessState createState() => new _UploadSuccessState();
+  _UploadSuccessState createState() => new _UploadSuccessState(type:this.type);
+  UploadSuccess({this.type});
   }
 class _UploadSuccessState extends State<UploadSuccess> {
+  String type;
+  _UploadSuccessState({this.type});
   @override
   void initState() {
     super.initState();
     new     Future.delayed(
         const Duration(seconds: 2),
-            () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        ));
+            () => type=="free"?nextPagePushReplacement(context, HomeScreen()):nextPagePushReplacement(context, PaymentDetailsScreen()));
       // ApiCall().getUserToken().then((token) => {
       //   if (token != null &&
       //       token.trim().isNotEmpty)

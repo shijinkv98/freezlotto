@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
+import 'package:freezlotto/screens/payment_screen.dart';
 import 'package:freezlotto/screens/upload_advertisement.dart';
 import 'package:freezlotto/screens/upload_page.dart';
 
@@ -62,7 +63,7 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
           InkWell(
             onTap: (){
               // nextPagePush(context, UploadAdvertisement());
-              nextPagePush(context, UploadPage());
+              nextPagePush(context, UploadPage(duration: "",category: "",type: "free",));
             },
             child: Container(
               margin: EdgeInsets.only(top: 34,left: 27,right: 27),
@@ -89,28 +90,33 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
               ),
             ),
           ) ,
-          Container(
-            margin: EdgeInsets.only(top: 13,left: 27,right: 27),
-            width: MediaQuery.of(context).size.width,
-            height: 57,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/switchdotted.png'),
-                  fit: BoxFit.fill),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 25),
-                  child: Text('Paid',style: style,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 25),
-                  child: Icon(Icons.arrow_forward_ios,color: white,size: 15,),
-                )
-              ],
+          InkWell(
+            onTap: (){
+              nextPagePush(context, PaymentScreen());
+            },
+            child: Container(
+              margin: EdgeInsets.only(top: 13,left: 27,right: 27),
+              width: MediaQuery.of(context).size.width,
+              height: 57,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/switchdotted.png'),
+                    fit: BoxFit.fill),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Text('Paid',style: style,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 25),
+                    child: Icon(Icons.arrow_forward_ios,color: white,size: 15,),
+                  )
+                ],
+              ),
             ),
           ),
           Container(

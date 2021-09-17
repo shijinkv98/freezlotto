@@ -17,14 +17,22 @@ final TextStyle style = TextStyle(color: white,fontWeight: FontWeight.w400,fontF
 final TextStyle style2 = TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 20,letterSpacing: 0.8);
 
 class UploadPage extends StatefulWidget {
+  String duration;
+  String category;
+  String type;
   @override
-  _UploadPageState createState() => _UploadPageState();
+  _UploadPageState createState() => _UploadPageState(duration:this.duration,category:this.category,type:this.type);
+  UploadPage({this.category,this.duration,this.type});
 }
 
 class _UploadPageState extends State<UploadPage> {
   File fileMedia;
   MediaSource source;
+  String duration;
+  String category;
+  String type;
 
+  _UploadPageState({this.duration,this.category,this.type});
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
@@ -87,8 +95,8 @@ class _UploadPageState extends State<UploadPage> {
                            textColor: Colors.white,
                            fontSize: 16.0
                        ):
-                          homeBloc.uploadAds(context, fileMedia, "free", "", 'category');
-
+                          homeBloc.uploadAds(context, fileMedia, type, duration, category);
+                          nextPagePushReplacement(context, UploadSuccess(type: type,));
 
                         },
 

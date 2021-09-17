@@ -1,7 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:freezlotto/network/response/about_us_response.dart';
-import 'package:freezlotto/network/response/home_response.dart';
-import 'package:freezlotto/network/response/response.dart';
 import 'package:freezlotto/network/response/terms_response.dart';
 import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
@@ -17,7 +14,6 @@ class GalleryBloc extends ChangeNotifier {
   //   notifyListeners();
   // }
   List<TermsDetails> termsDetails = new List<TermsDetails>();
-  List<AboutUsResponse> aboutDetails = new List<AboutUsResponse>();
 
 
   getTermsData(BuildContext context)  {
@@ -55,37 +51,8 @@ class GalleryBloc extends ChangeNotifier {
           }
         });
 
-        APIService().getAboutData().then((response) {
-          isLoading = false;
-          notifyListeners();
-          if (response.statusCode == 200){
-            AboutUsResponse aboutScreenResponse =
-            AboutUsResponse.fromJson(response.data);
-            // advertisementList = termsScreenResponse.advertisementList;
-            // notifyListeners();
-
-            if (aboutScreenResponse.success == 0) {
-              AlertUtils.showToast(aboutScreenResponse.message, context);
-
-              aboutDetails = aboutScreenResponse.aboutDetails.cast<AboutUsResponse>();
-              //   notifyListeners();
-            } else if (aboutScreenResponse.success == 3) {
-              print("NEED TO LOGIN HERE......");
-              kMoveToLogin(context);
-            }else if (aboutScreenResponse.success == 1) {
-              aboutDetails = aboutScreenResponse.aboutDetails.cast<AboutUsResponse>();
-              notifyListeners();
-            }
-            // }else {
-            //   AlertUtils.showToast(homeScreenResponse.message, context);
-            // }
-
-          } else {
-            AlertUtils.showToast("Something Went Wrong", context);
-          }
-        });
-
       }
     });
   }
+
 }

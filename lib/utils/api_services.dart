@@ -138,14 +138,14 @@ class APIService {
     print("RESPONSE:::" + response.data.toString());
     return response;
   }
-
-  ///get about data///
-  Future<Response> getAboutData() async {
-    var url = APIClient.ABOUT;
+ ///get ads contents data///
+  Future<Response> getAdsContents() async {
+    var url = APIClient.Ads_Contents;
     print("URL:::" + url);
     Response response = await dio.get(url);
     print("RESPONSE:::" + response.data.toString());
     return response;
   }
+
 
 }

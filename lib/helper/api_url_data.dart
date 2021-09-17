@@ -8,6 +8,7 @@ class APIClient {
   static final HOME = Base_URL +  "home";
   static final ABOUT = Base_URL +  "about";
   static final TERMS = Base_URL +  "terms";
+  static final Ads_Contents = Base_URL +  "advtupload";
   static final Ad_Asset_Location = "https://freezelotto.alisonsdemo.online/images/advertisement/";
 
 }
