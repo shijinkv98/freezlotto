@@ -1,12 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/utils/app_utils.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(NewsFeedScreen());
+}
 
 final TextStyle style = TextStyle(
     color: white,
@@ -16,6 +25,12 @@ final TextStyle style = TextStyle(
     letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(
     color: textColor,
+    fontWeight: FontWeight.w400,
+    fontFamily: SEMI_BOLD_FONT,
+    fontSize: 14,
+    letterSpacing: 0.8);
+final TextStyle style3 = TextStyle(
+    color: red,
     fontWeight: FontWeight.w400,
     fontFamily: SEMI_BOLD_FONT,
     fontSize: 14,
@@ -33,8 +48,10 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   String videoUrl = " ";
   String newsFeedId = " ";
   bool isLoading = false;
+  String url = "";
   @override
   void initState() {
+    initDynamicLinks();
     // runYoutubePlayer();
     super.initState();
   }
@@ -175,7 +192,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
               flags: YoutubePlayerFlags(
                   enableCaption: false,
                   isLive: false,
-                  autoPlay: false
+                  autoPlay: false,
+
               )
           );
           return Column(
@@ -230,11 +248,14 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                     return Image(
                                         image: AssetImage(
                                           'assets/images/like_black.png',
-                                        ),color: isLiked ? Colors.red : Colors.black,
+                                        ),color: newsFeedBloc.newsfeedsList[index].liked_status == "1" ? Colors.red : Colors.black,
                                     );
                                   },
                                   onTap: (isLiked) async{
                                     newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
+                                    setState(() {
+
+                                    });
                                     return !isLiked;
                                   },
                                   likeCount: 1,
@@ -242,14 +263,17 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                     var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
                                     Widget result;
                                     if (count == 1) {
-                                      result = Text(
+                                      result = newsFeedBloc.newsfeedsList[index].liked_status == "0" ?Text(
                                         "Unlike",
                                           style: style2,
+                                      ):Text(
+                                        'Like',
+                                        style: style3,
                                       );
                                     } else
                                       result = Text(
                                         'Like',
-                                        style: style2,
+                                        style: style3,
                                       );
                                     return result;
                                   },
@@ -258,43 +282,88 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                             ),
                           ],
                         )),
-                    Container(
-                        margin: EdgeInsets.only(left: 15),
-                        width: 96,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: white,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: Container(
-                                width: 17, height: 15,
-                                child: Image(
-                                  image: AssetImage(
-                                    'assets/images/share.png',
+                    InkWell(
+                      onTap: ()async{
+                        try {
+                          url = await AppUtils.buildDynamicLink();
+
+
+                        } catch (e) {
+                          print(e);
+                        }
+                        setState(() {
+                          share(url, 'test');
+                        });
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(left: 15),
+                          width: 96,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: white,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Container(
+                                  width: 17, height: 15,
+                                  child: Image(
+                                    image: AssetImage(
+                                      'assets/images/share.png',
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 15),
-                              child: Text(
-                                'Share',
-                                style: style2,
-                              ),
-                            )
-                          ],
-                        )),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Text(
+                                  'Share',
+                                  style: style2,
+                                ),
+                              )
+                            ],
+                          )),
+                    ),
                   ],
                 ),
-              )
+              ),
+              Text(url),
             ],
           );
         });
+  }
+
+  void initDynamicLinks() async {
+    final PendingDynamicLinkData data =
+    await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri deepLink = data?.link;
+
+    if (deepLink != null) {
+      handleDynamicLink(deepLink);
+    }
+    FirebaseDynamicLinks.instance.onLink(
+        onSuccess: (PendingDynamicLinkData dynamicLink) async {
+          final Uri deepLink = dynamicLink?.link;
+
+          if (deepLink != null) {
+            handleDynamicLink(deepLink);
+          }
+        }, onError: (OnLinkErrorException e) async {
+      print(e.message);
+    });
+  }
+  handleDynamicLink(Uri url) {
+    List<String> separatedString = [];
+    separatedString.addAll(url.path.split('/'));
+    if (separatedString[1] == "post") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomeScreen(tabnumber: 1)));
+    }
   }
 }
 

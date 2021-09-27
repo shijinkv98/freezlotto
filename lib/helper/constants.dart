@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
@@ -46,7 +47,14 @@ const Color profileiconColor = const Color(0xFFAB1616);
 final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
 final TextStyle appBarTitle = TextStyle(fontWeight: FontWeight.w500,fontFamily: SEMI_BOLD_FONT,fontSize: 21,letterSpacing: 0.8,color: white);
 
-
+Future<void> share(dynamic link, String title) async{
+  await FlutterShare.share(
+      title: title,
+      text: title,
+      linkUrl: link,
+      chooserTitle: 'chooser title'
+  );
+}
 //Box Decorations Related
 
 BoxDecoration buttongradient= BoxDecoration(

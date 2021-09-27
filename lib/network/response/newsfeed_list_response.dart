@@ -43,6 +43,7 @@ class NewsfeedsList {
   String id;
   String newsfeed;
   String likesCount;
+  String liked_status;
   String shareCount;
   String status;
   String createdAt;
@@ -55,6 +56,7 @@ class NewsfeedsList {
         this.newsfeed,
         this.likesCount,
         this.shareCount,
+        this.liked_status,
         this.status,
         this.createdAt,
         this.updatedAt,
@@ -64,6 +66,7 @@ class NewsfeedsList {
   NewsfeedsList.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
     newsfeed = json['newsfeed'].toString();
+    liked_status = json['liked_status'].toString();
     likesCount = json['likes_count'].toString();
     shareCount = json['share_count'].toString();
     status = json['status'].toString();

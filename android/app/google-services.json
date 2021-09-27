@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "81628808624",
+    "project_id": "freezlotto-49be1",
+    "storage_bucket": "freezlotto-49be1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81628808624:android:7e6a7d709262a1e52a0275",
+        "android_client_info": {
+          "package_name": "com.freezlotto.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81628808624-kemndoc6fcek3tnue7cevsu4rku0uh8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.freezlotto.application",
+            "certificate_hash": "d532d0f9d80d050c1af5034d6f93c319e6d224f0"
+          }
+        },
+        {
+          "client_id": "81628808624-udnpnv3thnh0mi03s6sj2fet9m9cjvnu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWsoW0KLlBE8f9trixKfzAMQFd-fMyNB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81628808624-udnpnv3thnh0mi03s6sj2fet9m9cjvnu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

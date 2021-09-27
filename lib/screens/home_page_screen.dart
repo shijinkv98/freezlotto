@@ -124,6 +124,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                 height: MediaQuery.of(context).size.height,
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
+                                  color: Colors.grey[300],
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(31)),
                                   // image: DecorationImage(
@@ -135,7 +136,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                       BorderRadius.all(Radius.circular(31)),
                                   child: FadeInImage.assetNetwork(
                                     fit: BoxFit.fitHeight,
-                                    placeholder: 'assets/images/bg_dummy.png',
+                                    placeholder: 'assets/images/logo.png',
                                     image:
                                         '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
                                   ),

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/blocs/gallery_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:freezlotto/blocs/home_bloc.dart';
 import 'notifier/loginnotifier.dart';
 
 void main() {
+
   runApp(MyApp());
 }
 

@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
               nextPagePushReplacement(context, RegisterScreen());
             }
             else{
-              nextPagePushReplacement(context, HomeScreen());
+              nextPagePushReplacement(context, HomeScreen(tabnumber: 0));
             }
           });
     }

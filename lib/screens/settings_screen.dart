@@ -186,14 +186,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         false;
   }
 
-  Future<void> share(dynamic link, String title) async{
-    await FlutterShare.share(
-      title: 'title 1',
-      text: title,
-      linkUrl: link,
-      chooserTitle: 'chooser title'
-    );
-  }
+
 
 }
 
