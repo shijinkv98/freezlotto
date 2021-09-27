@@ -35,7 +35,7 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds> {
 
   @override
   Widget build(BuildContext context) {
-    return getTabController(context, getHOMEpage(), 1);
+    return getTabController(getHOMEpage(), 1,3,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
 
   Widget getHOMEpage() {

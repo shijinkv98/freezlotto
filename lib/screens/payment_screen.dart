@@ -263,7 +263,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0
-        ): nextPagePush(context, UploadPage(type: "paid",category: dropdownValue,duration:_Duration,));
+        ): nextPagePush(context,
+            UploadPage(type: "paid",category: dropdownValue,duration:_Duration,)
+        );
 
       }
     }

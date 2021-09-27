@@ -12,13 +12,16 @@ import 'package:freezlotto/utils/preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreenSecond extends StatefulWidget {
+  String customerMobile = " ";
   @override
-  _SplashScreenSecondState createState() => new _SplashScreenSecondState();
+  _SplashScreenSecondState createState() => new _SplashScreenSecondState(customerMobile : this.customerMobile);
+  SplashScreenSecond({this.customerMobile});
 }
 class _SplashScreenSecondState extends State<SplashScreenSecond> {
   String userPhone = "";
+  String customerMobile = " ";
   String _phone = " ";
-
+_SplashScreenSecondState({this.customerMobile});
   @override
   void initState() {
     getUserInfo();
@@ -65,7 +68,7 @@ class _SplashScreenSecondState extends State<SplashScreenSecond> {
                               image: AssetImage('assets/images/rectangle_10.png'),
                               fit: BoxFit.cover),
                         ),
-                        child: Center(child: Text(phone,style:TextStyle(fontSize: 15,color:white,fontWeight:FontWeight.w500,fontFamily: REGULAR_FONT,letterSpacing: 1.5),)),
+                        child: Center(child: Text(customerMobile,style:TextStyle(fontSize: 15,color:white,fontWeight:FontWeight.w500,fontFamily: REGULAR_FONT,letterSpacing: 1.5),)),
                       ),
                     )
 

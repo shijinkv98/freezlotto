@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -30,7 +31,7 @@ class _AboutUscreenState extends State<AboutUscreen> {
   }
   Widget getBody(){
     return WebView(
-      initialUrl: "https://www.google.com",
+      initialUrl: APIClient.ABOUT,
     );
 
 }

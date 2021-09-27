@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
+import 'package:freezlotto/screens/profile_newsfeed_screen.dart';
 
 import 'newsfeed_screen.dart';
 
@@ -27,21 +28,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return getAppBar(context, "Profile",getBody());
+    return getProfileTabController(context,getBody(),0,2,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
   Widget getBody(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 30,right: 30,top:65),
-        child: Column(
-          children: [
-            getContentVideo(),
-            getContentAds(),
-            getContentAdsRepeat(),
-            getContentFeeds()
-          ],
+    return TabBarView(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 20,right: 20,top: 20),
+          child: getContentAds(),
         ),
-      ),
+        Center(
+          child: ProfileNewsFeedScreen()
+        )
+      ],
     );
 }
 
@@ -179,9 +178,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
   Widget getListAds() {
     return ListView.builder(
-        itemCount: 1,
+        itemCount: 5,
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return _listAds();
         });

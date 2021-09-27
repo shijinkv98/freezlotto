@@ -8,9 +8,9 @@ import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
 import 'package:freezlotto/screens/terms_conditions_screen.dart';
-
+import 'package:freezlotto/utils/preferences.dart';
+import 'package:freezlotto/widget/video_sample_page.dart';
 import 'register_screen.dart';
-import 'newsfeed_screen.dart';
 
 final TextStyle style = TextStyle(
     color: white,
@@ -56,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             InkWell(
                 onTap: () {
-                nextPagePush(context, ProfileScreen());
+                nextPagePush(context, MyTvScreen());
                 },
                 child: getContent('assets/images/profile.png', 'Profile')),
             InkWell(
@@ -148,9 +148,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
   Future<void> logout(BuildContext context)
   async {
-    // SharedPreferences preferences = await SharedPreferences.getInstance();
-    // await preferences.clear();
+
     nextPagePushReplacement(context, RegisterScreen());
+
   }
   Widget getAlertLogout(BuildContext context){
     return  showDialog(
@@ -175,6 +175,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           FlatButton(
             onPressed: () {
+              Preferences.clearPreference();
               logout(context);
             },
             child: Text('Yes',style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal)),

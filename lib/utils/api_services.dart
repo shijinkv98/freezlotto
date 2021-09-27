@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart'as http;
 import 'package:dio/dio.dart';
 import 'package:freezlotto/helper/api_params.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
@@ -36,8 +36,8 @@ class APIService {
   Future<Response> getHomeData() async {
     var url = APIClient.HOME;
     var queryParams = {
-      CUS_ID: '1'
-      // CUS_ID: await Preferences.get(PrefKey.customerID)
+      // CUS_ID: '1'
+      CUS_ID: await Preferences.get(PrefKey.customerID)
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);
@@ -48,11 +48,10 @@ class APIService {
   Future<Response> likeUpdate(String newsfeedId) async {
     var url = APIClient.NEWS_FEEDS_LIKE;
     var queryParams = {
-      CUS_ID: '1',
+      // CUS_ID: '1',
       NEWSFEED_ID: newsfeedId,
-      LIKEABLE:'1'
-
-      // CUS_ID: await Preferences.get(PrefKey.customerID)
+      LIKEABLE:'1',
+      CUS_ID: await Preferences.get(PrefKey.customerID)
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);
@@ -63,9 +62,9 @@ class APIService {
   Future<Response> uploadNewsfeed(String newsfeed) async {
     var url = APIClient.FEEDS;
     var queryParams = {
-      CUS_ID: '57',
+      // CUS_ID: '57',
       NEWSFEED: "$newsfeed",
-      // CUS_ID: await Preferences.get(PrefKey.customerID)
+      CUS_ID: await Preferences.get(PrefKey.customerID)
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);
@@ -73,15 +72,32 @@ class APIService {
     return response;
   }
   ///upload ads///
-  Future<Response> uploadAds(File add,String type,String duration,String category) async {
+  Future<Response> uploadAds(String add,String type,String duration,String category) async {
     var url = APIClient.ADD;
+
     var queryParams = {
-      CUS_ID: '1',
+      // CUS_ID: '1',
       ADD: "$add",
       FREE_OR_PAID:"$type",
       DURATION:"$duration",
-      CATEGORY:"$category"
-      // CUS_ID: await Preferences.get(PrefKey.customerID)
+      CATEGORY:"$category",
+      CUS_ID: await Preferences.get(PrefKey.customerID)
+    };
+    var data = {
+      ADD: "$add",
+
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
+  ///SUBMIT PAYMENT///
+  Future<Response> submitPayment(String addId,String transactionId) async {
+    var url = APIClient.PAYMENT;
+    var queryParams = {
+     ADD_ID: addId,
+     TRANSACTION_ID: transactionId,
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);
@@ -92,9 +108,31 @@ class APIService {
   Future<Response> getNewsFeedListData() async {
     var url = APIClient.NEWS_FEEDS_LIST;
     var queryParams = {
-      CUS_ID: '58',
-      NEXT:'0'
-      // CUS_ID: await Preferences.get(PrefKey.customerID)
+      // CUS_ID: '58',
+      NEXT:'0',
+      CUS_ID: await Preferences.get(PrefKey.customerID)
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
+///get Profile Newsfeed list///
+  Future<Response> getProfileNewsFeedListData() async {
+    var url = APIClient.PROFILE_NEWS_FEEDS_LIST;
+    var queryParams = {
+      CUS_ID: await Preferences.get(PrefKey.customerID)
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
+  ///get gallery list///
+  Future<Response> getGalleryData() async {
+    var url = APIClient.GALLERY;
+    var queryParams = {
+      CUS_ID: await Preferences.get(PrefKey.customerID)
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);
@@ -105,9 +143,9 @@ class APIService {
   Future<Response> getNextListData() async {
     var url = APIClient.NEWS_FEEDS_LIST;
     var queryParams = {
-      CUS_ID: '58',
-      NEXT:'1'
-      // CUS_ID: await Preferences.get(PrefKey.customerID)
+      // CUS_ID: '58',
+      NEXT:'1',
+      CUS_ID: await Preferences.get(PrefKey.customerID)
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);

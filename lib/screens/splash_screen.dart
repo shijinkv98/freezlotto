@@ -27,37 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
               nextPagePushReplacement(context, RegisterScreen());
             }
             else{
-              nextPagePushReplacement(context, SplashScreenSecond());
+              nextPagePushReplacement(context, HomeScreen());
             }
           });
     }
-
-        // () =>{
-        //   if(stringValue == null)
-        //     {
-        //       nextPagePushReplacement(context, SplashScreenSecond())
-        //     }
-        //   else{
-        //     nextPagePushReplacement(context, RegisterScreen())
-        //   }
-        // });
-        //     () => Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SplashScreenSecond()),
-        // )
-      // ApiCall().getUserToken().then((token) => {
-      //   if (token != null &&
-      //       token.trim().isNotEmpty)
-      //     {
-      //       debugPrint("token: "+token),
-      //       Navigator.of(context).pushReplacementNamed('/homenew')}
-      //   else
-      //     {Navigator.of(context).pushReplacementNamed('/login')}
-      // }),
-      // () => Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => LoginScreen()),
-      //     )
     );
   }
 

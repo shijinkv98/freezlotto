@@ -25,7 +25,7 @@ class _UploadSuccessState extends State<UploadSuccess> {
     super.initState();
     new     Future.delayed(
         const Duration(seconds: 2),
-            () => type=="free"?nextPagePushReplacement(context, HomeScreen()):nextPagePushReplacement(context, PaymentDetailsScreen()));
+            () => nextPagePushReplacement(context, HomeScreen()));
       // ApiCall().getUserToken().then((token) => {
       //   if (token != null &&
       //       token.trim().isNotEmpty)

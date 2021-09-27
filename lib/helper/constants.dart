@@ -42,29 +42,11 @@ const Color dateColor = const Color(0xFFADADAD);
 const Color admin_subtitle = const Color(0xFF757575);
 const Color bubbleColor = const Color(0xFFC4C4C4);
 const Color dropdowndividerColor = const Color(0xFFE5E5E5);
+const Color profileiconColor = const Color(0xFFAB1616);
 final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
 final TextStyle appBarTitle = TextStyle(fontWeight: FontWeight.w500,fontFamily: SEMI_BOLD_FONT,fontSize: 21,letterSpacing: 0.8,color: white);
 
-//Text related
-const String aboutdescription_one = 'Freezlotto is a company registered in India. We will take the lead in boosting world economic growth. It will give a new impetus to the market and drive it forward. Provide honest knowledge to the customers about each product.';
-const String aboutdescription_two = 'In addition to ads we also play jokes, business ideas, very important news, 50-50 contest, YouTube channel promotions etc. We will be promoting startups below Rs20 lakh/27000 for free.';
-const String terms_one = "1.Any types of cheating noted you will be punished.";
-const String terms_two = "2.Minimum money for reedem is Rs. 1000/-";
-const String terms_three = "3.Account price will be need 3 more stamps to won for packing and delivery.";
-const String terms_four = "4.Money prize will be transfer through online money transfer apps.";
-const String terms_five = "5.Share app link to social media for 100 newsfeed likes.";
-const String terms_six = "6.We are not using any personal data and you should keep your mobile for same account. If you change your mobile, the account will lost";
-const String terms_seven = "7.may be change our policy in future and wait for it.";
-const String terms_eight = "8.Minimum age: You must be at least 13 years old to use our service.";
-const String terms_nine = "9.If the bumper prize is won, the amount required by the government of the respective country wil be taxable.";
-const String terms_ten = "10.There is no charge to use FREEZLOTTO.";
-const String terms_eleven = "11.You must not access, use modify, distribute, transfer or exploid our services in unauthorized manners.";
-const String terms_twelve = "12.You are responsible for keeping your device and FREEZLOTTO account safe and secure.";
-const String terms_thirteen = "13.Money prize will transfer within 24 hours.";
-const String terms_fourteen = "14.If you won money prize, 10% commission goes to referral Id or newsfeed winner (If there is no referral id).";
-const String terms_fivteen = "15.Don't delete shared app link. It may cause problem with your prize redeem.";
-const String terms_sixteen = "16.There is a account verification for suspecious customer.";
-const String terms_seventeen = "17.Fake reporting leads to ban.";
+
 //Box Decorations Related
 
 BoxDecoration buttongradient= BoxDecoration(
@@ -124,7 +106,8 @@ BoxDecoration couponOuter= BoxDecoration(
   ),
   borderRadius: BorderRadius.all(Radius.circular(10)),
 );
-BoxDecoration couponInner= BoxDecoration(
+BoxDecoration couponInner=
+BoxDecoration(
   gradient:  LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
@@ -204,15 +187,110 @@ Widget getAppBar(BuildContext context,String title,Widget body){
     backgroundColor: white,
   );
 }
-Widget getTabController(BuildContext context,Widget page,int number){
+Widget getProfileTabController(BuildContext context,Widget page,int number,int tabCount,double top,double width){
   return DefaultTabController(
-    length: 3,
+    length: tabCount,
+    initialIndex: number,
+    child: Scaffold(
+      appBar: new PreferredSize(
+        child: new
+        Container(
+          padding: new EdgeInsets.only(
+              top: top
+          ),
+          decoration: new BoxDecoration(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
+            image: DecorationImage(
+                image: AssetImage('assets/images/rectangle_33.png'),
+                fit: BoxFit.cover),
+          ),
+
+          child:Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap:(){
+                      Navigator.pop(context);
+
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Image.asset('assets/images/back_ios.png',width: 14,height: 23,),
+                    ),
+                  ),
+                  Text('FREEZLOTTO',style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: SEMI_BOLD_FONT,letterSpacing: 2),),
+                  Container(padding: EdgeInsets.only(right: 30),)
+                ],
+              ),
+              SizedBox(height: 20),
+              Container(
+                height: 40,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25,right: 25),
+                  child:
+                  TabBar(
+                    unselectedLabelColor: white,
+                    isScrollable: false,
+                    labelColor: Colors.black,
+                    labelStyle: style2,
+                    indicatorColor: Colors.transparent,
+                    indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: white),
+                    tabs: [
+                      Container(
+                        width: width,
+                        decoration:BoxDecoration(
+                          border: Border.all(color: white),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+
+                        ),
+                        child: Tab(
+                          text: "Advertisement",
+                        ),
+                      ),
+                      Container(
+                        width: width,
+                        decoration:BoxDecoration(
+                            border: Border.all(color: white),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Tab(
+                          text: "Newsfeed",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 18,)
+            ],
+          ),
+        ),
+        preferredSize: new Size(
+           width,
+            130.0
+        ),
+      ),
+      backgroundColor: white,
+      body: page,
+
+    ),
+  );
+}
+Widget getTabController(Widget page,int number,int tabCount,double top,double width){
+  return DefaultTabController(
+    length: tabCount,
     initialIndex: number,
     child: Scaffold(
       appBar: new PreferredSize(
         child: new Container(
           padding: new EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top
+              top: top
           ),
           decoration: new BoxDecoration(
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
@@ -274,7 +352,7 @@ Widget getTabController(BuildContext context,Widget page,int number){
           ),
         ),
         preferredSize: new Size(
-            MediaQuery.of(context).size.width,
+           width,
             130.0
         ),
       ),
@@ -311,7 +389,7 @@ Widget progressBar = InkWell(
   child: SafeArea(
     child: Center(
       child: SizedBox(
-        child: CircularProgressIndicator( valueColor:AlwaysStoppedAnimation<Color>(Colors.red),),
+        child: CircularProgressIndicator(),
         width: 60,
         height: 60,
       ),

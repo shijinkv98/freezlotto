@@ -9,11 +9,14 @@ import 'package:freezlotto/network/response/register_response.dart';
 import 'package:freezlotto/network/response/response.dart';
 import 'package:freezlotto/notifier/loginnotifier.dart';
 import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/screens/splash_screen_second.dart';
 import 'package:freezlotto/utils/alert_utils.dart';
 import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
 import 'package:freezlotto/utils/preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 final TextStyle style = TextStyle(color: SubHeadTextColor,fontWeight: FontWeight.normal,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(color: SubHeadTextColor,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
@@ -25,13 +28,15 @@ class RegisterScreen extends StatefulWidget{
   _RegisterScreenState createState() => new _RegisterScreenState();
   }
 class _RegisterScreenState extends State<RegisterScreen>{
-
+  DateTime currentBackPressTime;
   final GlobalKey<FormState> _userNameKey = GlobalKey();
   final GlobalKey<FormState> _usermobileKey = GlobalKey();
   final GlobalKey<FormState> _userReferenceKey = GlobalKey();
   bool _isLoading = false;
   RegisterResponse _signupData = new RegisterResponse();
-
+  String customerMobile="";
+  String customerId="";
+  String success="";
   @override
   void initState() {
     // _updateNotifier =
@@ -57,9 +62,21 @@ class _RegisterScreenState extends State<RegisterScreen>{
     return Scaffold(
       backgroundColor: white,
       body:
-      getFullView(),
+      WillPopScope(
+          onWillPop: onWillPop,
+          child: getFullView()),
 
     );
+  }
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: 'Press Back Button again to exit');
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
   Widget getFullView() {
@@ -445,20 +462,22 @@ class _RegisterScreenState extends State<RegisterScreen>{
               setState(() => _isLoading = false);
               if (response.statusCode == 200) {
                 RegisterResponse _signupResponse = RegisterResponse.fromJson(response.data);
-                Preferences.save(PrefKey.phone, _signupResponse.customerMobile);
-                Preferences.save(PrefKey.customerID, _signupResponse.customerId);
-                if (_signupResponse.success != 1) {
+                customerMobile = _signupResponse.customerMobile;
+                customerId =_signupResponse.customerId;
+                // nextPagePushReplacement(context, SplashScreenSecond());
+                Preferences.save(PrefKey.phone, customerMobile);
+                Preferences.save(PrefKey.customerID, customerId);
+                if (_signupResponse.success == "1") {
 
-                  AlertUtils.showToast(_signupResponse.message, context);
-                   } else {
                   AlertUtils.showToast("Registration Successfull", context);
-
-
+                  nextPagePushReplacement(context, SplashScreenSecond(customerMobile: customerMobile));
+                   } else {
+                  AlertUtils.showToast(_signupResponse.message, context);
                 }
               } else {
                 AlertUtils.showToast("Registration Failed", context);
               }
-              nextPagePushReplacement(context, HomeScreen());
+
             });
           }
         });

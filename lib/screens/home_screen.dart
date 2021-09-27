@@ -30,11 +30,11 @@ class _HomeScreenState extends State<HomeScreen>{
   @override
   Widget build(BuildContext context) {
 
-    return getTabController(context,getHOMEpage(),0);
+    return getTabController(getHOMEpage(),0,3,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
   Widget getHOMEpage() {
     return TabBarView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: ScrollPhysics(),
       children: [
         HomePageScreen(),
         NewsFeedScreen(),

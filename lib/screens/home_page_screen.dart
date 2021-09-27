@@ -99,11 +99,18 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                         homeBloc.advertisementList[index].advertisement;
                     videoPath = APIClient.Ad_Asset_Location +
                         homeBloc.advertisementList[index].advertisement;
-                    _controller = VideoPlayerController.network(
-                        'https://freezelotto.alisonsdemo.online/images/advertisement/SampleVideo_1280x720_1mb.mp4');
-                    _initializeVideoPlayerFuture = _controller.initialize();
+                    _controller = VideoPlayerController.network(videoPath);
+                    // _controller.addListener(() {
+                    //   // setState(() {});
+                    // });
                     _controller.setLooping(false);
-                    _controller.setVolume(1.0);
+                    _controller.initialize().then((_) => setState(() {}));
+                    _controller.play();
+                    // _controller = VideoPlayerController.network(
+                    //     'https://freezelotto.alisonsdemo.online/images/advertisement/SampleVideo_1280x720_1mb.mp4');
+                    // _initializeVideoPlayerFuture = _controller.initialize();
+                    // _controller.setLooping(false);
+                    // _controller.setVolume(1.0);
 
                     return Container(
                         margin: EdgeInsets.only(bottom: 65),
@@ -136,7 +143,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                               )
                             : Container(
                                 color: white,
-                                child: Stack(
+                                child:
+                                Stack(
                                   children: [
                                     Align(
                                       alignment: Alignment.topCenter,
@@ -180,13 +188,23 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                                                 .all(Radius
                                                                     .circular(
                                                                         23)),
-                                                            child:
-                                                                ChewieListItem(
-                                                              videoPlayerController:
-                                                                  VideoPlayerController
-                                                                      .network(
-                                                                          'https://freezelotto.alisonsdemo.online/images/advertisement/SampleVideo_1280x720_1mb.mp4'),
+                                                            child:Stack(
+                                                              alignment: Alignment.bottomCenter,
+                                                              children: [
+                                                                Container(child: VideoPlayer(_controller),height:400,width: double.infinity,),
+                                                                _ControlsOverlay(controller: _controller),
+                                                                VideoProgressIndicator(_controller, allowScrubbing: true),
+
+
+                                                              ],
                                                             )
+
+                                                            //     ChewieListItem(
+                                                            //   videoPlayerController:
+                                                            //       VideoPlayerController
+                                                            //           .network(
+                                                            //               'https://freezelotto.alisonsdemo.online/images/advertisement/SampleVideo_1280x720_1mb.mp4'),
+                                                            // )
                                                             // FutureBuilder(
                                                             //     future:
                                                             //         _initializeVideoPlayerFuture,
@@ -640,5 +658,115 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   var customerID = "";
   void getUserInfo() async {
     customerID = await Preferences.get(PrefKey.customerID);
+  }
+}
+
+class _ControlsOverlay extends StatelessWidget {
+  const _ControlsOverlay({Key key, this.controller})
+      : super(key: key);
+
+  static const _examplePlaybackRates = [
+    0.25,
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    5.0,
+    10.0,
+  ];
+
+  final VideoPlayerController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return  Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          color: Colors.black26,
+          height: 50,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 50),
+              reverseDuration: Duration(milliseconds: 200),
+              child: Row(
+                children: [
+                  MaterialButton(
+                    onPressed: () async{
+                      var position=   await controller.position;
+
+                      controller.seekTo(Duration(seconds: position.inSeconds-5));
+                    },
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 20.0,
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  controller.value.isPlaying
+                      ? MaterialButton(
+                    child: Icon(
+                      Icons.pause,
+                      color: Colors.white,
+                      size: 30.0,
+                    ),
+                    onPressed: () {
+                      controller.value.isPlaying ? controller.pause() : controller.play();
+                    },
+                  )
+                      : MaterialButton(
+                    child: Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 30.0,
+                    ),
+                    onPressed: () {
+                      controller.value.isPlaying ? controller.pause() : controller.play();
+                    },
+                  ),
+                  SizedBox(width: 20,),
+                  MaterialButton(
+                    onPressed: () async{
+                      var position=   await controller.position;
+
+                      controller.seekTo(Duration(seconds: position.inSeconds+5));
+                    },
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: 20.0,
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  PopupMenuButton(
+                    initialValue: controller.value.playbackSpeed,
+                    tooltip: 'Playback speed',
+                    color: Colors.white,
+                    onSelected: (speed) {
+                      controller.setPlaybackSpeed(speed);
+                    },
+                    itemBuilder: (context) {
+                      return [
+                        for (final speed in _examplePlaybackRates)
+                          PopupMenuItem(
+                            value: speed,
+                            child: Text('${speed}x',),
+                          )
+                      ];
+                    },
+                    child: Text('${controller.value.playbackSpeed}x',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
   }
 }

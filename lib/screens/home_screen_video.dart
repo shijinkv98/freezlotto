@@ -25,7 +25,7 @@ class _HomeScreenVideoState extends State<HomeScreenVideo>{
   @override
   Widget build(BuildContext context) {
 
-    return getTabController(context,getHOMEpage(),0);
+    return getTabController(getHOMEpage(),0,3,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
 
   }
 

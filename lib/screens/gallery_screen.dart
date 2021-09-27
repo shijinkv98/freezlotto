@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:freezlotto/blocs/gallery_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/coupon_page.dart';
 import 'package:freezlotto/screens/home_screen_video.dart';
 import 'package:freezlotto/screens/settings_screen.dart';
 import 'package:freezlotto/screens/upload_news_feeds.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:provider/provider.dart';
+import 'package:freezlotto/helper/api_url_data.dart';
+import 'package:freezlotto/widget/fl_Dropdown.dart';
 
 final TextStyle style = TextStyle(
   color: Colors.white,
@@ -65,6 +70,7 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   String dropdownValue = 'Laptop';
+  String _dropList;
 
   @override
   void initState() {
@@ -73,6 +79,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<GalleryBloc>(context, listen: false).getGalleryData(context);
     return Scaffold(
       floatingActionButton: Container(
         width: 72,
@@ -81,7 +88,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
           onPressed: () {
             nextPagePush(context, SettingsScreen());
             },
-
           child: Container(
             height: 72,
             width: 72,
@@ -119,142 +125,121 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   Widget getFullView() {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(left: 30, right: 30, top: 30),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(14)),
-              image: DecorationImage(
-                  image: AssetImage('assets/images/rectangle_10.png'),
-                  fit: BoxFit.cover),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 27, right: 27, top: 10, bottom: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width / 3.5,
-                          child: Text('Account Money', style: style2)),
-                      // SizedBox(width: 30),
-                      Text('Rs. 25000', style: style)
-                    ],
-                  ),
-                ),
-                Divider(height: 1, color: white),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 27, right: 27, top: 5, bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width / 3.5,
-                          child: Text('Account Prize', style: style2)),
-                      // SizedBox(width: 45),
-                      Container(
-                        // margin: EdgeInsets.only(left: 30),
-                        padding: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width/2-67,
-                        child: Theme(
-                          data: new ThemeData(
-                            canvasColor: Colors.white,
-                            primaryColor: Colors.black,
-                            accentColor: Colors.white,
-                          ),
-                          child:
-                          DropdownButton<String>(
-                            // value: dropdownValue,
-                            // style: style,
-
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down_sharp,
-                              color: white,
-                            ),
-                            iconSize: 24,
-                            elevation: 0,
-                            style: dropdown,
-                            dropdownColor: white,
-                            isExpanded: true,
-                            hint: Text(
-                              dropdownValue,
-                              style: style,
-                              textAlign: TextAlign.justify,
-                            ),
-                            // style: style,
-                            isDense: false,
-                            underline: Container(
-                              height: 2,
-                              color: Colors.transparent,
-                            ),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                dropdownValue = newValue;
-                              });
-                            },
-                            items: <String>[
-                              'Laptop',
-                              'Television',
-                              'Smartphone',
-                              'WashinMachine',
-                              'Furniture',
-                              'Refrigerator',
-                              'Sports Cycle',
-                              'Air Conditioner'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
+      child: Consumer<GalleryBloc>(
+        builder: (context, galleryBloc, child) => ModalProgressHUD(
+      inAsyncCall: galleryBloc.isLoading,
+        child:
+        Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(14)),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/rectangle_10.png'),
+                    fit: BoxFit.cover),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 27, right: 27, top: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width/3.5,
+                            child: Text('Account Money', style: style2)),
+                        SizedBox(
+                          width: 30,
                         ),
-                      )
-                    ],
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width/3.5,
+                            child: Text('${'Rs.'}${galleryBloc.accountMoney}', style: style))
+                      ],
+                    ),
                   ),
-                )
-              ],
+                  Divider(height: 1, color: white),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 27, right: 27, top: 5, bottom: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width/3.5,
+                            child: Text('Account Prize', style: style2)),
+                        SizedBox(
+                          width:20,
+                        ),
+                        Container(
+                          // margin: EdgeInsets.only(left: 30),
+                          width: MediaQuery.of(context).size.width/3.5,
+                          child: Theme(
+                            data: new ThemeData(
+                              canvasColor: Colors.white,
+                              primaryColor: Colors.black,
+                              accentColor: Colors.white,
+                            ),
+                            child:FLDropdown(
+                              items: galleryBloc.prizeList
+                                  .map((e) => e.priceName)
+                                  .toList(),
+                              hintText:galleryBloc.prizeList[0].priceName,
+                              selectedValue: _dropList != null
+                                  ? galleryBloc.prizeList
+                                  .where((e) =>e.id == galleryBloc.prizeList[0].id).first.priceName
+                                  : null,
+                              onChanged: (selected) {
+                                _dropList = galleryBloc.prizeList.where((e)=>e.priceName == selected).first.id;
+                              },
+                            ),
+
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          getMiddleContainer(),
-          Container(
-            height: 49,
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(left: 55, right: 55, top: 50, bottom: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              image: DecorationImage(
-                  image: AssetImage('assets/images/rectangle_10.png'),
-                  fit: BoxFit.cover),
-            ),
-            child: Center(
-                child: Text(
-              "ACTIVITY LOG",
-              style: style3,
-            )),
-          )
-        ],
+            getMiddleContainer(galleryBloc),
+            Container(
+              height: 49,
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.only(left: 55, right: 55, top: 50, bottom: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/rectangle_10.png'),
+                    fit: BoxFit.cover),
+              ),
+              child: Center(
+                  child: Text(
+                "ACTIVITY LOG",
+                style: style3,
+              )),
+            )
+          ],
+        ),
+        ),
       ),
     );
   }
 
-  Widget getMiddleContainer() {
+  Widget getMiddleContainer(GalleryBloc galleryBloc) {
     double width = MediaQuery.of(context).size.width - 15;
     double height = 240;
     double aspect = (width / 2) / height;
     return Container(
       margin: EdgeInsets.only(left: 33, right: 33, top: 33),
       child: GridView.builder(
-          itemCount: 9,
+          itemCount: galleryBloc.coupens.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               mainAxisExtent: 110,
@@ -265,46 +250,43 @@ class _GalleryScreenState extends State<GalleryScreen> {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext ctx, index) {
-            return _itemsBuilder();
+            return   InkWell(
+              onTap: (){
+                nextPagePush(context, CouponScreen());
+              },
+              child: Container(
+                margin: EdgeInsets.all(0.3),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child:FadeInImage.assetNetwork(
+                  fit: BoxFit.fitHeight,
+                  placeholder: 'assets/images/bg_dummy.png',
+                  image:
+                  '${APIClient.Coupon_Asset_Location}${galleryBloc.coupens[index].coupenImage}',
+                ),
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       'DISCOUNT',
+                //       style: couponDis,
+                //     ),
+                //     Text(
+                //       'COUPON',
+                //       style: couponDis,
+                //     ),
+                //     Text(
+                //       '30% OFF',
+                //       style: redText,
+                //     ),
+                //   ],
+                // ),
+              ),
+            );
           }),
     );
   }
 
-  Widget _itemsBuilder() {
-    return
-      InkWell(
-        onTap: (){
-          nextPagePush(context, CouponScreen());
-        },
-        child: Container(
-        decoration:couponOuter,
-        child: Container(
-          margin: EdgeInsets.all(2),
-          decoration: couponInnerWhite,
-          child: Container(
-            margin: EdgeInsets.all(0.3),
-            decoration: couponInner,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'DISCOUNT',
-                  style: couponDis,
-                ),
-                Text(
-                  'COUPON',
-                  style: couponDis,
-                ),
-                Text(
-                  '30% OFF',
-                  style: redText,
-                ),
-              ],
-            ),
-          ),
-        ),
-    ),
-      );
-  }
 }

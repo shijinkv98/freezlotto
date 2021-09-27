@@ -6,6 +6,7 @@ import 'package:freezlotto/screens/home_page_screen.dart';
 import 'package:freezlotto/screens/payment_screen.dart';
 import 'package:freezlotto/screens/upload_advertisement.dart';
 import 'package:freezlotto/screens/upload_page.dart';
+import 'package:freezlotto/utils/file_model.dart';
 
 import 'newsfeed_screen.dart';
 
@@ -63,7 +64,8 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
           InkWell(
             onTap: (){
               // nextPagePush(context, UploadAdvertisement());
-              nextPagePush(context, UploadPage(duration: "",category: "",type: "free",));
+              nextPagePush(context,
+                  UploadPage(duration: "",category: "",type: "free",));
             },
             child: Container(
               margin: EdgeInsets.only(top: 34,left: 27,right: 27),
