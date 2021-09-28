@@ -16,5 +16,6 @@ const String NEWSFEED = "newsfeed";
 const String LIKEABLE = "likeable";
 const String PHONE_COUNTRY_CODE = "phone_country_code";
 const String REFERAL_COUNTRY_CODE = "referal_country_code";
+const String PAID_AMOUNT = "paid_amount";
 
 

@@ -190,7 +190,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                               items: galleryBloc.prizeList
                                   .map((e) => e.priceName)
                                   .toList(),
-                              hintText:galleryBloc.prizeList[0].priceName,
+                              hintText:'Select',
                               selectedValue: _dropList != null
                                   ? galleryBloc.prizeList
                                   .where((e) =>e.id == galleryBloc.prizeList[0].id).first.priceName

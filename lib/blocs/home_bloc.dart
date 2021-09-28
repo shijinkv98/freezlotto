@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:freezlotto/network/response/AdsGetResponse.dart';
 import 'package:freezlotto/network/response/ads_uploaded_response.dart';
 import 'package:freezlotto/network/response/home_response.dart';
 import 'package:freezlotto/network/response/payment_success_response.dart';
 import 'package:freezlotto/network/response/response.dart';
 import 'package:freezlotto/network/response/upload_add_contents_response.dart';
 import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/screens/payment_details_screen.dart';
 import 'package:freezlotto/screens/upload_successfull.dart';
 import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
@@ -19,6 +21,9 @@ class HomeBloc extends ChangeNotifier {
   String commission_amount = "";
   String advertisment_id = "";
   String paid_amount = "";
+  // String get_paid_amount = "";
+  String addId = "";
+  // String add_Id = "";
   String conten1 = "";
   String conten2 = "";
   String conten3 = "";
@@ -103,34 +108,32 @@ class HomeBloc extends ChangeNotifier {
     });
   }
 
-  uploadAds(BuildContext context,String file,String type,String duration,String category)  {
+  uploadAds(BuildContext context,File file,String type,String duration,String category)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
       if (isConnected) {
         isLoading = true;
         notifyListeners();
-        APIService().uploadAds(file,type,duration,category).then((response) {
+        APIService().uploadImage(context,file,type,duration,category).then((response) {
           isLoading = false;
-          // notifyListeners();
+          notifyListeners();
           if (response.statusCode == 200) {
-            AdsUploadedResponse adsUploadedResponse = AdsUploadedResponse.fromJson(response.data);
-            pagecontents = adsUploadedResponse.pagecontents;
-            advertisment_id = adsUploadedResponse.advertismentId;
-            paid_amount = adsUploadedResponse.paidAmount;
-            conten3 = adsUploadedResponse.pagecontents.conten3;
-            conten2 = adsUploadedResponse.pagecontents.conten2;
-            conten1 = adsUploadedResponse.pagecontents.conten1;
-            // pagecontents = adsUploadedResponse.pagecontents;
-            if (adsUploadedResponse.success == "1") {
+            UploadResponse uploadResponse = UploadResponse.fromJson(response.data);
+            advertisment_id = uploadResponse.advertismentId;
+            paid_amount = uploadResponse.paidAmount;
+            nextPagePushReplacement(context, type=="free" ? UploadSuccess(): PaymentDetailsScreen(ads_id: advertisment_id,amount: paid_amount,));
+            if (uploadResponse.success == 1) {
 
               AlertUtils.showToast(
-                  "NewsFeed successfully updated", context);
+                  "Successfully updated", context);
+
               // nextPagePushReplacement(context, UploadSuccess());
               // getAddressList(context);
               // Navigator.of(context).pop();
-            } else if (adsUploadedResponse.success == 3) {
+            } else if (uploadResponse.success == 3) {
               kMoveToLogin(context);
             } else {
-              AlertUtils.showToast(adsUploadedResponse.message, context);
+
+              AlertUtils.showToast(uploadResponse.message, context);
             }
           } else {
             AlertUtils.showToast("Failed", context);
@@ -138,6 +141,46 @@ class HomeBloc extends ChangeNotifier {
         }
 
         );
+      }
+    });
+  }
+  getAdsData(BuildContext context)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        notifyListeners();
+        APIService().getAdsData(advertisment_id,paid_amount).then((response) {
+          isLoading = false;
+          notifyListeners();
+          if (response.statusCode == 200) {
+            AdsGetResponse adsGetResponse = AdsGetResponse.fromJson(response.data);
+            addId = adsGetResponse.advertismentId;
+            // g_paid/_amount = adsGetResponse.paidAmount;
+            pagecontents = adsGetResponse.pagecontents;
+            conten3=adsGetResponse.pagecontents.conten3;
+            conten2=adsGetResponse.pagecontents.conten2;
+            conten1=adsGetResponse.pagecontents.conten1;
+
+            if (adsGetResponse.success == 0) {
+              AlertUtils.showToast('Failed', context);
+
+              // advertisementList = homeScreenResponse.advertisementList;
+              //   notifyListeners();
+            } else if (adsGetResponse.success == 3) {
+              print("NEED TO LOGIN HERE......");
+              kMoveToLogin(context);
+            }else if (adsGetResponse.success == 1) {
+              pagecontents = adsGetResponse.pagecontents;
+              notifyListeners();
+            }
+            // }else {
+            //   AlertUtils.showToast(homeScreenResponse.message, context);
+            // }
+
+          } else {
+            AlertUtils.showToast("Failed", context);
+          }
+        });
       }
     });
   }
@@ -149,11 +192,11 @@ class HomeBloc extends ChangeNotifier {
         notifyListeners();
         APIService().submitPayment(addId,transactionId).then((response) {
           isLoading = false;
-          // notifyListeners();
+          notifyListeners();
           if (response.statusCode == 200) {
             PaymentSuccessResponse paymentSuccessResponse = PaymentSuccessResponse.fromJson(response.data);
-            // nextPagePushReplacement(context, UploadSuccess());
-            if (paymentSuccessResponse.success == "1") {
+            nextPagePushReplacement(context, UploadSuccess());
+            if (paymentSuccessResponse.success == 1) {
 
               AlertUtils.showToast(
                   "Successfully updated", context);

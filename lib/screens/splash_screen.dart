@@ -9,6 +9,8 @@ import 'package:freezlotto/screens/splash_screen_second.dart';
 import 'package:freezlotto/utils/preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => new _SplashScreenState();
@@ -27,7 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
               nextPagePushReplacement(context, RegisterScreen());
             }
             else{
-              nextPagePushReplacement(context, HomeScreen(tabnumber: 0));
+              nextPagePushReplacement(context,
+                  HomeScreen(tabnumber: 0)
+              );
             }
           });
     }

@@ -49,11 +49,11 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -95,17 +95,17 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    videoUrl =
-                        homeBloc.advertisementList[index].advertisement;
-                    videoPath = APIClient.Ad_Asset_Location +
-                        homeBloc.advertisementList[index].advertisement;
-                    _controller = VideoPlayerController.network(videoPath);
+                    // videoUrl =
+                    //     homeBloc.advertisementList[index].advertisement;
+                    // videoPath = APIClient.Ad_Asset_Location +
+                    //     homeBloc.advertisementList[index].advertisement;
+                    // _controller = VideoPlayerController.network(videoPath);
                     // _controller.addListener(() {
                     //   // setState(() {});
                     // });
-                    _controller.setLooping(false);
-                    _controller.initialize().then((_) => setState(() {}));
-                    _controller.play();
+                    // _controller.setLooping(false);
+                    // _controller.initialize().then((_) => setState(() {}));
+                    // _controller.play();
                     // _controller = VideoPlayerController.network(
                     //     'https://freezelotto.alisonsdemo.online/images/advertisement/SampleVideo_1280x720_1mb.mp4');
                     // _initializeVideoPlayerFuture = _controller.initialize();
@@ -189,16 +189,17 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                                                 .all(Radius
                                                                     .circular(
                                                                         23)),
-                                                            child:Stack(
-                                                              alignment: Alignment.bottomCenter,
-                                                              children: [
-                                                                Container(child: VideoPlayer(_controller),height:400,width: double.infinity,),
-                                                                _ControlsOverlay(controller: _controller),
-                                                                VideoProgressIndicator(_controller, allowScrubbing: true),
-
-
-                                                              ],
-                                                            )
+                                                            // child:
+                                                            // Stack(
+                                                            //   alignment: Alignment.bottomCenter,
+                                                            //   children: [
+                                                            //     Container(child: VideoPlayer(_controller),height:400,width: double.infinity,),
+                                                            //     _ControlsOverlay(controller: _controller),
+                                                            //     VideoProgressIndicator(_controller, allowScrubbing: true),
+                                                            //
+                                                            //
+                                                            //   ],
+                                                            // )
 
                                                             //     ChewieListItem(
                                                             //   videoPlayerController:
@@ -259,17 +260,19 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                                               color: Colors
                                                                   .transparent,
                                                             ),
-                                                            child: Icon(
-                                                              _controller
-                                                                      .value
-                                                                      .isPlaying
-                                                                  ? Icons
-                                                                      .pause_circle_filled_outlined
-                                                                  : Icons
-                                                                      .play_circle_filled_outlined,
-                                                              color: white,
-                                                              size: 55,
-                                                            )),
+                                                            // child:
+                                                            // Icon(
+                                                            //   _controller
+                                                            //           .value
+                                                            //           .isPlaying
+                                                            //       ? Icons
+                                                            //           .pause_circle_filled_outlined
+                                                            //       : Icons
+                                                            //           .play_circle_filled_outlined,
+                                                            //   color: white,
+                                                            //   size: 55,
+                                                            // )
+                                                        ),
                                                       ),
                                                     ),
                                                   ], //<Widget>[]

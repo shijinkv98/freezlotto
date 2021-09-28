@@ -195,6 +195,9 @@ Widget getAppBar(BuildContext context,String title,Widget body){
     backgroundColor: white,
   );
 }
+
+final GlobalKey<ScaffoldState> drawerScaffoldKey =
+new GlobalKey<ScaffoldState>();
 Widget getProfileTabController(BuildContext context,Widget page,int number,int tabCount,double top,double width){
   return DefaultTabController(
     length: tabCount,
@@ -231,7 +234,7 @@ Widget getProfileTabController(BuildContext context,Widget page,int number,int t
                       child: Image.asset('assets/images/back_ios.png',width: 14,height: 23,),
                     ),
                   ),
-                  Text('FREEZLOTTO',style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: SEMI_BOLD_FONT,letterSpacing: 2),),
+                  Text('PROFILE',style: TextStyle(color: Colors.white,fontSize: 20,fontFamily: SEMI_BOLD_FONT,letterSpacing: 2),),
                   Container(padding: EdgeInsets.only(right: 30),)
                 ],
               ),
@@ -318,7 +321,8 @@ Widget getTabController(Widget page,int number,int tabCount,double top,double wi
                 height: 40,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 25,right: 25),
-                  child: TabBar(
+                  child:
+                  TabBar(
                     unselectedLabelColor: white,
                     isScrollable: false,
                     labelColor: Colors.black,

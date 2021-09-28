@@ -20,18 +20,19 @@ final TextStyle style5 = TextStyle(color: SubHeadTextColor,fontWeight: FontWeigh
 final TextStyle dropdown = TextStyle(color: dropdowntextColor,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 String _TransID;
 class PaymentDetailsScreen extends StatefulWidget{
-
+String ads_id;
+String amount;
 
   @override
-  _PaymentDetailsScreenState createState() => new _PaymentDetailsScreenState();
-
+  _PaymentDetailsScreenState createState() => new _PaymentDetailsScreenState(ads_id: this.ads_id, amount: this.amount);
+PaymentDetailsScreen({this.amount,this.ads_id});
   }
 class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
   // File advertisement;
-
+  String ads_id;
+  String amount;
   final GlobalKey<FormState> _transIdKey = GlobalKey();
-
-  _PaymentDetailsScreenState();
+  _PaymentDetailsScreenState({this.ads_id,this.amount});
   @override
   void initState() {
     super.initState();
@@ -40,32 +41,21 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
+    Provider.of<HomeBloc>(context, listen: false).getAdsData(context);
     return getAppBar(context, " Switch to Admin App",getBody());
   }
   Widget getBody(){
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height-120,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-
-            Consumer<HomeBloc>(
+    return Consumer<HomeBloc>(
         builder: (context, homeBloc, child) => ModalProgressHUD(
-          inAsyncCall: homeBloc.isLoading,
-                child: getContent(homeBloc))),
-
-          ],
-        ),
-      ),
-    );
-}
-
-  Widget getContent(HomeBloc homeBloc){
-    return SingleChildScrollView(
+      inAsyncCall: homeBloc.isLoading,
+      child: SingleChildScrollView(
         child: Container(
+          height: MediaQuery.of(context).size.height-120,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+          Container(
           margin: EdgeInsets.only(left: 30,right: 30,top: 120),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height-240,
@@ -130,25 +120,33 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                   }
                 },
                 child: Container(
-                  margin: EdgeInsets.only(top: 50,left: 44,right: 44,bottom: 26),
-                  height: 43,
-                  width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(top: 50,left: 44,right: 44,bottom: 26),
+                    height: 43,
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(6)),
                       image: DecorationImage(
                           image: AssetImage('assets/images/submitbg.png'),
                           fit: BoxFit.cover),
                     ),
-                  child:Center(child: Text('SUBMIT',style: style3,))
+                    child:Center(child: Text('SUBMIT',style: style3,))
                 ),
               ),
               Center(child:  Text(homeBloc.conten3,style: style2,textAlign: TextAlign.center,) ,),
               SizedBox(height: 20,)
             ],
           ),
-        ),
+        )
+
+            ],
+      )
+        )
+      ),
+        )
     );
-  }
+}
+
+
 
   Widget getTransIdField(){
     return Form(

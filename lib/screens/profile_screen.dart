@@ -14,12 +14,14 @@ final TextStyle style4= TextStyle(color:dateColor,fontWeight: FontWeight.w400,fo
 final TextStyle style3 = TextStyle(color:textColor,fontWeight: FontWeight.w600,fontFamily: SEMI_BOLD_FONT,fontSize: 19,letterSpacing: 0.8);
 String _Link;
 class ProfileScreen extends StatefulWidget{
-
+int tabnumer;
   @override
-  _ProfileScreenState createState() => new _ProfileScreenState();
+  _ProfileScreenState createState() => new _ProfileScreenState(tabnumer:this.tabnumer);
+  ProfileScreen({this.tabnumer});
   }
 class _ProfileScreenState extends State<ProfileScreen> {
-
+  int tabnumer;
+_ProfileScreenState({this.tabnumer});
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return getProfileTabController(context,getBody(),0,2,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
+    return getProfileTabController(context,getBody(),tabnumer,2,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
   Widget getBody(){
     return TabBarView(

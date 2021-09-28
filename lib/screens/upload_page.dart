@@ -109,8 +109,7 @@ class _UploadPageState extends State<UploadPage> {
                            textColor: Colors.white,
                            fontSize: 16.0
                        ):
-                         uploadImage(context,fileMedia,type,duration,category);
-
+                         homeBloc.uploadAds(context,fileMedia,type,duration,category);
 
                         },
 
@@ -158,19 +157,3 @@ class _UploadPageState extends State<UploadPage> {
   }
 }
 Dio dio = new Dio();
-Future<String> uploadImage(BuildContext context,File file,String type,String duration,String category) async {
-  String fileName = file.path.split('/').last;
-  FormData formData = FormData.fromMap({
-    ADD:await MultipartFile.fromFile(file.path, filename:fileName),
-    FREE_OR_PAID:type,
-    DURATION:duration,
-    CATEGORY:category,
-    CUS_ID: await Preferences.get(PrefKey.customerID)
-  });
-
-  var response = await dio.post(APIClient.ADD, data: formData);
-  print(response);
-
-  response.statusCode == 200 ? nextPagePushReplacement(context, type=="free"?UploadSuccess(): PaymentDetailsScreen()):Container();
-  return response.statusMessage;
-}

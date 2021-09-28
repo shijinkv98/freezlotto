@@ -56,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             InkWell(
                 onTap: () {
-                nextPagePush(context, MyTvScreen());
+                nextPagePush(context, ProfileScreen(tabnumer: 0,));
                 },
                 child: getContent('assets/images/profile.png', 'Profile')),
             InkWell(

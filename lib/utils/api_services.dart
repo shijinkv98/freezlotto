@@ -1,5 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:freezlotto/helper/constants.dart';
+import 'package:freezlotto/screens/payment_details_screen.dart';
+import 'package:freezlotto/screens/upload_successfull.dart';
 import 'package:http/http.dart'as http;
 import 'package:dio/dio.dart';
 import 'package:freezlotto/helper/api_params.dart';
@@ -72,20 +76,29 @@ class APIService {
     return response;
   }
   ///upload ads///
-  Future<Response> uploadAds(String add,String type,String duration,String category) async {
+  Future<Response> uploadImage(BuildContext context,File file,String type,String duration,String category) async {
+    String fileName = file.path.split('/').last;
     var url = APIClient.ADD;
-
-    var queryParams = {
-      // CUS_ID: '1',
-      ADD: "$add",
-      FREE_OR_PAID:"$type",
-      DURATION:"$duration",
-      CATEGORY:"$category",
+    FormData formData = FormData.fromMap({
+      ADD:await MultipartFile.fromFile(file.path, filename:fileName),
+      FREE_OR_PAID:type,
+      DURATION:duration,
+      CATEGORY:category,
       CUS_ID: await Preferences.get(PrefKey.customerID)
-    };
-    var data = {
-      ADD: "$add",
+    });
+    print("URL:::" + url + formData.toString());
+    Response response = await dio.post(url, data: formData);
+    print("RESPONSE:::" + response.data.toString());
 
+    // response.statusCode == 200 ? nextPagePushReplacement(context, type=="free"?UploadSuccess(): PaymentDetailsScreen()):Container();
+    return response;
+  }
+  ///get ads ///
+  Future<Response> getAdsData(String addId,String paid_amount) async {
+    var url = APIClient.ADD_Get;
+    var queryParams = {
+      ADD_ID: addId,
+      PAID_AMOUNT: paid_amount,
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);

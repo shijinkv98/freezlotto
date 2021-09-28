@@ -54,7 +54,7 @@ _SplashScreenSecondState({this.customerMobile});
                       onTap: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(builder: (context) => HomeScreen(tabnumber: 0,)),
                         );
 
                       },

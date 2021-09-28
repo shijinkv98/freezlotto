@@ -330,7 +330,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                   ],
                 ),
               ),
-              Text(url),
+
             ],
           );
         });
