@@ -3,6 +3,7 @@ import 'package:freezlotto/network/response/home_response.dart';
 import 'package:freezlotto/network/response/newsfeed_like_response.dart';
 import 'package:freezlotto/network/response/newsfeed_list_response.dart';
 import 'package:freezlotto/network/response/newsfeed_upload_response.dart';
+import 'package:freezlotto/network/response/report_newsfeed_response.dart';
 import 'package:freezlotto/network/response/response.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/upload_news_feeds.dart';
@@ -119,6 +120,35 @@ class NewsFeedBloc extends ChangeNotifier {
               kMoveToLogin(context);
             } else {
               AlertUtils.showToast(newsFeedUploadResponse.message, context);
+            }
+          } else {
+            AlertUtils.showToast("Failed", context);
+          }
+        });
+      }
+    });
+
+  }
+  reportNewsFeeds(BuildContext context,String newsfeedId)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        // notifyListeners();
+        APIService().reportNewsfeeds(newsfeedId).then((response) {
+          isLoading = false;
+          // notifyListeners();
+          if (response.statusCode == 200) {
+            ReportResponse reportResponse = ReportResponse
+                .fromJson(response.data);
+            if (reportResponse.success == 1) {
+              AlertUtils.showToast(
+                  "NewsFeed successfully updated", context);
+              // getAddressList(context);
+              Navigator.of(context).pop();
+            } else if (reportResponse.success == 3) {
+              kMoveToLogin(context);
+            } else {
+              AlertUtils.showToast(reportResponse.message, context);
             }
           } else {
             AlertUtils.showToast("Failed", context);

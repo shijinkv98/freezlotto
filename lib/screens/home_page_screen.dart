@@ -147,7 +147,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                         width: 72,height: 72,
                                         child:FloatingActionButton(
                                           onPressed: () {
-                                            homeBloc.commission_amount =="0"?homeBloc.addMoney(context):Container();
+                                            homeBloc.commission_amount !="0"?homeBloc.addMoney(context):Container();
                                             nextPagePushReplacement(context, HomeScreen(tabnumber: 2,));
                                           },
                                           child: Column(

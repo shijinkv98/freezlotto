@@ -327,6 +327,45 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                             ],
                           )),
                     ),
+                    InkWell(
+                      onTap: (){
+                       newsFeedBloc.reportNewsFeeds(context, newsFeedBloc.newsfeedsList[index].id);
+                       setState(() {
+
+                       });
+                      },
+                      child: Container(
+                          width: 96,
+                          height: 40,
+                          margin: EdgeInsets.only(left: 15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: white,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Container(
+                                  width: 17, height: 15,
+                                  child: Image(
+                                    image: AssetImage(
+                                      'assets/images/banned.png',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Text(
+                                  'Report',
+                                  style: style2,
+                                ),
+                              )
+                            ],
+                          )),
+                    ),
                   ],
                 ),
               ),

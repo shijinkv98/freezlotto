@@ -261,28 +261,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 ),
                 child:FadeInImage.assetNetwork(
                   fit: BoxFit.fitHeight,
-                  placeholder: 'assets/images/bg_dummy.png',
+                  placeholder: 'assets/images/logo.png',
                   image:
                   '${APIClient.Coupon_Asset_Location}${galleryBloc.coupens[index].coupenImage}',
                 ),
-                // Column(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Text(
-                //       'DISCOUNT',
-                //       style: couponDis,
-                //     ),
-                //     Text(
-                //       'COUPON',
-                //       style: couponDis,
-                //     ),
-                //     Text(
-                //       '30% OFF',
-                //       style: redText,
-                //     ),
-                //   ],
-                // ),
               ),
             );
           }),

@@ -2,6 +2,7 @@ class APIClient {
   static final Base_URL = "https://freezelotto.alisonsdemo.online/api/";
   static final Register_URL = Base_URL + "register";
   static final ADD = Base_URL +  "advertisement";
+  static final REPORT = Base_URL +  "newsfeeds-report";
   static final ADD_Get = Base_URL +  "advertisement-get";
   static final ADD_MONEY = Base_URL +  "add-money-to-account";
   static final FEEDS = Base_URL + "newsfeeds";
