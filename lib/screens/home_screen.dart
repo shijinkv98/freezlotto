@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen>{
   @override
   void initState(){
     super.initState();
-    _loadCustomerID();
   }
 
 
@@ -37,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen>{
   }
   Widget getHOMEpage() {
     return TabBarView(
-      physics: ScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       children: [
         HomePageScreen(),
         NewsFeedScreen(),
@@ -46,12 +45,7 @@ class _HomeScreenState extends State<HomeScreen>{
     );
 
   }
-  _loadCustomerID() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _customer_id = (prefs.getString('customer_id') ?? '');
-    });
-  }
+
 
 
 

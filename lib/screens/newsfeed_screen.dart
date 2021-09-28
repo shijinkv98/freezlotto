@@ -63,7 +63,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   }
 
   @override deactivate() {
-    _controller.pause();
+    // _controller.pause();
     super.deactivate();
   }
 

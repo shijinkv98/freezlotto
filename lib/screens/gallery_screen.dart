@@ -78,7 +78,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     Provider.of<GalleryBloc>(context, listen: false).getGalleryData(context);
     return Scaffold(
       floatingActionButton: Container(
@@ -124,11 +124,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   Widget getFullView() {
-    return SingleChildScrollView(
-      child: Consumer<GalleryBloc>(
-        builder: (context, galleryBloc, child) => ModalProgressHUD(
-      inAsyncCall: galleryBloc.isLoading,
-        child:
+    return  Consumer<GalleryBloc>(
+      builder: (context, galleryBloc, child) => ModalProgressHUD(
+        inAsyncCall: galleryBloc.isLoading,
+        child:SingleChildScrollView(
+      child:
         Column(
           children: [
             Container(

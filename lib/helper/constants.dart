@@ -196,8 +196,8 @@ Widget getAppBar(BuildContext context,String title,Widget body){
   );
 }
 
-final GlobalKey<ScaffoldState> drawerScaffoldKey =
-new GlobalKey<ScaffoldState>();
+final GlobalKey<ScaffoldState> drawerScaffoldKey =new GlobalKey<ScaffoldState>();
+
 Widget getProfileTabController(BuildContext context,Widget page,int number,int tabCount,double top,double width){
   return DefaultTabController(
     length: tabCount,
@@ -429,4 +429,5 @@ kMoveToLogin(BuildContext context) {
   Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (BuildContext context) => RegisterScreen()));
 }
+
 
