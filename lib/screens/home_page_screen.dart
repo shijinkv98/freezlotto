@@ -1,23 +1,18 @@
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:freezlotto/helper/api_params.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
-import 'package:freezlotto/network/ApiCall.dart';
-import 'package:freezlotto/network/response/home_response.dart';
-import 'package:freezlotto/screens/chewie_list_item.dart';
-import 'package:freezlotto/screens/home_screen_video.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
 import 'package:freezlotto/utils/preferences.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
 import 'package:video_player/video_player.dart';
+
+import 'home_screen.dart';
 
 final TextStyle style = TextStyle(
     color: white,
@@ -119,29 +114,70 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                         child: homeBloc.advertisementList[index].fileType ==
                                 "image"
                             ? Container(
-                                margin: EdgeInsets.only(
-                                    bottom: 50, top: 40, left: 30, right: 30),
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(31)),
-                                  // image: DecorationImage(
-                                  //  image: AssetImage('assets/images/bg_dummy.png'),
-                                  //     fit: BoxFit.cover),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(31)),
-                                  child: FadeInImage.assetNetwork(
-                                    fit: BoxFit.fitHeight,
-                                    placeholder: 'assets/images/logo.png',
-                                    image:
-                                        '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
-                                  ),
-                                ),
-                              )
+                              child: Stack(
+                                children: [
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          bottom: 50, top: 40, left: 30, right: 30),
+                                      height: MediaQuery.of(context).size.height,
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(31)),
+                                        // image: DecorationImage(
+                                        //  image: AssetImage('assets/images/bg_dummy.png'),
+                                        //     fit: BoxFit.cover),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(31)),
+                                        child: FadeInImage.assetNetwork(
+                                          fit: BoxFit.fitHeight,
+                                          placeholder: 'assets/images/logo.png',
+                                          image:
+                                              '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
+                                        ),
+                                      ),
+                                    ),
+                                  Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        margin: EdgeInsets.only(bottom: 30, top: 40, left: 30, right: 45),
+                                        width: 72,height: 72,
+                                        child:FloatingActionButton(
+                                          onPressed: () {
+                                            homeBloc.commission_amount =="0"?homeBloc.addMoney(context):Container();
+                                            nextPagePushReplacement(context, HomeScreen(tabnumber: 2,));
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                homeBloc.referal_count,
+                                                style: TextStyle(
+                                                    color: flottingTextColor,
+                                                    fontFamily: MEDIUM_FONT,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 22),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(bottom: 5),
+                                                child: Image.asset(
+                                                  'assets/images/Vector.png',
+                                                  width: 30,
+                                                  height: 20,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          mini: false,
+                                          backgroundColor: homeBloc.commission_amount =="0"?flottingButtonColor:flottingRedTextColor,
+                                        )))
+                                ],
+                              ),
+                            )
                             : Container(
                                 color: white,
                                 child:
@@ -542,41 +578,42 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                 ),
                               ));
                   })),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              width: 72,
-              height: 72,
-              margin: EdgeInsets.only(right: 45, bottom: 80),
-              child: FloatingActionButton(
-                onPressed: () {},
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      homeBloc.referal_count,
-                      style: TextStyle(
-                          color: flottingTextColor,
-                          fontFamily: MEDIUM_FONT,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 22),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Image.asset(
-                        'assets/images/Vector.png',
-                        width: 30,
-                        height: 20,
-                      ),
-                    ),
-                  ],
-                ),
-                mini: false,
-                backgroundColor: homeBloc.commission_amount =="0"?flottingButtonColor:flottingRedTextColor,
-              ),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.bottomRight,
+          //   child: Container(
+          //     width: 72,
+          //     height: 72,
+          //     margin: EdgeInsets.only(right: 45, bottom: 80),
+          //     child:
+          //     FloatingActionButton(
+          //       onPressed: () {},
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.center,
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Text(
+          //             homeBloc.referal_count,
+          //             style: TextStyle(
+          //                 color: flottingTextColor,
+          //                 fontFamily: MEDIUM_FONT,
+          //                 fontWeight: FontWeight.w400,
+          //                 fontSize: 22),
+          //           ),
+          //           Padding(
+          //             padding: const EdgeInsets.only(bottom: 5),
+          //             child: Image.asset(
+          //               'assets/images/Vector.png',
+          //               width: 30,
+          //               height: 20,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //       mini: false,
+          //       backgroundColor: homeBloc.commission_amount =="0"?flottingButtonColor:flottingRedTextColor,
+          //     ),
+          //   ),
+          // ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(

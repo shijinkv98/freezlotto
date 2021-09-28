@@ -1,20 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:freezlotto/helper/api_params.dart';
-import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
-import 'package:freezlotto/network/ApiCall.dart';
 import 'package:freezlotto/network/response/register_response.dart';
-import 'package:freezlotto/network/response/response.dart';
-import 'package:freezlotto/notifier/loginnotifier.dart';
-import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/splash_screen_second.dart';
 import 'package:freezlotto/utils/alert_utils.dart';
 import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
 import 'package:freezlotto/utils/preferences.dart';
-import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 

@@ -75,6 +75,17 @@ class APIService {
     print("RESPONSE:::" + response.data.toString());
     return response;
   }
+  ///add money to account///
+  Future<Response> addMoneyToAccount() async {
+    var url = APIClient.ADD_MONEY;
+    var queryParams = {
+      CUS_ID: await Preferences.get(PrefKey.customerID)
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
   ///upload ads///
   Future<Response> uploadImage(BuildContext context,File file,String type,String duration,String category) async {
     String fileName = file.path.split('/').last;

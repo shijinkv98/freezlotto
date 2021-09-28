@@ -2,14 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
-import 'package:freezlotto/main.dart';
-import 'package:freezlotto/network/ApiCall.dart';
-import 'package:freezlotto/network/response/register_response.dart';
 import 'package:freezlotto/screens/home_screen.dart';
-import 'package:freezlotto/screens/register_screen.dart';
-import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreenSecond extends StatefulWidget {
   String customerMobile = " ";

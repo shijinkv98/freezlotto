@@ -185,6 +185,40 @@ class HomeBloc extends ChangeNotifier {
     });
   }
 
+  addMoney(BuildContext context)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        notifyListeners();
+        APIService().addMoneyToAccount().then((response) {
+          isLoading = false;
+          notifyListeners();
+          if (response.statusCode == 200) {
+            AdsGetResponse adsGetResponse = AdsGetResponse.fromJson(response.data);
+
+            if (adsGetResponse.success == 0) {
+              AlertUtils.showToast('Failed', context);
+
+              // advertisementList = homeScreenResponse.advertisementList;
+              //   notifyListeners();
+            } else if (adsGetResponse.success == 3) {
+              print("NEED TO LOGIN HERE......");
+              kMoveToLogin(context);
+            }else if (adsGetResponse.success == 1) {
+              notifyListeners();
+            }
+            // }else {
+            //   AlertUtils.showToast(homeScreenResponse.message, context);
+            // }
+
+          } else {
+            AlertUtils.showToast("Failed", context);
+          }
+        });
+      }
+    });
+  }
+
   submitTransaction(BuildContext context,String addId,String transactionId)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
       if (isConnected) {
