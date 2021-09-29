@@ -1,163 +1,182 @@
+import 'package:chewie/chewie.dart';
+import 'package:chewie/src/chewie_player.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:video_player/video_player.dart';
-class MyTvScreen extends StatefulWidget {
 
-  // final String url;
-  @override
-  _MyTvScreenState createState() => _MyTvScreenState();
+void main() {
+  runApp(
+    ChewieDemo(),
+  );
 }
-class _MyTvScreenState extends State {
-  VideoPlayerController _controller;
 
+class ChewieDemo extends StatefulWidget {
+  ChewieDemo({this.title = 'Chewie Demo'});
+
+  final String title;
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ChewieDemoState();
+  }
+}
+
+class _ChewieDemoState extends State<ChewieDemo> {
+  TargetPlatform _platform;
+  VideoPlayerController _videoPlayerController1;
+  VideoPlayerController _videoPlayerController2;
+  ChewieController _chewieController;
 
   @override
   void initState() {
-    _controller = VideoPlayerController.network("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4");
-    _controller.addListener(() {
-      setState(() {});
+    super.initState();
+    _videoPlayerController1 = VideoPlayerController.network(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+    _videoPlayerController2 = VideoPlayerController.network(
+        'https://www.sample-videos.com/video123/mp4/480/asdasdas.mp4');
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController1,
+      aspectRatio: 3 / 2,
+      autoPlay: true,
+      looping: false,
+      // Try playing around with some of these other options:
+
+      // showControls: false,
+      // materialProgressColors: ChewieProgressColors(
+      //   playedColor: Colors.red,
+      //   handleColor: Colors.blue,
+      //   backgroundColor: Colors.grey,
+      //   bufferedColor: Colors.lightGreen,
+      // ),
+      // placeholder: Container(
+      //   color: Colors.grey,
+      // ),
+      // autoInitialize: true,
+    );
+
+    _videoPlayerController1.addListener(() {
+      if (_videoPlayerController1.value.position ==
+          _videoPlayerController1.value.duration) {
+        print('video Ended');
+      }
     });
-    _controller.setLooping(true);
-    _controller.initialize().then((_) => setState(() {}));
-    _controller.play();
   }
+
   @override
   void dispose() {
-    _controller.dispose();
+    _videoPlayerController1.dispose();
+    _videoPlayerController2.dispose();
+    _chewieController.dispose();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("TV Player"),
+    return MaterialApp(
+      title: widget.title,
+      theme: ThemeData.light().copyWith(
+        platform: _platform ?? Theme
+            .of(context)
+            .platform,
       ),
-      body: SingleChildScrollView(
-        child:
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Container(child: VideoPlayer(_controller),height:400,width: double.infinity,),
-            _ControlsOverlay(controller: _controller),
-            VideoProgressIndicator(_controller, allowScrubbing: true),
-
-
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: Chewie(
+                  controller: _chewieController,
+                ),
+              ),
+            ),
+            // FlatButton(
+            //   onPressed: () {
+            //     _chewieController.enterFullScreen();
+            //   },
+            //   child: Text('Fullscreen'),
+            // ),
+            // Row(
+            //   children: <Widget>[
+            //     Expanded(
+            //       child: FlatButton(
+            //         onPressed: () {
+            //           setState(() {
+            //             _chewieController.dispose();
+            //             _videoPlayerController2.pause();
+            //             _videoPlayerController2.seekTo(Duration(seconds: 0));
+            //             _chewieController = ChewieController(
+            //               videoPlayerController: _videoPlayerController1,
+            //               aspectRatio: 3 / 2,
+            //               autoPlay: true,
+            //               looping: true,
+            //             );
+            //           });
+            //         },
+            //         child: Padding(
+            //           child: Text("Video 1"),
+            //           padding: EdgeInsets.symmetric(vertical: 16.0),
+            //         ),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: FlatButton(
+            //         onPressed: () {
+            //           setState(() {
+            //             _chewieController.dispose();
+            //             _videoPlayerController1.pause();
+            //             _videoPlayerController1.seekTo(Duration(seconds: 0));
+            //             _chewieController = ChewieController(
+            //               videoPlayerController: _videoPlayerController2,
+            //               aspectRatio: 3 / 2,
+            //               autoPlay: true,
+            //               looping: true,
+            //             );
+            //           });
+            //         },
+            //         child: Padding(
+            //           padding: EdgeInsets.symmetric(vertical: 16.0),
+            //           child: Text("Error Video"),
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
+            // Row(
+            //   children: <Widget>[
+            //     Expanded(
+            //       child: FlatButton(
+            //         onPressed: () {
+            //           setState(() {
+            //             _platform = TargetPlatform.android;
+            //           });
+            //         },
+            //         child: Padding(
+            //           child: Text("Android controls"),
+            //           padding: EdgeInsets.symmetric(vertical: 16.0),
+            //         ),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: FlatButton(
+            //         onPressed: () {
+            //           setState(() {
+            //             _platform = TargetPlatform.iOS;
+            //           });
+            //         },
+            //         child: Padding(
+            //           padding: EdgeInsets.symmetric(vertical: 16.0),
+            //           child: Text("iOS controls"),
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // )
           ],
         ),
       ),
-
     );
-  }
-
-}
-class _ControlsOverlay extends StatelessWidget {
-  const _ControlsOverlay({Key key, this.controller})
-      : super(key: key);
-
-  static const _examplePlaybackRates = [
-    0.25,
-    0.5,
-    1.0,
-    1.5,
-    2.0,
-    3.0,
-    5.0,
-    10.0,
-  ];
-
-  final VideoPlayerController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return  Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          color: Colors.black26,
-          height: 50,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 50),
-              reverseDuration: Duration(milliseconds: 200),
-              child: Row(
-                children: [
-                  MaterialButton(
-                    onPressed: () async{
-                      var position=   await controller.position;
-
-                      controller.seekTo(Duration(seconds: position.inSeconds-5));
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                      size: 20.0,
-                    ),
-                  ),
-                  SizedBox(width: 20,),
-                  controller.value.isPlaying
-                      ? MaterialButton(
-                    child: Icon(
-                      Icons.pause,
-                      color: Colors.white,
-                      size: 30.0,
-                    ),
-                    onPressed: () {
-                      controller.value.isPlaying ? controller.pause() : controller.play();
-                    },
-                  )
-                      : MaterialButton(
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 30.0,
-                    ),
-                    onPressed: () {
-                      controller.value.isPlaying ? controller.pause() : controller.play();
-                    },
-                  ),
-                  SizedBox(width: 20,),
-                  MaterialButton(
-                    onPressed: () async{
-                      var position=   await controller.position;
-
-                      controller.seekTo(Duration(seconds: position.inSeconds+5));
-                    },
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                      size: 20.0,
-                    ),
-                  ),
-                  SizedBox(width: 20,),
-                  PopupMenuButton(
-                    initialValue: controller.value.playbackSpeed,
-                    tooltip: 'Playback speed',
-                    color: Colors.white,
-                    onSelected: (speed) {
-                      controller.setPlaybackSpeed(speed);
-                    },
-                    itemBuilder: (context) {
-                      return [
-                        for (final speed in _examplePlaybackRates)
-                          PopupMenuItem(
-                            value: speed,
-                            child: Text('${speed}x',),
-                          )
-                      ];
-                    },
-                    child: Text('${controller.value.playbackSpeed}x',style: TextStyle(color: Colors.white),),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-
   }
 }

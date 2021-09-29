@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:freezlotto/network/response/delete_response.dart';
+import 'package:freezlotto/network/response/profile_ads_response.dart';
 import 'package:freezlotto/network/response/profile_newsfeed_response.dart';
 import 'package:freezlotto/network/response/terms_response.dart';
 import 'package:freezlotto/network/response/coupon_list_response.dart';
+import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
 import 'package:freezlotto/helper/constants.dart';
@@ -10,6 +13,7 @@ import 'package:freezlotto/utils/alert_utils.dart';
 class GalleryBloc extends ChangeNotifier {
   bool isLoading = false;
   List<NewsfeedList> newsfeedList = new List<NewsfeedList>();
+  List<AdvertisementList> advertisementList = new List<AdvertisementList>();
 
   List<Coupens> coupens = new List<Coupens>();
   List<PrizeList> prizeList = new List<PrizeList>();
@@ -57,6 +61,42 @@ class GalleryBloc extends ChangeNotifier {
       }
     });
   }
+  getProfileAdsData(BuildContext context)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        notifyListeners();
+        APIService().getProfileAdsData().then((response) {
+          isLoading = false;
+          notifyListeners();
+          if (response.statusCode == 200){
+            ProfileAdsResponse profileAdsResponse = ProfileAdsResponse.fromJson(response.data);
+            advertisementList = profileAdsResponse.advertisementList;
+            notifyListeners();
+
+            if (profileAdsResponse.success == 0) {
+              AlertUtils.showToast(profileAdsResponse.message, context);
+
+              // advertisementList = homeScreenResponse.advertisementList;
+              //   notifyListeners();
+            } else if (profileAdsResponse.success == 3) {
+              print("NEED TO LOGIN HERE......");
+              kMoveToLogin(context);
+            }else if (profileAdsResponse.success == 1) {
+              advertisementList = profileAdsResponse.advertisementList;
+              notifyListeners();
+            }
+            // }else {
+            //   AlertUtils.showToast(homeScreenResponse.message, context);
+            // }
+
+          } else {
+            AlertUtils.showToast("Login Failed", context);
+          }
+        });
+      }
+    });
+  }
 
   getProfileNewsFeedData(BuildContext context)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
@@ -87,6 +127,40 @@ class GalleryBloc extends ChangeNotifier {
             // }else {
             //   AlertUtils.showToast(homeScreenResponse.message, context);
             // }
+
+          } else {
+            AlertUtils.showToast("Login Failed", context);
+          }
+        });
+      }
+    });
+  }
+  deleteAds(BuildContext context,String adsID)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        notifyListeners();
+        APIService().deleteAds(adsID).then((response) {
+          isLoading = false;
+          notifyListeners();
+          if (response.statusCode == 200){
+            DeleteResponse deleteResponse = DeleteResponse.fromJson(response.data);
+            AlertUtils.showToast(deleteResponse.message, context);
+            nextPagePushReplacement(context, ProfileScreen(tabnumer: 0,));
+            notifyListeners();
+
+            if (deleteResponse.success == 0) {
+              AlertUtils.showToast(deleteResponse.message, context);
+
+              // advertisementList = homeScreenResponse.advertisementList;
+              //   notifyListeners();
+            } else if (deleteResponse.success == 3) {
+              print("NEED TO LOGIN HERE......");
+              kMoveToLogin(context);
+            }else if (deleteResponse.success == 1) {
+              AlertUtils.showToast(deleteResponse.message, context);
+              notifyListeners();
+            }
 
           } else {
             AlertUtils.showToast("Login Failed", context);

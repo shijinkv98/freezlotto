@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:freezlotto/blocs/gallery_bloc.dart';
+import 'package:freezlotto/blocs/home_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
+import 'package:freezlotto/screens/profile_ads_screen.dart';
 import 'package:freezlotto/screens/profile_newsfeed_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'newsfeed_screen.dart';
 
@@ -30,14 +34,14 @@ _ProfileScreenState({this.tabnumer});
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<GalleryBloc>(context, listen: false).getProfileAdsData(context);
     return getProfileTabController(context,getBody(),tabnumer,2,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
   Widget getBody(){
     return TabBarView(
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 20,right: 20,top: 20),
-          child: getContentAds(),
+        Center(
+            child: ProfileAdsScreen()
         ),
         Center(
           child: ProfileNewsFeedScreen()
@@ -184,116 +188,114 @@ _ProfileScreenState({this.tabnumer});
         shrinkWrap: true,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return _listAds();
-        });
-  }
-  Widget _listAds() {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/images/mask_group.png'),
-                    fit: BoxFit.fill),
-                borderRadius: BorderRadius.all(Radius.circular(23)),
-                color: white
-
-            ),
-            height: 221,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10,bottom: 17),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          return       Container(
+            child: Column(
               children: [
                 Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      color: white,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image(
-                          image: AssetImage(
-                            'assets/images/eye.png',
-                          ),width: 15,height: 14,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left:5),
-                          child: Text(
-                            'View',
-                            style: style2,
-                          ),
-                        )
-                      ],
-                    )),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/mask_group.png'),
+                          fit: BoxFit.fill),
+                      borderRadius: BorderRadius.all(Radius.circular(23)),
+                      color: white
+
+                  ),
+                  height: 221,
+                ),
                 Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      color: white,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image(
-                          image: AssetImage(
-                            'assets/images/close_circle.png',
-                          ),width: 15,height: 14,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left:5),
-                          child: Text(
-                            'Cancel',
-                            style: style2,
+                  margin: EdgeInsets.only(top: 10,bottom: 17),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: white,
                           ),
-                        )
-                      ],
-                    )),
-                Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        stops: [0.1, 0.5, 0.9],
-                        colors: [
-                          Color(0xFF1FA2FF),
-                          Color(0xFF12D8FA),
-                          Color(0xFFA6FFE6),
-                        ],
-                      ),
-                      color: white,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:15,right: 6),
-                          child: Image(
-                            image: AssetImage(
-                              'assets/images/tick.png'
-                            ),width: 12,height: 14,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image(
+                                image: AssetImage(
+                                  'assets/images/eye.png',
+                                ),width: 15,height: 14,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left:5),
+                                child: Text(
+                                  'View',
+                                  style: style2,
+                                ),
+                              )
+                            ],
+                          )),
+                      Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: white,
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right:20,top: 4,bottom: 4),
-                          child: Text(
-                            'Active',
-                            style: style5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image(
+                                image: AssetImage(
+                                  'assets/images/close_circle.png',
+                                ),width: 15,height: 14,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left:5),
+                                child: Text(
+                                  'Cancel',
+                                  style: style2,
+                                ),
+                              )
+                            ],
+                          )),
+                      Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: [0.1, 0.5, 0.9],
+                              colors: [
+                                Color(0xFF1FA2FF),
+                                Color(0xFF12D8FA),
+                                Color(0xFFA6FFE6),
+                              ],
+                            ),
+                            color: white,
                           ),
-                        )
-                      ],
-                    )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left:15,right: 6),
+                                child: Image(
+                                  image: AssetImage(
+                                      'assets/images/tick.png'
+                                  ),width: 12,height: 14,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right:20,top: 4,bottom: 4),
+                                child: Text(
+                                  'Active',
+                                  style: style5,
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
-        ],
-      ),
-    );
+          );
+        });
   }
+
 
   Widget getContentAdsRepeat(){
     return getListAdsRepeat();

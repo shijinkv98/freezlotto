@@ -1,4 +1,5 @@
 
+import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,11 +8,14 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
 import 'package:freezlotto/utils/preferences.dart';
+import 'package:freezlotto/widget/chewie_video_widget.dart';
+import 'package:freezlotto/widget/video_page.dart';
+import 'package:freezlotto/widget/video_sample_page.dart';
+import 'package:freezlotto/widget/video_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
 import 'package:video_player/video_player.dart';
-
 import 'home_screen.dart';
 
 final TextStyle style = TextStyle(
@@ -33,16 +37,43 @@ class HomePageScreen extends StatefulWidget {
 
 class _NewsFeedScreenState extends State<HomePageScreen> {
   DateTime currentBackPressTime;
-  VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
   String videoUrl = "";
   String videoPath = " ";
+
+  TargetPlatform _platform;
+  VideoPlayerController _videoPlayerController1;
+  VideoPlayerController _videoPlayerController2;
+  ChewieController _chewieController;
+  // BetterPlayerController _betterPlayerController;
   @override
   void initState() {
-
     super.initState();
-  }
+    _videoPlayerController1 = VideoPlayerController.network(
+        videoPath);
+    _videoPlayerController2 = VideoPlayerController.network(
+        'https://www.sample-videos.com/video123/mp4/480/asdasdas.mp4');
+    _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController1,
+        aspectRatio: 3 / 2,
+        autoPlay: true,
+        looping: false,
 
+    );
+    _videoPlayerController1.addListener(() {
+      if (_videoPlayerController1.value.position ==
+          _videoPlayerController1.value.duration) {
+        print('video Ended');
+      }
+    });
+  }
+  @override
+  void dispose() {
+    _videoPlayerController1.dispose();
+    _videoPlayerController2.dispose();
+    _chewieController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
@@ -83,10 +114,10 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
+
                     // videoUrl =
                     //     homeBloc.advertisementList[index].advertisement;
-                    // videoPath = APIClient.Ad_Asset_Location +
-                    //     homeBloc.advertisementList[index].advertisement;
+                    videoPath = APIClient.Ad_Asset_Location + homeBloc.advertisementList[index].advertisement;
                     //
 
                     return Container(
@@ -207,11 +238,40 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                                                 .all(Radius
                                                                     .circular(
                                                                         23)),
+                                                          child:Center(
+                                                            child: Chewie(
+                                                              controller: _chewieController,
+                                                            ),
+                                                          )
 
-                                                            )),
+
+                                                          // ChewieListItem(
+                                                          //
+                                                          //   videoPlayerController: VideoPlayerController.network(APIClient.Ad_Asset_Location + homeBloc.advertisementList[index].advertisement,
+                                                          //     // 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+                                                          //   ),
+                                                          // ),
+                                                          // child: AspectRatio(
+                                                            // aspectRatio: 16 / 9,
+                                                            // child: BetterPlayer(
+                                                            //  controller:_betterPlayerController ,
+                                                            //   ),
+                                                            // ),
+                                                          ),
+                                                        ),
                                                     InkWell(
                                                       onTap: () {
-
+                                                        // setState(() {
+                                                        //   if (_chewieController
+                                                        //
+                                                        //       .isPlaying) {
+                                                        //     _chewieController
+                                                        //         .pause();
+                                                        //   } else {
+                                                        //     _chewieController
+                                                        //         .play();
+                                                        //   }
+                                                        // });
                                                       },
                                                       child: Align(
                                                         alignment:
@@ -538,15 +598,21 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           // ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 73,
-              width: MediaQuery.of(context).size.width,
-              decoration: buttongradient,
-              child: Center(
-                  child: Text(
-                'GIFT BOARD',
-                style: style,
-              )),
+            child: InkWell(
+              onTap: (){
+                nextPagePush(context, ChewieDemo());
+                    // ChewieVideoWidget(url: 'https://freezelotto.alisonsdemo.online/images/advertisement/image_picker7551887099558065971.mp4', play: true));
+              },
+              child: Container(
+                height: 73,
+                width: MediaQuery.of(context).size.width,
+                decoration: buttongradient,
+                child: Center(
+                    child: Text(
+                  'GIFT BOARD',
+                  style: style,
+                )),
+              ),
             ),
           ),
         ],

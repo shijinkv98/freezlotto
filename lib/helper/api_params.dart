@@ -5,6 +5,7 @@ const String CUS_ID = "customer_id";
 const String NEXT = "next";
 const String ADD = "advertisement";
 const String ADD_ID = "advertisment_id";
+const String ADS_ID = "advertisement_id";
 const String TRANSACTION_ID = "transaction_id";
 const String FREE_OR_PAID = "free_or_paid";
 const String DURATION = "duration";

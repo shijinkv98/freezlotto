@@ -165,9 +165,31 @@ class APIService {
     print("RESPONSE:::" + response.data.toString());
     return response;
   }
+  ///get Profile Newsfeed list///
+  Future<Response> deleteAds(String adsID) async {
+    var url = APIClient.DELETE;
+    var queryParams = {
+      ADS_ID: adsID
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
   ///get gallery list///
   Future<Response> getGalleryData() async {
     var url = APIClient.GALLERY;
+    var queryParams = {
+      CUS_ID: await Preferences.get(PrefKey.customerID)
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
+///get profile ads list///
+  Future<Response> getProfileAdsData() async {
+    var url = APIClient.PROFILE_ADS;
     var queryParams = {
       CUS_ID: await Preferences.get(PrefKey.customerID)
     };

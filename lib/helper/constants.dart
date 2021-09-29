@@ -84,6 +84,11 @@ BoxDecoration iconGradient = BoxDecoration(
    ]
 )
 );
+BoxDecoration redBox = BoxDecoration(
+  borderRadius: BorderRadius.all(Radius.circular(6))   ,
+      color: red
+
+);
 BoxDecoration bggradient= BoxDecoration(
   shape: BoxShape.circle,
   gradient:  LinearGradient(

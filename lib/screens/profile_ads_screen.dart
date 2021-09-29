@@ -1,0 +1,312 @@
+import 'package:chewie/chewie.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:freezlotto/blocs/gallery_bloc.dart';
+import 'package:freezlotto/blocs/newsfeed_bloc.dart';
+import 'package:freezlotto/helper/api_url_data.dart';
+import 'package:freezlotto/helper/constants.dart';
+import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/screens/profile_screen.dart';
+import 'package:freezlotto/utils/app_utils.dart';
+import 'package:like_button/like_button.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+final TextStyle style2 = TextStyle(color:textColor,fontWeight: FontWeight.w400,fontFamily: MEDIUM_FONT,fontSize:14,letterSpacing: 0.8);
+final TextStyle style3 = TextStyle(color:textColor,fontWeight: FontWeight.w800,fontFamily: MEDIUM_FONT,fontSize:18,letterSpacing: 0.8);
+
+class ProfileAdsScreen extends StatefulWidget {
+
+  @override
+  _ProfileAdsScreenState createState() => new _ProfileAdsScreenState();
+}
+
+class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
+  VideoPlayerController _videoPlayerController1;
+  VideoPlayerController _videoPlayerController2;
+  ChewieController _chewieController;
+  String videoPath = " ";
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController1 = VideoPlayerController.network(
+        videoPath);
+    _videoPlayerController2 = VideoPlayerController.network(
+        'https://www.sample-videos.com/video123/mp4/480/asdasdas.mp4');
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController1,
+      aspectRatio: 3 / 2,
+      autoPlay: true,
+      looping: false,
+
+    );
+    _videoPlayerController1.addListener(() {
+      if (_videoPlayerController1.value.position ==
+          _videoPlayerController1.value.duration) {
+        print('video Ended');
+      }
+    });
+  }
+  @override
+  void dispose() {
+    _videoPlayerController1.dispose();
+    _videoPlayerController2.dispose();
+    _chewieController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Provider.of<GalleryBloc>(context, listen: false).getProfileNewsFeedData(context);
+    return Scaffold(
+      backgroundColor: white,
+        body: Consumer<GalleryBloc>(
+          builder: (context, galleryBloc, child) =>
+              ModalProgressHUD(
+                  inAsyncCall: galleryBloc.isLoading,
+                  child: getContentAds(galleryBloc)),
+        ));
+  }
+
+  Widget getContentAds(GalleryBloc galleryBloc){
+    return getListAds(galleryBloc);
+  }
+  Widget getListAds(GalleryBloc galleryBloc) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: ListView.builder(
+          itemCount: galleryBloc.advertisementList.length,
+          shrinkWrap: true,
+          physics: ScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) {
+            videoPath = APIClient.Ad_Asset_Location + galleryBloc.advertisementList[index].advertisement;
+            return Column(
+              children: [
+                galleryBloc.advertisementList[index].fileType == "image"?
+                Container(
+                  margin: EdgeInsets.only(left: 30,right: 30,top: 5),
+                  width: MediaQuery.of(context).size.width,
+
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(31)),
+                    color: Colors.grey[300],
+                  ),
+                  child: ClipRRect(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(31)),
+                    child: FadeInImage.assetNetwork(
+                      fit: BoxFit.fitWidth,
+                      placeholder: 'assets/images/logo.png',
+                      image:
+                      '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
+                    ),
+                  ),
+                  height: 221,
+                ):
+                Container(
+                  margin: EdgeInsets.only(left: 30,right: 30,top: 5),
+                  width: MediaQuery.of(context).size.width,
+
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(31)),
+                    color: Colors.grey[300],
+                  ),
+                  child: ClipRRect(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(31)),
+                    child: Chewie(
+                      controller: _chewieController,
+                    ),
+                  ),
+                  height: 221,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10,bottom: 17,left: 30,right: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          return  showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              backgroundColor: Colors.blue,
+                              content:  Builder(
+                                builder: (context) {
+                                  // Get available height and width of the build area of this widget. Make a choice depending on the size.
+                                  double height = MediaQuery.of(context).size.height;
+                                  var width = MediaQuery.of(context).size.width;
+                                  return Container(
+                                    height: height,
+                                    width: width - 60,
+                                    child: FadeInImage.assetNetwork(
+                                      fit: BoxFit.fitWidth,
+                                      placeholder: 'assets/images/logo.png',
+                                      image:
+                                      '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              color: white,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                    'assets/images/eye.png',
+                                  ),width: 15,height: 14,color: profileiconColor,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left:5),
+                                  child: Text(
+                                    'View',
+                                    style: style2,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          return
+                            showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              content:  Builder(
+                                builder: (context) {
+                                  // Get available height and width of the build area of this widget. Make a choice depending on the size.
+                                  double height = 150;
+                                  var width = MediaQuery.of(context).size.width;
+                                  return Container(
+                                    height: height,
+                                    width: width - 60,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text("Are you sure?",style: style3),
+                                        SizedBox(height: 10),
+                                        Text("You won't be able to revert this!",style: style2,),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap:(){
+                                                galleryBloc.deleteAds(context, galleryBloc.advertisementList[index].id);
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.only(right: 5,top: 15),
+                                                decoration: iconGradient,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 5),
+                                                  child: Text("Yes, Delete it",style: style,),
+                                                ),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap:(){
+                                                Navigator.of(ctx).pop();                                  },
+                                              child: Container(
+                                                margin: EdgeInsets.only(left: 5,top: 15),
+                                                decoration: redBox,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 5),
+                                                  child: Text("Cancel",style: style,),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+
+
+
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              color: white,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                    'assets/images/close_circle.png',
+                                  ),width: 15,height: 14,color: profileiconColor,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left:5),
+                                  child: Text(
+                                    'Cancel',
+                                    style: style2,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                      Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: [0.1, 0.5, 0.9],
+                              colors: [
+                                Color(0xFF1FA2FF),
+                                Color(0xFF12D8FA),
+                                Color(0xFFA6FFE6),
+                              ],
+                            ),
+                            color: white,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left:15,right: 6),
+                                child: Image(
+                                  image: AssetImage(galleryBloc.advertisementList[index].status == '1' ?
+                                      'assets/images/tick.png':'assets/images/close_round.png'
+                                  ),width: 12,height: 14,color: white,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right:20,top: 4,bottom: 4),
+                                child: Text(galleryBloc.advertisementList[index].status == '1'?
+                                  'Active':'Inactive',
+                                  style: style5,
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  ),
+                )
+              ],
+            );
+          }),
+    );
+  }
+
+}
+
