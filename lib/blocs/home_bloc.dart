@@ -120,16 +120,16 @@ class HomeBloc extends ChangeNotifier {
             UploadResponse uploadResponse = UploadResponse.fromJson(response.data);
             advertisment_id = uploadResponse.advertismentId;
             paid_amount = uploadResponse.paidAmount;
-            nextPagePushReplacement(context, type=="free" ? UploadSuccess(): PaymentDetailsScreen(ads_id: advertisment_id,amount: paid_amount,));
-            if (uploadResponse.success == 1) {
+
+            if (uploadResponse.success == '1') {
 
               AlertUtils.showToast(
                   "Successfully updated", context);
-
+              nextPagePushReplacement(context, type=="free" ? UploadSuccess(): PaymentDetailsScreen(ads_id: advertisment_id,amount: paid_amount,));
               // nextPagePushReplacement(context, UploadSuccess());
               // getAddressList(context);
               // Navigator.of(context).pop();
-            } else if (uploadResponse.success == 3) {
+            } else if (uploadResponse.success == '3') {
               kMoveToLogin(context);
             } else {
 

@@ -160,8 +160,7 @@ class NewsFeedBloc extends ChangeNotifier {
   }
 
   void nextButtonTapped(BuildContext context,NewsFeedBloc newsFeedBloc,String value){
-    newsFeedBloc.newsfeedspresent == value?
-    nextPagePushReplacement(context, UploadNewsFeeds()):updateUI(context);
+    newsFeedBloc.newsfeedspresent == value? nextPagePushReplacement(context, UploadNewsFeeds()):updateUI(context);
   }
   void updateUI(BuildContext context) {
     getNextData(context);
@@ -181,7 +180,7 @@ class NewsFeedBloc extends ChangeNotifier {
             if (newsFeedLikeResponse.success == 1) {
               AlertUtils.showToast("Address successfully updated", context);
               // getAddressList(context);
-              Navigator.of(context).pop();
+            nextPagePushReplacement(context, HomeScreen(tabnumber: 1,));
             } else if (newsFeedLikeResponse.success == 3) {
               kMoveToLogin(context);
             } else {

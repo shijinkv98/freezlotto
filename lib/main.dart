@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/blocs/gallery_bloc.dart';
+import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
@@ -26,7 +27,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
-        home:SplashScreen(),
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) => new SplashScreen(),
+          // Default home route
+          '/helloworld': (BuildContext context) =>
+          new HomeScreen(tabnumber: 1,),
+          // home:SplashScreen(),
+        }
       ),
     );
   }

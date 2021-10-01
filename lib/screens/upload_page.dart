@@ -20,11 +20,13 @@ import 'package:freezlotto/utils/preferences.dart';
 import 'package:freezlotto/widget/video_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:http/http.dart' as http;
+import 'package:video_thumbnail/video_thumbnail.dart';
 final TextStyle style = TextStyle(color: white,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 20,letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 20,letterSpacing: 0.8);
 
@@ -32,6 +34,7 @@ class UploadPage extends StatefulWidget {
   String duration;
   String category;
   String type;
+
   Dio dio = new Dio();
   @override
   _UploadPageState createState() => _UploadPageState(duration:this.duration,category:this.category,type:this.type);
@@ -44,6 +47,7 @@ class _UploadPageState extends State<UploadPage> {
   String duration;
   String category;
   String type;
+
   _UploadPageState({this.duration,this.category,this.type});
   @override
   Widget build(BuildContext context) {
@@ -99,7 +103,6 @@ class _UploadPageState extends State<UploadPage> {
                     ),
                     InkWell(
                       onTap: () {
-
                        fileMedia == null ? Fluttertoast.showToast(
                            msg: "Please select atleast one file to upload",
                            toastLength: Toast.LENGTH_LONG,
@@ -132,6 +135,7 @@ class _UploadPageState extends State<UploadPage> {
         ),
       ));
     }
+
   Future capture(MediaSource source) async {
     setState(() {
       this.source = source;

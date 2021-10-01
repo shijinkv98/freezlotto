@@ -7,6 +7,8 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/utils/app_utils.dart';
+import 'package:freezlotto/utils/dynamic_link_service.dart';
+import 'package:freezlotto/utils/locator.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
@@ -49,8 +51,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   String newsFeedId = " ";
   bool isLoading = false;
   String url = "";
+
   @override
-  void initState() {
+  void initState()  {
     initDynamicLinks();
     // runYoutubePlayer();
     super.initState();
@@ -111,7 +114,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                 InkWell(
                   onTap: () {
                     newsFeedBloc.nextButtonTapped(context,newsFeedBloc,"0");
+                    setState(() {
 
+                    });
                   },
                   child: Container(
                     width: 80,
@@ -185,6 +190,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
         shrinkWrap: true,
         // physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
+
           videoUrl = newsFeedBloc.newsfeedsList[index].newsfeed;
           newsFeedId = newsFeedBloc.newsfeedsList[index].id;
           _controller = YoutubePlayerController(
@@ -292,7 +298,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                           print(e);
                         }
                         setState(() {
-                          share(url, 'test');
+                          share(url, 'Freezlotto newsfeeds');
                         });
                       },
                       child: Container(
@@ -376,8 +382,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   }
 
   void initDynamicLinks() async {
-    final PendingDynamicLinkData data =
-    await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri deepLink = data?.link;
 
     if (deepLink != null) {
@@ -388,7 +393,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
           final Uri deepLink = dynamicLink?.link;
 
           if (deepLink != null) {
-            handleDynamicLink(deepLink);
+            Navigator.pushNamed(context, '/helloworld');
+            // nextPagePushReplacement(context, HomeScreen(tabnumber: 1,));
+            // handleDynamicLink(deepLink);
           }
         }, onError: (OnLinkErrorException e) async {
       print(e.message);

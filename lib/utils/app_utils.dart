@@ -30,10 +30,10 @@ class AppUtils {
         minimumVersion: '0',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
-          description: "Once upon a time in the town",
+          description: "Check out the given link",
           imageUrl:
           Uri.parse("https://flutter.dev/images/flutter-logo-sharing.png"),
-          title: "Breaking Code's Post"),
+          title: "Freezlotto"),
     );
     final ShortDynamicLink dynamicUrl = await parameters.buildShortLink();
     return dynamicUrl.shortUrl.toString();

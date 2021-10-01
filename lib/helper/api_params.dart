@@ -10,6 +10,7 @@ const String TRANSACTION_ID = "transaction_id";
 const String FREE_OR_PAID = "free_or_paid";
 const String DURATION = "duration";
 const String CATEGORY = "category";
+const String THUMB_IMAGE = "advertisement_image";
 const String FEED = "newsfeed";
 const String CUSTOMER_ID = "customerId";
 const String NEWSFEED_ID = "newsfeed_id";

@@ -9,6 +9,8 @@ import 'package:dio/dio.dart';
 import 'package:freezlotto/helper/api_params.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/utils/preferences.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class APIService {
   static final APIService _singleton = new APIService._internal();
@@ -102,12 +104,21 @@ class APIService {
   ///upload ads///
   Future<Response> uploadImage(BuildContext context,File file,String type,String duration,String category) async {
     String fileName = file.path.split('/').last;
+    // String thumbName =  file.path.split('/').last;
+    String thumbName = await VideoThumbnail.thumbnailFile(
+      video:file.path,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.JPEG,
+      maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+      quality: 75,
+    );
     var url = APIClient.ADD;
     FormData formData = FormData.fromMap({
       ADD:await MultipartFile.fromFile(file.path, filename:fileName),
       FREE_OR_PAID:type,
       DURATION:duration,
       CATEGORY:category,
+      THUMB_IMAGE:await MultipartFile.fromFile(thumbName,filename: thumbName),
       CUS_ID: await Preferences.get(PrefKey.customerID)
     });
     print("URL:::" + url + formData.toString());

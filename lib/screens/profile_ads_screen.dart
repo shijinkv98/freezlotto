@@ -15,6 +15,7 @@ import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 final TextStyle style2 = TextStyle(color:textColor,fontWeight: FontWeight.w400,fontFamily: MEDIUM_FONT,fontSize:14,letterSpacing: 0.8);
 final TextStyle style3 = TextStyle(color:textColor,fontWeight: FontWeight.w800,fontFamily: MEDIUM_FONT,fontSize:18,letterSpacing: 0.8);
@@ -26,36 +27,14 @@ class ProfileAdsScreen extends StatefulWidget {
 }
 
 class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
-  VideoPlayerController _videoPlayerController1;
-  VideoPlayerController _videoPlayerController2;
-  ChewieController _chewieController;
   String videoPath = " ";
   @override
   void initState() {
     super.initState();
-    _videoPlayerController1 = VideoPlayerController.network(
-        videoPath);
-    _videoPlayerController2 = VideoPlayerController.network(
-        'https://www.sample-videos.com/video123/mp4/480/asdasdas.mp4');
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController1,
-      aspectRatio: 3 / 2,
-      autoPlay: true,
-      looping: false,
 
-    );
-    _videoPlayerController1.addListener(() {
-      if (_videoPlayerController1.value.position ==
-          _videoPlayerController1.value.duration) {
-        print('video Ended');
-      }
-    });
   }
   @override
   void dispose() {
-    _videoPlayerController1.dispose();
-    _videoPlayerController2.dispose();
-    _chewieController.dispose();
     super.dispose();
   }
 
@@ -83,7 +62,9 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
           shrinkWrap: true,
           physics: ScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            videoPath = APIClient.Ad_Asset_Location + galleryBloc.advertisementList[index].advertisement;
+            WebView.platform = SurfaceAndroidWebView();
+            // videoPath = APIClient.Ad_Asset_Location + galleryBloc.advertisementList[index].advertisement;
+            videoPath= '${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}';
             return Column(
               children: [
                 galleryBloc.advertisementList[index].fileType == "image"?
@@ -118,9 +99,10 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                   child: ClipRRect(
                     borderRadius:
                     BorderRadius.all(Radius.circular(31)),
-                    child: Chewie(
-                      controller: _chewieController,
-                    ),
+                    child:WebView(
+                      initialUrl:videoPath,
+                      allowsInlineMediaPlayback: true,
+                    )
                   ),
                   height: 221,
                 ),
@@ -133,21 +115,24 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                         onTap: (){
                           return  showDialog(
                             context: context,
-                            builder: (ctx) => AlertDialog(
-                              backgroundColor: Colors.blue,
+                            builder: (ctx) =>
+                                AlertDialog(
+                              backgroundColor: Colors.white,
                               content:  Builder(
                                 builder: (context) {
                                   // Get available height and width of the build area of this widget. Make a choice depending on the size.
-                                  double height = MediaQuery.of(context).size.height;
+                                  double height = MediaQuery.of(context).size.height/2;
                                   var width = MediaQuery.of(context).size.width;
                                   return Container(
                                     height: height,
                                     width: width - 60,
-                                    child: FadeInImage.assetNetwork(
-                                      fit: BoxFit.fitWidth,
+                                    child:galleryBloc.advertisementList[index].fileType == "image"? FadeInImage.assetNetwork(
+                                      fit: BoxFit.fitHeight,
                                       placeholder: 'assets/images/logo.png',
                                       image:
                                       '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
+                                    ):WebView(
+                                      initialUrl:videoPath,
                                     ),
                                   );
                                 },
@@ -183,7 +168,8 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                           return
                             showDialog(
                             context: context,
-                            builder: (ctx) => AlertDialog(
+                            builder: (ctx) =>
+                                AlertDialog(
                               content:  Builder(
                                 builder: (context) {
                                   // Get available height and width of the build area of this widget. Make a choice depending on the size.

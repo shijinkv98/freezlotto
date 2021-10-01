@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen>{
   }
   Widget getHOMEpage() {
     return TabBarView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: ScrollPhysics(),
       children: [
         HomePageScreen(),
         NewsFeedScreen(),

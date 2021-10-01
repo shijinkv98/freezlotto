@@ -9,7 +9,6 @@ import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
 import 'package:freezlotto/screens/terms_conditions_screen.dart';
 import 'package:freezlotto/utils/preferences.dart';
-import 'package:freezlotto/widget/video_sample_page.dart';
 import 'register_screen.dart';
 
 final TextStyle style = TextStyle(
@@ -81,8 +80,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: getContent('assets/images/terms.png', 'Terms and conditions')),
             InkWell(
                 onTap: () {
-                  getAlertLogout(context);
-                  Navigator.pop(context);
+                  return
+                  showDialog(
+                    context: context,
+                    builder: (ctx) =>
+                        AlertDialog(
+                          content:  Builder(
+                            builder: (context) {
+                              // Get available height and width of the build area of this widget. Make a choice depending on the size.
+                              double height = 150;
+                              var width = MediaQuery.of(context).size.width;
+                              return Container(
+                                height: height,
+                                width: width - 60,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Are you sure?",style: style3),
+                                    SizedBox(height: 10),
+                                    Text("You won't be able to login again!",style: style2,),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap:(){
+                                            Preferences.clearPreference();
+                                            logout(context);
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(right: 5,top: 15),
+                                            decoration: iconGradient,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 5),
+                                              child: Text("Yes , Logout",style: style,),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap:(){
+                                            Navigator.of(ctx).pop();                                  },
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 5,top: 15),
+                                            decoration: redBox,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 5),
+                                              child: Text("Cancel",style: style,),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                  );
+                  // getAlertLogout(context);
+                  // Navigator.pop(context);
                 },
                 child: getContent('assets/images/exit.png', 'Exit')),
           ],
@@ -152,39 +210,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
     nextPagePushReplacement(context, RegisterScreen());
 
   }
-  Widget getAlertLogout(BuildContext context){
-    return  showDialog(
-      builder: (context) => AlertDialog(
-        title: Center(child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Logout ?', style:TextStyle(color: textColor,fontSize: 18,fontWeight: FontWeight.bold),),
-            SizedBox(height: 10),
-            Text('Are you sure you want to exit ?' , style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal),)
-          ],
-        )),
-        // content: Center(child: Text('Are you sure you want to exit ?')),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              print("you choose no");
-              Navigator.of(context).pop(false);
-            },
-            child: Text('No',style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal)),
-          ),
-          FlatButton(
-            onPressed: () {
-              Preferences.clearPreference();
-              logout(context);
-            },
-            child: Text('Yes',style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal)),
-          ),
-        ],
-      ), context: context,
-    ) ??
-        false;
-  }
+  // Widget getAlertLogout(BuildContext context){
+  //   return  showDialog(
+  //     builder: (context) => AlertDialog(
+  //       title: Center(child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.start,
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Text('Logout ?', style:TextStyle(color: textColor,fontSize: 18,fontWeight: FontWeight.bold),),
+  //           SizedBox(height: 10),
+  //           Text('Are you sure you want to exit ?' , style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal),)
+  //         ],
+  //       )),
+  //       // content: Center(child: Text('Are you sure you want to exit ?')),
+  //       actions: <Widget>[
+  //         FlatButton(
+  //           onPressed: () {
+  //             print("you choose no");
+  //             Navigator.of(context).pop(false);
+  //           },
+  //           child: Text('No',style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal)),
+  //         ),
+  //         FlatButton(
+  //           onPressed: () {
+  //             Preferences.clearPreference();
+  //             logout(context);
+  //           },
+  //           child: Text('Yes',style:TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.normal)),
+  //         ),
+  //       ],
+  //     ), context: context,
+  //   ) ??
+  //       false;
+  // }
 
 
 
