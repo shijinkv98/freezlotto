@@ -108,7 +108,43 @@ class HomeBloc extends ChangeNotifier {
     });
   }
 
-  uploadAds(BuildContext context,File file,String type,String duration,String category)  {
+  uploadAdsVideo(BuildContext context,File file,String type,String duration,String category)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        notifyListeners();
+        APIService().uploadVideo(context,file,type,duration,category).then((response) {
+          isLoading = false;
+          notifyListeners();
+          if (response.statusCode == 200) {
+            UploadResponse uploadResponse = UploadResponse.fromJson(response.data);
+            advertisment_id = uploadResponse.advertismentId;
+            paid_amount = uploadResponse.paidAmount;
+
+            if (uploadResponse.success == '1') {
+
+              AlertUtils.showToast(
+                  "Successfully updated", context);
+              nextPagePushReplacement(context, type=="free" ? UploadSuccess(): PaymentDetailsScreen(ads_id: advertisment_id,amount: paid_amount,));
+              // nextPagePushReplacement(context, UploadSuccess());
+              // getAddressList(context);
+              // Navigator.of(context).pop();
+            } else if (uploadResponse.success == '3') {
+              kMoveToLogin(context);
+            } else {
+
+              AlertUtils.showToast(uploadResponse.message, context);
+            }
+          } else {
+            AlertUtils.showToast("Failed", context);
+          }
+        }
+
+        );
+      }
+    });
+  }
+  uploadAdsImage(BuildContext context,File file,String type,String duration,String category)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
       if (isConnected) {
         isLoading = true;

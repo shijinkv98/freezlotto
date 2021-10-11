@@ -1,11 +1,7 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
-import 'package:freezlotto/blocs/deeplink_bloc.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
@@ -18,12 +14,11 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import 'newsfeed_screen_direct.dart';
 import 'profile_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(NewsFeedScreen());
+  runApp(NewsFeedScreenDirect());
 }
 
 final TextStyle style = TextStyle(
@@ -45,38 +40,20 @@ final TextStyle style3 = TextStyle(
     fontSize: 14,
     letterSpacing: 0.8);
 
-class NewsFeedScreen extends StatefulWidget {
-  NewsFeedScreen({this.url,this.title,this.category,this.price});
+class NewsFeedScreenDirect extends StatefulWidget {
+  NewsFeedScreenDirect({this.url});
   final url;
-  String title;
-  String price;
-  String category;
   @override
-  _NewsFeedScreenState createState() => new _NewsFeedScreenState();
+  _NewsFeedScreenDirectState createState() => new _NewsFeedScreenDirectState();
 }
 
-class _NewsFeedScreenState extends State<NewsFeedScreen> {
+class _NewsFeedScreenDirectState extends State<NewsFeedScreenDirect> {
   YoutubePlayerController _controller;
   String videoUrl = " ";
   String newsFeedId = " ";
   bool isLoading = false;
   String url = "";
-  String title;
-  String price;
-  String category;
-  StreamController<String> controllerUrl = StreamController<String>();
-  void generateLink(BranchUniversalObject buo, BranchLinkProperties lp) async {
-    BranchResponse response =
-    await FlutterBranchSdk.getShortUrl(buo: buo, linkProperties: lp);
 
-    if (response.success) {
-      print(response.result);
-      controllerUrl.sink.add('${response.result}');
-    } else {
-      controllerUrl.sink
-          .add('Error : ${response.errorCode} - ${response.errorMessage}');
-    }
-  }
   @override
   void initState()  {
     initDynamicLinks();
@@ -108,96 +85,107 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   }
 
   Widget getFullView(NewsFeedBloc newsFeedBloc) {
-    return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: 61,
-            margin: EdgeInsets.only(left: 30, right: 30, top: 30),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              image: DecorationImage(
-                  image: AssetImage('assets/images/rectangle_10.png'),
-                  fit: BoxFit.cover),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Text('${'Rs .'}${newsFeedBloc.priceMoney}', style: style),
-                ),
-                InkWell(
-                  onTap: () {
-                    newsFeedBloc.nextButtonTapped(context,newsFeedBloc,"0");
-                    setState(() {
-
-                    });
-                  },
-                  child: Container(
-                    width: 80,
-                    height: 40,
-                    margin: EdgeInsets.only(right: 15),
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/rectangle_8.png'),
-                            fit: BoxFit.cover)),
-                    child: Container(
-                        width: 16,
-                        height: 13,
-                        child: Image(
-                            image: AssetImage('assets/images/right.png'))
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height - 261,
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 50),
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: Image.asset(
-                      "assets/images/ellipse_5.png",
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                Align(
-                    alignment: Alignment.topCenter,
-                    child: getMiddleContainer(newsFeedBloc)
-                ),
-
-              ],
-            ),
-          )
-        ],
+    return  Scaffold(
+      appBar: AppBar(
+        title: Text('Newsfeed'),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
+      body: Container(
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              height: 61,
+              margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/rectangle_10.png'),
+                    fit: BoxFit.cover),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30),
+                    child: Text('${'Rs .'}${newsFeedBloc.priceMoney}', style: style),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      newsFeedBloc.nextButtonTapped(context,newsFeedBloc,"0");
+                      setState(() {
+
+                      });
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 40,
+                      margin: EdgeInsets.only(right: 15),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/rectangle_8.png'),
+                              fit: BoxFit.cover)),
+                      child: Container(
+                          width: 16,
+                          height: 13,
+                          child: Image(
+                              image: AssetImage('assets/images/right.png'))
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height - 261,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 50),
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      child: Image.asset(
+                        "assets/images/ellipse_5.png",
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  Align(
+                      alignment: Alignment.topCenter,
+                      child: getMiddleContainer(newsFeedBloc)
+                  ),
+
+                ],
+              ),
+            )
+          ],
+        ),
+      )
+
     );
+
+
+
   }
   void updateUI() {
     setState(() {
@@ -314,52 +302,18 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                           ],
                         )),
                     InkWell(
-                      onTap: (){
-
-                        BranchLinkProperties lp = BranchLinkProperties(
-                            channel: 'facebook',
-                            feature: 'sharing',
-                            //alias: 'flutterplugin' //define link url,
-                            stage: 'new share',
-                            campaign: 'xxxxx',
-                            tags: ['one', 'two', 'three']);
-                          lp.addControlParam('\$uri_redirect_mode', '1');
-                        return generateLink(
-                          BranchUniversalObject(canonicalIdentifier: 'flutter/branch',
-                              //canonicalUrl: '',
-                              title: 'Flutter Branch Plugin',
-                              imageUrl:
-                              'https://flutter.dev/assets/flutter-lockup-4cb0ee072ab312e59784d9fbf4fb7ad42688a7fdaea1270ccf6bbf4f34b7e03f.svg',
-                              contentDescription: 'Flutter Branch Description',
-                              contentMetadata: BranchContentMetaData()
-                                ..addCustomMetadata('title', 'title')
-                                ..addCustomMetadata('price', 'price')
-                                ..addCustomMetadata('category', newsFeedBloc.newsfeedsList[index].id)
-                                ..addCustomMetadata('key', 1)
-                                ..addCustomMetadata('custom_list_number', [1, 2, 3, 4, 5])
-                                ..addCustomMetadata('custom_list_string', ['a', 'b', 'c']),
-                              keywords: ['Plugin', 'Branch', 'Flutter'],
-                              publiclyIndex: true,
-                              locallyIndex: true,
-                              expirationDateInMilliSec:
-                              DateTime.now().add(Duration(days: 365)).millisecondsSinceEpoch),
-                            lp,
-                        );
+                      onTap: ()async{
+                        try {
+                          url = await AppUtils.buildDynamicLink();
 
 
+                        } catch (e) {
+                          print(e);
+                        }
+                        setState(() {
+                          share(url, 'Freezlotto newsfeeds');
+                        });
                       },
-                      // async{
-                      //   try {
-                      //     url = await AppUtils.buildDynamicLink();
-                      //
-                      //
-                      //   } catch (e) {
-                      //     print(e);
-                      //   }
-                      //   setState(() {
-                      //     share(url, 'Freezlotto newsfeeds');
-                      //   });
-                      // },
                       child: Container(
                           margin: EdgeInsets.only(left: 15),
                           width: 96,
@@ -467,7 +421,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => NewsFeedScreen(
+              builder: (context) => NewsFeedScreenDirect(
               )));
     }
   }

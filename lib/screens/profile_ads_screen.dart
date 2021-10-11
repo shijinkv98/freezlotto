@@ -13,6 +13,7 @@ import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/utils/app_utils.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -113,7 +114,8 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                     children: [
                       InkWell(
                         onTap: (){
-                          return  showDialog(
+                          return
+                            showDialog(
                             context: context,
                             builder: (ctx) =>
                                 AlertDialog(
@@ -126,13 +128,21 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                                   return Container(
                                     height: height,
                                     width: width - 60,
-                                    child:galleryBloc.advertisementList[index].fileType == "image"? FadeInImage.assetNetwork(
-                                      fit: BoxFit.fitHeight,
-                                      placeholder: 'assets/images/logo.png',
-                                      image:
-                                      '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
-                                    ):WebView(
-                                      initialUrl:videoPath,
+                                    child:
+                                    galleryBloc.advertisementList[index].fileType == "image"?
+                                    PhotoView(
+                                      imageProvider: NetworkImage('${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}'),
+                                    )
+                                    // FadeInImage.assetNetwork(
+                                    //   fit: BoxFit.fitHeight,
+                                    //   placeholder: 'assets/images/logo.png',
+                                    //   image:
+                                    //   '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
+                                    // )
+                                        :
+                                    WebView(
+
+                                      initialUrl:'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}',
                                     ),
                                   );
                                 },

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_screen_red.dart';
@@ -21,6 +22,7 @@ class HomeScreen extends StatefulWidget{
   }
 class _HomeScreenState extends State<HomeScreen>{
   String _customer_id;
+  DateTime currentBackPressTime;
   int tabnumber;
   _HomeScreenState({this.tabnumber});
   @override
@@ -35,17 +37,30 @@ class _HomeScreenState extends State<HomeScreen>{
     return getTabController(getHOMEpage(),tabnumber,3,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
   Widget getHOMEpage() {
-    return TabBarView(
-      physics: ScrollPhysics(),
-      children: [
-        HomePageScreen(),
-        NewsFeedScreen(),
-        GalleryScreen(),
-      ],
+    return WillPopScope(
+        onWillPop: onWillPop,
+        child:
+        TabBarView(
+          physics: ScrollPhysics(),
+          children: [
+            HomePageScreen(),
+            NewsFeedScreen(),
+            GalleryScreen(),
+          ],
+        )
     );
-
   }
 
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: 'Press Back Button again to exit');
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
 
 
 

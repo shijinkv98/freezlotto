@@ -52,7 +52,60 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     Provider.of<HomeBloc>(context, listen: false).getAdsContentsData(context);
     return Scaffold(
       backgroundColor: white,
-      body: WillPopScope(
+      floatingActionButton: Consumer<HomeBloc>(
+        builder: (context, homeBloc, child) => Container(
+          width: 75,height: 75,
+          margin: EdgeInsets.only(right: 15,bottom: 60),
+          child: FloatingActionButton(
+            onPressed: () {
+              homeBloc.commission_amount !=
+                  "0"
+                  ? homeBloc.addMoney(context)
+                  : Container();
+              nextPagePushReplacement(
+                  context,
+                  HomeScreen(
+                    tabnumber: 2,
+                  ));
+            },
+            child: Column(
+              crossAxisAlignment:
+              CrossAxisAlignment.center,
+              mainAxisAlignment:
+              MainAxisAlignment.center,
+              children: [
+                Text(
+                  homeBloc.referal_count,
+                  style: TextStyle(
+                      color:
+                      flottingTextColor,
+                      fontFamily: MEDIUM_FONT,
+                      fontWeight:
+                      FontWeight.w400,
+                      fontSize: 22),
+                ),
+                Padding(
+                  padding:
+                  const EdgeInsets.only(
+                      bottom: 5),
+                  child: Image.asset(
+                    'assets/images/Vector.png',
+                    width: 30,
+                    height: 20,
+                  ),
+                ),
+              ],
+            ),
+            mini: false,
+            backgroundColor:
+            homeBloc.commission_amount ==
+                "0"
+                ? flottingButtonColor
+                : flottingRedTextColor,
+          ),
+        )),
+      body:
+      WillPopScope(
           onWillPop: onWillPop,
           child: Consumer<HomeBloc>(
             builder: (context, homeBloc, child) => ModalProgressHUD(
@@ -126,63 +179,18 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                         ),
                                       ),
                                     ),
-                                    Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                            margin: EdgeInsets.only(
-                                                bottom: 30,
-                                                top: 40,
-                                                left: 30,
-                                                right: 45),
-                                            width: 72,
-                                            height: 72,
-                                            child: FloatingActionButton(
-                                              onPressed: () {
-                                                homeBloc.commission_amount !=
-                                                        "0"
-                                                    ? homeBloc.addMoney(context)
-                                                    : Container();
-                                                nextPagePushReplacement(
-                                                    context,
-                                                    HomeScreen(
-                                                      tabnumber: 2,
-                                                    ));
-                                              },
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    homeBloc.referal_count,
-                                                    style: TextStyle(
-                                                        color:
-                                                            flottingTextColor,
-                                                        fontFamily: MEDIUM_FONT,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 22),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 5),
-                                                    child: Image.asset(
-                                                      'assets/images/Vector.png',
-                                                      width: 30,
-                                                      height: 20,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              mini: false,
-                                              backgroundColor:
-                                                  homeBloc.commission_amount ==
-                                                          "0"
-                                                      ? flottingButtonColor
-                                                      : flottingRedTextColor,
-                                            )))
+//                                     Align(
+//                                         alignment: Alignment.bottomRight,
+//                                         child: Container(
+//                                             margin: EdgeInsets.only(
+//                                                 bottom: 30,
+//                                                 top: 40,
+//                                                 left: 30,
+//                                                 right: 45),
+//                                             width: 72,
+//                                             height: 72,
+//                                             child:
+// ))
                                   ],
                                 ),
                               )
@@ -207,86 +215,89 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                               height: 300,
                                               child: Stack(
                                                 children: <Widget>[
-                                                  Container(
+                                                  Card(
+                                                    elevation:2,
+                                                    shape:RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(23),
+                                                   ),
                                                     margin: EdgeInsets.only(
                                                         left: 30,
                                                         right: 30,
                                                         top: 50),
-                                                    width:
-                                                        MediaQuery.of(context).size.width,
-                                                    height: 221,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(Radius.circular(23))),
+                                                    // width:
+                                                    //     MediaQuery.of(context).size.width,
+                                                    // height: 300,
+                                                    // decoration: BoxDecoration(
+                                                    //     borderRadius:
+                                                    //         BorderRadius.all(Radius.circular(23))),
                                                     child: ClipRRect(
                                                         borderRadius:BorderRadius.all(Radius.circular(23)),
                                                         child:
                                                             Container(
-                                                                height: 221,
+                                                                height: 300,
                                                                 color: Colors.grey[300],
-                                                                width: double
-                                                                    .infinity,
+                                                                width:  MediaQuery.of(context).size.width,
                                                                 child: WebView(
                                                                   initialUrl:videoPath,
-                                                                  allowsInlineMediaPlayback: true,
+
                                                                 ))
 
                                                         ),
                                                   ),
-                                                  Align(
-                                                    alignment: Alignment.bottomRight,
-                                                    child: Container(
-                                                      margin: EdgeInsets.only(bottom: 5,top: 40,left: 30,right: 45),
-                                                      height: 60,width: 60,
-                                                      child: FloatingActionButton(
-                                              onPressed: () {
-                                                homeBloc.commission_amount !=
-                                                    "0"
-                                                    ? homeBloc.addMoney(context)
-                                                    : Container();
-                                                nextPagePushReplacement(
-                                                    context,
-                                                    HomeScreen(
-                                                      tabnumber: 2,
-                                                    ));
-                                              },
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    homeBloc.referal_count,
-                                                    style: TextStyle(
-                                                        color:
-                                                        flottingTextColor,
-                                                        fontFamily: MEDIUM_FONT,
-                                                        fontWeight:
-                                                        FontWeight.w400,
-                                                        fontSize: 22),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                    const EdgeInsets.only(
-                                                        bottom: 5),
-                                                    child: Image.asset(
-                                                      'assets/images/Vector.png',
-                                                      width: 30,
-                                                      height: 20,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              mini: false,
-                                              backgroundColor:
-                                              homeBloc.commission_amount ==
-                                                  "0"
-                                                  ? flottingButtonColor
-                                                  : flottingRedTextColor,
-                                            ),
-                                                    ),
-                                                  )
+                                            //       Align(
+                                            //         alignment: Alignment.bottomRight,
+                                            //         child: Container(
+                                            //           margin: EdgeInsets.only(bottom: 5,top: 40,left: 30,right: 45),
+                                            //           height: 60,width: 60,
+                                            //           child: FloatingActionButton(
+                                            //   onPressed: () {
+                                            //     homeBloc.commission_amount !=
+                                            //         "0"
+                                            //         ? homeBloc.addMoney(context)
+                                            //         : Container();
+                                            //     nextPagePushReplacement(
+                                            //         context,
+                                            //         HomeScreen(
+                                            //           tabnumber: 2,
+                                            //         ));
+                                            //   },
+                                            //   child: Column(
+                                            //     crossAxisAlignment:
+                                            //     CrossAxisAlignment.center,
+                                            //     mainAxisAlignment:
+                                            //     MainAxisAlignment.center,
+                                            //     children: [
+                                            //       Text(
+                                            //         homeBloc.referal_count,
+                                            //         style: TextStyle(
+                                            //             color:
+                                            //             flottingTextColor,
+                                            //             fontFamily: MEDIUM_FONT,
+                                            //             fontWeight:
+                                            //             FontWeight.w400,
+                                            //             fontSize: 22),
+                                            //       ),
+                                            //       Padding(
+                                            //         padding:
+                                            //         const EdgeInsets.only(
+                                            //             bottom: 5),
+                                            //         child: Image.asset(
+                                            //           'assets/images/Vector.png',
+                                            //           width: 30,
+                                            //           height: 20,
+                                            //         ),
+                                            //       ),
+                                            //     ],
+                                            //   ),
+                                            //   mini: false,
+                                            //   backgroundColor:
+                                            //   homeBloc.commission_amount ==
+                                            //       "0"
+                                            //       ? flottingButtonColor
+                                            //       : flottingRedTextColor,
+                                            // ),
+                                            //         ),
+                                            //       )
                                                 ], //<Widget>[]
                                               ),
                                             ),

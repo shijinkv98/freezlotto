@@ -112,7 +112,8 @@ class _UploadPageState extends State<UploadPage> {
                            textColor: Colors.white,
                            fontSize: 16.0
                        ):
-                         homeBloc.uploadAds(context,fileMedia,type,duration,category);
+                         source == MediaSource.image ?
+                         homeBloc.uploadAdsImage(context,fileMedia,type,duration,category):homeBloc.uploadAdsVideo(context,fileMedia,type,duration,category);
 
                         },
 
