@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
@@ -140,7 +142,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    WebView.platform = SurfaceAndroidWebView();
+                    WebViewController _controller;
+                    // WebView.platform = SurfaceAndroidWebView();
                         videoPath = '${'https://freezelotto.alisonsdemo.online/videoplay/'}${homeBloc.advertisementList[index].id}';
                     return Container(
                         margin: EdgeInsets.only(bottom: 65),
@@ -237,10 +240,17 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                                                 height: 300,
                                                                 color: Colors.grey[300],
                                                                 width:  MediaQuery.of(context).size.width,
-                                                                child: WebView(
-                                                                  initialUrl:videoPath,
-
-                                                                ))
+                                                                // child: WebView(
+                                                                //   initialUrl:videoPath,
+                                                                // )
+                                                              child: WebView(
+                                                              initialUrl: videoPath,
+                                                              javascriptMode: JavascriptMode.unrestricted,
+                                                              onWebViewCreated: (WebViewController webViewController) {
+                                                                _controller=webViewController;
+                                                              },
+                                                            ),
+                                                            )
 
                                                         ),
                                                   ),
@@ -404,7 +414,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
             alignment: Alignment.bottomCenter,
             child: InkWell(
               onTap: (){
-                nextPagePushReplacement(context, MainScreen());
+                // nextPagePushReplacement(context, MainScreen());
               },
               child: Container(
                 height: 73,
