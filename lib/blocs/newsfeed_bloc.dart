@@ -110,7 +110,7 @@ class NewsFeedBloc extends ChangeNotifier {
           if (response.statusCode == 200) {
             NewsFeedUploadResponse newsFeedUploadResponse = NewsFeedUploadResponse
                 .fromJson(response.data);
-            nextPagePushReplacement(context, HomeScreen());
+            nextPagePushReplacement(context, HomeScreen(tabnumber: 1,));
             if (newsFeedUploadResponse.success == 1) {
               AlertUtils.showToast(
                   "NewsFeed successfully updated", context);

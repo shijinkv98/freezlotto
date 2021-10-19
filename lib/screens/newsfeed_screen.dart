@@ -140,9 +140,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                 InkWell(
                   onTap: () {
                     newsFeedBloc.nextButtonTapped(context,newsFeedBloc,"0");
-                    setState(() {
-
-                    });
                   },
                   child: Container(
                     width: 80,
