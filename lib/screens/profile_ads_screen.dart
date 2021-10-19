@@ -57,7 +57,28 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
     return getListAds(galleryBloc);
   }
   Widget getListAds(GalleryBloc galleryBloc) {
-    return Padding(
+    return galleryBloc.advertisementList.length == 0
+        ? Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage("assets/images/logo.png"),
+              height: 150,
+              width: 150,
+              fit: BoxFit.contain,
+            ),
+            Text(
+              'No item found',
+              style: style3,
+            ),
+          ],
+        ),
+      ),
+    )
+        : Padding(
       padding: const EdgeInsets.only(top: 20),
       child: ListView.builder(
           itemCount: galleryBloc.advertisementList.length,
