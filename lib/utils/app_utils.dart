@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:connectivity/connectivity.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 
 import 'dialog_utils.dart';
@@ -16,28 +16,28 @@ class AppUtils {
     else
       return false;
   }
-  static Future<String> buildDynamicLink() async {
-    String url = "https://freezlotto.page.link";
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: url,
-      link: Uri.parse('$url/post/56'),
-      androidParameters: AndroidParameters(
-        packageName: "com.freezlotto.application",
-        minimumVersion: 0,
-      ),
-      iosParameters: IosParameters(
-        bundleId: "freezlotto-49be1",
-        minimumVersion: '0',
-      ),
-      socialMetaTagParameters: SocialMetaTagParameters(
-          description: "Check out the given link",
-          imageUrl:
-          Uri.parse("https://flutter.dev/images/flutter-logo-sharing.png"),
-          title: "Freezlotto"),
-    );
-    final ShortDynamicLink dynamicUrl = await parameters.buildShortLink();
-    return dynamicUrl.shortUrl.toString();
-  }
+  // static Future<String> buildDynamicLink() async {
+  //   String url = "https://freezlotto.page.link";
+  //   final DynamicLinkParameters parameters = DynamicLinkParameters(
+  //     uriPrefix: url,
+  //     link: Uri.parse('$url/post/56'),
+  //     androidParameters: AndroidParameters(
+  //       packageName: "com.freezlotto.application",
+  //       minimumVersion: 0,
+  //     ),
+  //     iosParameters: IosParameters(
+  //       bundleId: "freezlotto-49be1",
+  //       minimumVersion: '0',
+  //     ),
+  //     socialMetaTagParameters: SocialMetaTagParameters(
+  //         description: "Check out the given link",
+  //         imageUrl:
+  //         Uri.parse("https://flutter.dev/images/flutter-logo-sharing.png"),
+  //         title: "Freezlotto"),
+  //   );
+  //   final ShortDynamicLink dynamicUrl = await parameters.buildShortLink();
+  //   return dynamicUrl.shortUrl.toString();
+  // }
   static String generateRandomString(int length) {
     var rand = new Random();
     var codeUnits = new List.generate(length, (index) {

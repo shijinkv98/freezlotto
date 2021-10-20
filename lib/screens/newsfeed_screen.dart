@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:freezlotto/blocs/deeplink_bloc.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
+import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_screen.dart';
@@ -22,7 +23,7 @@ import 'newsfeed_screen_direct.dart';
 import 'profile_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(NewsFeedScreen());
 }
 
@@ -56,6 +57,14 @@ class NewsFeedScreen extends StatefulWidget {
 }
 
 class _NewsFeedScreenState extends State<NewsFeedScreen> {
+  String _linkMessage;
+  bool _isCreatingLink = false;
+  String _testString =
+      'To test: long press link and then copy and click from a non-browser '
+      "app. Make sure this isn't being tested on iOS simulator and iOS xcode "
+      'is properly setup. Look at firebase_dynamic_links/README.md for more '
+      'details.';
+
   YoutubePlayerController _controller;
   String videoUrl = " ";
   String newsFeedId = " ";
@@ -104,7 +113,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
               ModalProgressHUD(
                   inAsyncCall: newsfeedBloc.isLoading,
                   child: getFullView(newsfeedBloc)),
-        ));
+        )
+    );
   }
 
   Widget getFullView(NewsFeedBloc newsFeedBloc) {
@@ -120,7 +130,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                 .of(context)
                 .size
                 .width,
-            height: 61,
+            height: 57,
             margin: EdgeInsets.only(left: 30, right: 30, top: 30),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -139,9 +149,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                 InkWell(
                   onTap: () {
                     newsFeedBloc.nextButtonTapped(context,newsFeedBloc,"0");
-                    setState(() {
-
-                    });
                   },
                   child: Container(
                     width: 80,
@@ -316,35 +323,36 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                     InkWell(
                       onTap: (){
 
-                        BranchLinkProperties lp = BranchLinkProperties(
-                            channel: 'facebook',
-                            feature: 'sharing',
-                            //alias: 'flutterplugin' //define link url,
-                            stage: 'new share',
-                            campaign: 'xxxxx',
-                            tags: ['one', 'two', 'three']);
-                          lp.addControlParam('\$uri_redirect_mode', '1');
-                        return generateLink(
-                          BranchUniversalObject(canonicalIdentifier: 'flutter/branch',
-                              //canonicalUrl: '',
-                              title: 'Flutter Branch Plugin',
-                              imageUrl:
-                              'https://flutter.dev/assets/flutter-lockup-4cb0ee072ab312e59784d9fbf4fb7ad42688a7fdaea1270ccf6bbf4f34b7e03f.svg',
-                              contentDescription: 'Flutter Branch Description',
-                              contentMetadata: BranchContentMetaData()
-                                ..addCustomMetadata('title', 'title')
-                                ..addCustomMetadata('price', 'price')
-                                ..addCustomMetadata('category', newsFeedBloc.newsfeedsList[index].id)
-                                ..addCustomMetadata('key', 1)
-                                ..addCustomMetadata('custom_list_number', [1, 2, 3, 4, 5])
-                                ..addCustomMetadata('custom_list_string', ['a', 'b', 'c']),
-                              keywords: ['Plugin', 'Branch', 'Flutter'],
-                              publiclyIndex: true,
-                              locallyIndex: true,
-                              expirationDateInMilliSec:
-                              DateTime.now().add(Duration(days: 365)).millisecondsSinceEpoch),
-                            lp,
-                        );
+                        _createDynamicLink(true,newsFeedBloc.newsfeedsList[index].id);
+                        // BranchLinkProperties lp = BranchLinkProperties(
+                        //     channel: 'facebook',
+                        //     feature: 'sharing',
+                        //     //alias: 'flutterplugin' //define link url,
+                        //     stage: 'new share',
+                        //     campaign: 'xxxxx',
+                        //     tags: ['one', 'two', 'three']);
+                        //   lp.addControlParam('\$uri_redirect_mode', '1');
+                        // return generateLink(
+                        //   BranchUniversalObject(canonicalIdentifier: 'flutter/branch',
+                        //       //canonicalUrl: '',
+                        //       title: 'Flutter Branch Plugin',
+                        //       imageUrl:
+                        //       'https://flutter.dev/assets/flutter-lockup-4cb0ee072ab312e59784d9fbf4fb7ad42688a7fdaea1270ccf6bbf4f34b7e03f.svg',
+                        //       contentDescription: 'Flutter Branch Description',
+                        //       contentMetadata: BranchContentMetaData()
+                        //         ..addCustomMetadata('title', 'title')
+                        //         ..addCustomMetadata('price', 'price')
+                        //         ..addCustomMetadata('category', newsFeedBloc.newsfeedsList[index].id)
+                        //         ..addCustomMetadata('key', 1)
+                        //         ..addCustomMetadata('custom_list_number', [1, 2, 3, 4, 5])
+                        //         ..addCustomMetadata('custom_list_string', ['a', 'b', 'c']),
+                        //       keywords: ['Plugin', 'Branch', 'Flutter'],
+                        //       publiclyIndex: true,
+                        //       locallyIndex: true,
+                        //       expirationDateInMilliSec:
+                        //       DateTime.now().add(Duration(days: 365)).millisecondsSinceEpoch),
+                        //     lp,
+                        // );
 
 
                       },
@@ -440,36 +448,85 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
         });
   }
 
-  void initDynamicLinks() async {
+  Future<void> initDynamicLinks() async {
+    FirebaseDynamicLinks.instance.onLink(
+        onSuccess: (PendingDynamicLinkData dynamicLink) async {
+          final Uri deepLink = dynamicLink?.link;
+
+
+          if (deepLink != null) {
+            // ignore: unawaited_futures
+            Navigator.pushNamed(context, deepLink.path);
+          }
+        }, onError: (OnLinkErrorException e) async {
+      print('onLinkError');
+      print(e.message);
+    });
+
     final PendingDynamicLinkData data =
     await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri deepLink = data?.link;
 
     if (deepLink != null) {
-      handleDynamicLink(deepLink);
-    }
-    FirebaseDynamicLinks.instance.onLink(
-        onSuccess: (PendingDynamicLinkData dynamicLink) async {
-          final Uri deepLink = dynamicLink?.link;
-
-          if (deepLink != null) {
-            handleDynamicLink(deepLink);
-          }
-        }, onError: (OnLinkErrorException e) async {
-      print(e.message);
-    });
-  }
-
-  handleDynamicLink(Uri url) {
-    List<String> separatedString = [];
-    separatedString.addAll(url.path.split('/'));
-    if (separatedString[1] == "post") {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NewsFeedScreen(
-              )));
+      // izzgnore: unawaited_futures
+      Navigator.pushNamed(context, deepLink.path);
     }
   }
+
+  Future<void> _createDynamicLink(bool short,String newsFeedId) async {
+
+    // setState(() {
+    //   _isCreatingLink = true;
+    // });
+
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      // uriPrefix: 'https://cx4k7.app.goo.gl',
+      uriPrefix: 'https://freezlotto.page.link',
+      link: Uri.parse('https://freezlotto.page.link/?newsfeed=${newsFeedId}'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.freezlotto.application',
+        minimumVersion: 1,
+      ),
+      dynamicLinkParametersOptions: DynamicLinkParametersOptions(
+        shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
+      ),
+      iosParameters: IosParameters(
+        bundleId: 'com.freezlotto.application',
+        minimumVersion: '1.0',
+      ),
+    );
+
+
+
+
+    Uri url;
+    if (short) {
+      print('Entering Dynamic link');
+      final ShortDynamicLink shortLink = await parameters.buildShortLink();
+      url = shortLink.shortUrl;
+    } else {
+      url = await parameters.buildUrl();
+    }
+
+
+    // setState(() {
+      _linkMessage = url.toString();
+      _isCreatingLink = false;
+      print('my Sharing url = ' + _linkMessage);
+      share(_linkMessage, "Share this NewsFeed");
+    // });
+  }
+
+  // handleDynamicLink(Uri url) {
+  //   List<String> separatedString = [];
+  //   separatedString.addAll(url.path.split('/'));
+  //   if (separatedString[1] == "post") {
+  //     Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => NewsFeedScreen(
+  //             )));
+  //   }
+  // }
 }
 

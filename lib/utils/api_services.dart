@@ -92,8 +92,8 @@ class APIService {
   Future<Response> reportNewsfeeds(String newsfeedId) async {
     var url = APIClient.REPORT;
     var queryParams = {
-      NEWSFEED_ID:newsfeedId
-      // CUS_ID: await Preferences.get(PrefKey.customerID),
+      NEWSFEED_ID:newsfeedId,
+      CUS_ID: await Preferences.get(PrefKey.customerID),
 
     };
     print("URL:::" + url + queryParams.toString());

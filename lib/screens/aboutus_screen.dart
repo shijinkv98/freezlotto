@@ -16,10 +16,12 @@ class AboutUscreen extends StatefulWidget{
   }
 class _AboutUscreenState extends State<AboutUscreen> {
 
+  WebViewController _controller;
+
   @override
   void initState() {
     super.initState();
-    WebView.platform = SurfaceAndroidWebView();
+    // WebView.platform = SurfaceAndroidWebView();
 
   }
 
@@ -30,8 +32,15 @@ class _AboutUscreenState extends State<AboutUscreen> {
     return getAppBar(context, "About us",getBody());
   }
   Widget getBody(){
+    // return WebView(
+    //   initialUrl: APIClient.ABOUT,
+    // );
     return WebView(
       initialUrl: APIClient.ABOUT,
+      javascriptMode: JavascriptMode.unrestricted,
+      onWebViewCreated: (WebViewController webViewController) {
+        _controller=webViewController;
+      },
     );
 
 }

@@ -99,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   children: [
                                     Text("Are you sure?",style: style3),
                                     SizedBox(height: 10),
-                                    Text("You won't be able to login again!",style: style2,),
+                                    Text("Do you what to Logout!",style: style2,),
                                     Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,

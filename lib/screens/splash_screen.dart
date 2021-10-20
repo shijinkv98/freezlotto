@@ -29,8 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
               nextPagePushReplacement(context, RegisterScreen());
             }
             else{
+              // nextPagePushReplacement(context,
+              //     HomeScreen(tabnumber: 0)
+              // );
               nextPagePushReplacement(context,
-                  HomeScreen(tabnumber: 0)
+                  SplashScreenSecond(customerMobile:userPhone)
               );
             }
           });

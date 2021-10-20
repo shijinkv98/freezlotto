@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>81628808624-2tiu1fj372gahtdjlq2c52gjrj8ndu4l.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.81628808624-2tiu1fj372gahtdjlq2c52gjrj8ndu4l</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>81628808624-kemndoc6fcek3tnue7cevsu4rku0uh8o.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBiCCkq4ZxWWB1d1pMcJ8edR3R1r-ZTGo0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>81628808624</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.freezlotto.application</string>
+	<key>PROJECT_ID</key>
+	<string>freezlotto-49be1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>freezlotto-49be1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:81628808624:ios:d79c2220aeccbe192a0275</string>
+</dict>
+</plist>

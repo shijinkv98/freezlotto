@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +16,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(ProfileNewsFeedScreen());
 }
 
@@ -62,7 +62,7 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
   String copyLink = "";
   @override
   void initState() {
-    initDynamicLinks();
+    // initDynamicLinks();
     // runYoutubePlayer();
     super.initState();
   }
@@ -96,7 +96,7 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
       child: Column(
         children: [
           Container(
-              height: MediaQuery.of(context).size.height - 170,
+              height: MediaQuery.of(context).size.height - 174,
               child: getMiddleContainer(galleryBloc))
         ],
       ),
@@ -268,7 +268,7 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
                                   color: profileiconColor,
                                 ),
                                 Container(
-                                  width: 140,
+                                  width: 105,
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 5),
                                     child: Text(
@@ -287,25 +287,25 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
             });
   }
 
-  void initDynamicLinks() async {
-    final PendingDynamicLinkData data =
-        await FirebaseDynamicLinks.instance.getInitialLink();
-    final Uri deepLink = data?.link;
-
-    if (deepLink != null) {
-      handleDynamicLink(deepLink);
-    }
-    FirebaseDynamicLinks.instance.onLink(
-        onSuccess: (PendingDynamicLinkData dynamicLink) async {
-      final Uri deepLink = dynamicLink?.link;
-
-      if (deepLink != null) {
-        handleDynamicLink(deepLink);
-      }
-    }, onError: (OnLinkErrorException e) async {
-      print(e.message);
-    });
-  }
+  // void initDynamicLinks() async {
+  //   final PendingDynamicLinkData data =
+  //       await FirebaseDynamicLinks.instance.getInitialLink();
+  //   final Uri deepLink = data?.link;
+  //
+  //   if (deepLink != null) {
+  //     handleDynamicLink(deepLink);
+  //   }
+  //   FirebaseDynamicLinks.instance.onLink(
+  //       onSuccess: (PendingDynamicLinkData dynamicLink) async {
+  //     final Uri deepLink = dynamicLink?.link;
+  //
+  //     if (deepLink != null) {
+  //       handleDynamicLink(deepLink);
+  //     }
+  //   }, onError: (OnLinkErrorException e) async {
+  //     print(e.message);
+  //   });
+  // }
 
   handleDynamicLink(Uri url) {
     List<String> separatedString = [];

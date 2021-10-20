@@ -1,6 +1,6 @@
 import 'package:chewie/chewie.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +28,7 @@ class ProfileAdsScreen extends StatefulWidget {
 }
 
 class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
+
   String videoPath = " ";
   @override
   void initState() {
@@ -56,14 +57,36 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
     return getListAds(galleryBloc);
   }
   Widget getListAds(GalleryBloc galleryBloc) {
-    return Padding(
+    return galleryBloc.advertisementList.length == 0
+        ? Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage("assets/images/logo.png"),
+              height: 150,
+              width: 150,
+              fit: BoxFit.contain,
+            ),
+            Text(
+              'No item found',
+              style: style3,
+            ),
+          ],
+        ),
+      ),
+    )
+        : Padding(
       padding: const EdgeInsets.only(top: 20),
       child: ListView.builder(
           itemCount: galleryBloc.advertisementList.length,
           shrinkWrap: true,
           physics: ScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            WebView.platform = SurfaceAndroidWebView();
+            WebViewController _controller;
+            // WebView.platform = SurfaceAndroidWebView();
             // videoPath = APIClient.Ad_Asset_Location + galleryBloc.advertisementList[index].advertisement;
             videoPath= '${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}';
             return Column(
@@ -100,10 +123,17 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                   child: ClipRRect(
                     borderRadius:
                     BorderRadius.all(Radius.circular(31)),
-                    child:WebView(
-                      initialUrl:videoPath,
-                      allowsInlineMediaPlayback: true,
-                    )
+                    // child:WebView(
+                    //   initialUrl:videoPath,
+                    //   allowsInlineMediaPlayback: true,
+                    // )
+                    child: WebView(
+                      initialUrl: videoPath,
+                      javascriptMode: JavascriptMode.unrestricted,
+                      onWebViewCreated: (WebViewController webViewController) {
+                        _controller=webViewController;
+                      },
+                    ),
                   ),
                   height: 221,
                 ),
