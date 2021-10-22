@@ -42,8 +42,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
@@ -52,72 +52,63 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
       backgroundColor: white,
       floatingActionButton: Consumer<HomeBloc>(
           builder: (context, homeBloc, child) => Container(
-            width: 75,height: 75,
-            margin: EdgeInsets.only(right: 15,bottom: 60),
-            child: FloatingActionButton(
-              onPressed: () {
-                homeBloc.commission_amount !=
-                    "0"
-                    ? homeBloc.addMoney(context)
-                    : Container();
-                nextPagePushReplacement(
-                    context,
-                    HomeScreen(
-                      tabnumber: 2,
-                    ));
-              },
-              child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.center,
-                mainAxisAlignment:
-                MainAxisAlignment.center,
-                children: [
-                  Text(
-                    homeBloc.referal_count,
-                    style: TextStyle(
-                        color:
-                        flottingTextColor,
-                        fontFamily: MEDIUM_FONT,
-                        fontWeight:
-                        FontWeight.w400,
-                        fontSize: 22),
+                width: 75,
+                height: 75,
+                margin: EdgeInsets.only(right: 15, bottom: 60),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    homeBloc.commission_amount != "0"
+                        ? homeBloc.addMoney(context)
+                        : Container();
+                    nextPagePushReplacement(
+                        context,
+                        HomeScreen(
+                          tabnumber: 2,
+                        ));
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        homeBloc.referal_count,
+                        style: TextStyle(
+                            color: flottingTextColor,
+                            fontFamily: MEDIUM_FONT,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 22),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          'assets/images/Vector.png',
+                          width: 30,
+                          height: 20,
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.only(
-                        bottom: 5),
-                    child: Image.asset(
-                      'assets/images/Vector.png',
-                      width: 30,
-                      height: 20,
-                    ),
-                  ),
-                ],
-              ),
-              mini: false,
-              backgroundColor:
-              homeBloc.commission_amount ==
-                  "0"
-                  ? flottingButtonColor
-                  : flottingRedTextColor,
-            ),
-          )),
-      body:
-      WillPopScope(
+                  mini: false,
+                  backgroundColor: homeBloc.commission_amount == "0"
+                      ? flottingButtonColor
+                      : flottingRedTextColor,
+                ),
+              )),
+      body: WillPopScope(
           onWillPop: onWillPop,
           child: Consumer<HomeBloc>(
             builder: (context, homeBloc, child) => ModalProgressHUD(
                 inAsyncCall: homeBloc.isLoading,
-                child:
-                Container(
+                child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: getBannerSlider(homeBloc))
                 // homePageImage(homeBloc)
-            ),
+                ),
           )),
     );
   }
+
   Widget getBannerSlider(HomeBloc homeBloc) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
@@ -126,7 +117,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
         options: CarouselOptions(
           enlargeCenterPage: true,
           autoPlay: homeBloc.advertisementList.length > 1 ? true : false,
-          aspectRatio: width/height,
+          aspectRatio: width / height,
           scrollDirection: Axis.vertical,
           autoPlayCurve: Curves.easeIn,
           enableInfiniteScroll: false,
@@ -134,13 +125,14 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           viewportFraction: 0.8,
         ),
         items: homeBloc.advertisementList.map((i) {
+          // int duration = i.duration;
           return Builder(
             builder: (BuildContext context) {
-              duration = i.duration;
-              return  InkWell(
-                  onTap: (){},
-                  child: i.fileType=="image"?getImageBanner(i.advertisement):getVideo(i.id,homeBloc)
-
+              return InkWell(
+                onTap: () {},
+                child: i.fileType == "image"
+                    ? getImageBanner(i.advertisement)
+                    : getVideo(i.id, homeBloc),
               );
             },
           );
@@ -148,156 +140,164 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
       ),
     );
   }
+
   Widget getImageBanner(String url) {
-    return Container(
-      child: Container(
-        child: FadeInImage.assetNetwork(
-                                  fit: BoxFit.fitHeight,
-                                  placeholder: 'assets/images/logo.png',
-                                  image:
-                                  '${APIClient.Ad_Asset_Location}${url}',
-                                ),
-                              ));
+    return Padding(
+      padding: const EdgeInsets.only(left: 30,right: 30),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(23),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(23)),
+          ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+            child:ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(23)),
+              child: FadeInImage.assetNetwork(
+                fit: BoxFit.fill,
+                placeholder: 'assets/images/logo.png',
+                image: '${APIClient.Ad_Asset_Location}${url}',
+              ),
+            )),
+      ),
+    );
   }
-  Widget getVideo(String url,HomeBloc homeBloc){
+
+  Widget getVideo(String url, HomeBloc homeBloc) {
     WebViewController _controller;
     return Container(
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
         color: white,
-        child:
-        SingleChildScrollView(
+        child: SingleChildScrollView(
             physics: NeverScrollableScrollPhysics(),
             child: Container(
               child: Column(
-                mainAxisAlignment:MainAxisAlignment.start,
-                crossAxisAlignment:CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height/4,
+                    height: MediaQuery.of(context).size.height / 4,
                     child: Card(
-                      elevation:2,
-                      shape:RoundedRectangleBorder(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(23),
                       ),
                       margin: EdgeInsets.only(
-                          left: 30,
-                          right: 30,
+                        left: 30,
+                        right: 30,
                       ),
                       child: ClipRRect(
-                          borderRadius:BorderRadius.all(Radius.circular(23)),
-                          child:
-                          Container(
-                            height: MediaQuery.of(context).size.height/4,
+                          borderRadius: BorderRadius.all(Radius.circular(23)),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 4,
                             color: Colors.grey[300],
-                            width:  MediaQuery.of(context).size.width,
-                            child:
-                            WebView(
-                              initialUrl: '${'https://freezelotto.alisonsdemo.online/videoplay/'}${url}',
+                            width: MediaQuery.of(context).size.width,
+                            child: WebView(
+                              initialUrl:
+                                  '${'https://freezelotto.alisonsdemo.online/videoplay/'}${url}',
                               javascriptMode: JavascriptMode.unrestricted,
-                              onWebViewCreated: (WebViewController webViewController) {
-                                _controller=webViewController;
+                              onWebViewCreated:
+                                  (WebViewController webViewController) {
+                                _controller = webViewController;
                               },
                             ),
-                          )
-                      ),
+                          )),
                     ),
                   ),
                   InkWell(
                     onTap: () {
-                      nextPagePush(context,
-                          SwitchToAdminScreen());
+                      nextPagePush(context, SwitchToAdminScreen());
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(left: 30,right: 30,top: 30),
+                      margin: EdgeInsets.only(left: 30, right: 30, top: 30),
                       decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.all(
-                            Radius.circular(
-                                15)),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
                         image: DecorationImage(
-                            image: AssetImage(
-                                'assets/images/rectangle_10.png'),
+                            image: AssetImage('assets/images/rectangle_10.png'),
                             fit: BoxFit.cover),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(25.0),
                         child: Center(
                             child: Text(
-                              'Click here to Upload Advertisement',
-                              style: style,
-                            )),
+                          'Click here to Upload Advertisement',
+                          style: style,
+                        )),
                       ),
                     ),
                   ),
                   SizedBox(height: 20),
-                  getTermsBox(homeBloc.advertisementContents.conten1, 'assets/images/thumb.png'),
-                  getTermsBox(homeBloc.advertisementContents.conten2, 'assets/images/notess.png'),
-                  getTermsBox(homeBloc.advertisementContents.conten3, 'assets/images/close_round.png'),
-
-
+                  getTermsBox(homeBloc.advertisementContents.conten1,
+                      'assets/images/thumb.png'),
+                  getTermsBox(homeBloc.advertisementContents.conten2,
+                      'assets/images/notess.png'),
+                  getTermsBox(homeBloc.advertisementContents.conten3,
+                      'assets/images/close_round.png'),
                 ],
               ),
             )));
   }
-  Widget getTermsBox(String content,String asset){
+
+  Widget getTermsBox(String content, String asset) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-        margin: EdgeInsets.only(left: 30,right: 30),
+        margin: EdgeInsets.only(left: 30, right: 30),
         child: Center(
             child: ClipRRect(
-              borderRadius:
-              BorderRadius.all(Radius.circular(10)),
-              child: DottedBorder(
-                color: Colors.grey,//color of dotted/dash line
-                strokeWidth: 3, //thickness of dash/dots
-                dashPattern: [1,2],
-                child: Container(
-                    // width: MediaQuery.of(context).size.width - 61.5,
-                    decoration:
-                    BoxDecoration(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(10)),
-                      color: white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        children: [
-                          Container(
-                              margin: EdgeInsets.only(left:26),
-                              width: 30,
-                              height: 30,
-                              child:
-                              Image.asset(asset,color:iconColor,fit: BoxFit.fill,
-                              )),
-                          Container(
-                              margin: EdgeInsets
-                                  .only(
-                                  left:
-                                  14),
-                              width: MediaQuery.of(context).size.width -155,
-                              child: Text(
-                                content,
-                                // 'Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.',
-                                style: style2,
-                              )),
-                        ],
-                      ),
-                    )),
-              ),
-            )),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: DottedBorder(
+            color: Colors.grey, //color of dotted/dash line
+            strokeWidth: 3, //thickness of dash/dots
+            dashPattern: [1, 2],
+            child: Container(
+                // width: MediaQuery.of(context).size.width - 61.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Wrap(
+                    direction: Axis.horizontal,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(left: 26),
+                          width: 30,
+                          height: 30,
+                          child: Image.asset(
+                            asset,
+                            color: iconColor,
+                            fit: BoxFit.fill,
+                          )),
+                      Container(
+                          margin: EdgeInsets.only(left: 14),
+                          width: MediaQuery.of(context).size.width - 155,
+                          child: Text(
+                            content,
+                            // 'Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.',
+                            style: style2,
+                          )),
+                    ],
+                  ),
+                )),
+          ),
+        )),
       ),
     );
   }
+
   void updateUI() {
-    setState(() {
-    });
+    setState(() {});
   }
+
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
@@ -308,53 +308,53 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     }
     return Future.value(true);
   }
-  Widget enableDataHome() => Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(
-          Icons.error_outline,
-          color: Colors.red,
-          size: 80,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Column(
-            children: [
-              Text(
-                'OOPS!  NO INTERNET',
-                style: TextStyle(
-                    color: textColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 5),
-              Text(
-                'Please check your network connection',
-                style: TextStyle(color: textColor, fontSize: 20),
-              ),
-            ],
-          ),
-        ),
-        Container(
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(left: 40, top: 5, right: 40),
-            child: FlatButton(
-              onPressed: updateUI,
-              color: textColor,
-              child: Text(
-                'Try Again',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-            ))
-      ],
-    ),
-  );
 
+  Widget enableDataHome() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 80,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Column(
+                children: [
+                  Text(
+                    'OOPS!  NO INTERNET',
+                    style: TextStyle(
+                        color: textColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    'Please check your network connection',
+                    style: TextStyle(color: textColor, fontSize: 20),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(left: 40, top: 5, right: 40),
+                child: FlatButton(
+                  onPressed: updateUI,
+                  color: textColor,
+                  child: Text(
+                    'Try Again',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ))
+          ],
+        ),
+      );
 }
 // Widget homePageImage(HomeBloc homeBloc) {
 //   return Container(

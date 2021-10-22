@@ -79,7 +79,7 @@ class AdvertisementList {
     createdAt = json['created_at'].toString();
     updatedAt = json['updated_at'].toString();
     customerId = json['customer_id'].toString();
-    duration = json['duration'].toString();
+    duration = json['duration'];
     category = json['category'].toString();
     paidAmount = json['paid_amount'].toString();
     fileType = json['file_type'].toString();
