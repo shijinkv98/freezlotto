@@ -303,7 +303,6 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     setState(() {
     });
   }
-
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
@@ -314,7 +313,6 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     }
     return Future.value(true);
   }
-
   Widget enableDataHome() => Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
