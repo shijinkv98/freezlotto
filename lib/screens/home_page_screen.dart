@@ -152,17 +152,12 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     return Container(
       child: Container(
         child: FadeInImage.assetNetwork(
-          imageErrorBuilder: (BuildContext context, Object exception, StackTrace stackTrace)=>Image(
-            image: AssetImage("assets/icons/login_logo.png"),
-            fit: BoxFit.cover,
-          ),
-          placeholder: url,
-          image: url,
-          fit: BoxFit.fitWidth,
-          height: 200,
-        ),
-      ),
-    );
+                                  fit: BoxFit.fitHeight,
+                                  placeholder: 'assets/images/logo.png',
+                                  image:
+                                  '${APIClient.Ad_Asset_Location}${url}',
+                                ),
+                              ));
   }
   Widget getVideo(String url,HomeBloc homeBloc){
     WebViewController _controller;
