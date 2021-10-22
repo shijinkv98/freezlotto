@@ -291,7 +291,8 @@ class _RegisterScreenState extends State<RegisterScreen>{
   Widget getNameField(){
     return Form(
         key: _userNameKey,
-        child: TextFormField(
+        child:
+        TextFormField(
           obscureText: false,
           onSaved: (value) {
             _Name = value;

@@ -238,7 +238,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
     double aspect = (width / 2) / height;
     return Container(
       margin: EdgeInsets.only(left: 33, right: 33, top: 33),
-      child: GridView.builder(
+      child:
+      GridView.builder(
           itemCount: galleryBloc.coupens.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
