@@ -1,17 +1,9 @@
-// import 'package:firebase_core/firebase_core.dart';
-import 'dart:async';
-
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/blocs/gallery_bloc.dart';
-import 'package:freezlotto/screens/dynamic_link_service.dart';
-import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
-
-import 'notifier/loginnotifier.dart';
 
 void main() {
 
@@ -45,11 +37,7 @@ class _MyAppState extends State<MyApp>{
         themeMode: ThemeMode.light,
         home:SplashScreen(),
       ),
-
-
     );
-
-
   }
 }
 
