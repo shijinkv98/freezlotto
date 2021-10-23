@@ -17,8 +17,10 @@ import 'package:freezlotto/utils/locator.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import 'dynamic_link_service.dart';
 import 'newsfeed_screen_direct.dart';
 import 'profile_screen.dart';
 void main() async {
@@ -56,7 +58,7 @@ class NewsFeedScreen extends StatefulWidget {
   _NewsFeedScreenState createState() => new _NewsFeedScreenState();
 }
 
-class _NewsFeedScreenState extends State<NewsFeedScreen> {
+class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObserver{
   String _linkMessage;
   bool _isCreatingLink = false;
   String _testString =
@@ -65,6 +67,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
       'is properly setup. Look at firebase_dynamic_links/README.md for more '
       'details.';
 
+  final DynamicLinkService _dynamicLinkService = DynamicLinkService();
+  Timer _timerLink;
+  String _customer_id;
   YoutubePlayerController _controller;
   String videoUrl = " ";
   String newsFeedId = " ";
@@ -88,16 +93,37 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   }
   @override
   void initState()  {
-    initDynamicLinks();
+    WidgetsBinding.instance.addObserver(this);
+
+    // initDynamicLinks();
     // runYoutubePlayer();
     super.initState();
   }
-
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _timerLink = new Timer(
+        const Duration(milliseconds: 1000),
+            () {
+          _dynamicLinkService.retrieveDynamicLink(context);
+        },
+      );
+    }
+  }
   @override
   void dispose() {
     _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink != null) {
+      _timerLink.cancel();
+    }
     super.dispose();
   }
+  // @override
+  // void dispose() {
+  // 
+  //   super.dispose();
+  // }
 
   @override deactivate() {
     // _controller.pause();
@@ -322,8 +348,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                         )),
                     InkWell(
                       onTap: (){
-
-                        _createDynamicLink(true,newsFeedBloc.newsfeedsList[index].id);
+                        // _createDynamicLink(true,newsFeedBloc.newsfeedsList[index].id);
                         // BranchLinkProperties lp = BranchLinkProperties(
                         //     channel: 'facebook',
                         //     feature: 'sharing',
@@ -368,38 +393,58 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                       //     share(url, 'Freezlotto newsfeeds');
                       //   });
                       // },
-                      child: Container(
-                          margin: EdgeInsets.only(left: 15),
-                          width: 96,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            color: white,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Container(
-                                  width: 17, height: 15,
-                                  child: Image(
-                                    image: AssetImage(
-                                      'assets/images/share.png',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Text(
-                                  'Share',
-                                  style: style2,
-                                ),
-                              )
-                            ],
-                          )),
-                    ),
+                      child: FutureBuilder<Uri>(
+                          future: _dynamicLinkService.createDynamicLink(newsFeedId),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              Uri uri = snapshot.data;
+                              return
+                                InkWell(
+                                  onTap: ()=> Share.share(uri.toString()),
+                                  child: Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      width: 96,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: white,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 15),
+                                            child: Container(
+                                              width: 17, height: 15,
+                                              child: Image(
+                                                image: AssetImage(
+                                                  'assets/images/share.png',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 15),
+                                            child: Text(
+                                              'Share',
+                                              style: style2,
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                );
+                              //   FlatButton(
+                              //   color: Colors.amber,
+                              //   onPressed: () => Share.share(uri.toString()),
+                              //   child: Text('Share'),
+                              // );
+                            } else {
+                              return Container();
+                            }
+                          }),
+
+
+                      ),
                     InkWell(
                       onTap: (){
                        newsFeedBloc.reportNewsFeeds(context, newsFeedBloc.newsfeedsList[index].id);
@@ -473,49 +518,46 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
     }
   }
 
-  Future<void> _createDynamicLink(bool short,String newsFeedId) async {
-
-    // setState(() {
-    //   _isCreatingLink = true;
-    // });
-
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
-      // uriPrefix: 'https://cx4k7.app.goo.gl',
-      uriPrefix: 'https://freezlotto.page.link',
-      link: Uri.parse('https://freezlotto.page.link/?newsfeed=${newsFeedId}'),
-      androidParameters: AndroidParameters(
-        packageName: 'com.freezlotto.application',
-        minimumVersion: 1,
-      ),
-      dynamicLinkParametersOptions: DynamicLinkParametersOptions(
-        shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
-      ),
-      iosParameters: IosParameters(
-        bundleId: 'com.freezlotto.application',
-        minimumVersion: '1.0',
-      ),
-    );
-
-
-
-
-    Uri url;
-    if (short) {
-      print('Entering Dynamic link');
-      final ShortDynamicLink shortLink = await parameters.buildShortLink();
-      url = shortLink.shortUrl;
-    } else {
-      url = await parameters.buildUrl();
-    }
-
-
-    // setState(() {
-      _linkMessage = url.toString();
-      _isCreatingLink = false;
-      print('my Sharing url = ' + _linkMessage);
-      share(_linkMessage, "Share this NewsFeed");
-    // });
-  }
+  // Future<void> _createDynamicLink(bool short,String newsFeedId) async {
+  //
+  //   // setState(() {
+  //   //   _isCreatingLink = true;
+  //   // });
+  //
+  //   final DynamicLinkParameters parameters = DynamicLinkParameters(
+  //     // uriPrefix: 'https://cx4k7.app.goo.gl',
+  //     uriPrefix: 'https://freezlotto.page.link',
+  //     link: Uri.parse('https://freezlotto.page.link/?newsfeed=${newsFeedId}'),
+  //     androidParameters: AndroidParameters(
+  //       packageName: 'com.freezlotto.application',
+  //       minimumVersion: 1,
+  //     ),
+  //     dynamicLinkParametersOptions: DynamicLinkParametersOptions(
+  //       shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
+  //     ),
+  //     iosParameters: IosParameters(
+  //       bundleId: 'com.freezlotto.application',
+  //       minimumVersion: '1.0',
+  //     ),
+  //   );
+  //   Uri url;
+  //   if (short) {
+  //     print('Entering Dynamic link');
+  //     final ShortDynamicLink shortLink = await parameters.buildShortLink();
+  //     url = shortLink.shortUrl;
+  //
+  //   } else {
+  //     url = await parameters.buildUrl();
+  //   }
+  //
+  //
+  //   // setState(() {
+  //     _linkMessage = url.toString();
+  //     _isCreatingLink = false;
+  //     print('my Sharing url = ' + _linkMessage);
+  //     share(_linkMessage, "Share this NewsFeed");
+  //   // });
+  // }
 
   // handleDynamicLink(Uri url) {
   //   List<String> separatedString = [];

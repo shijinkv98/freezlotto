@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,7 @@ import 'package:freezlotto/screens/home_screen_red.dart';
 import 'package:freezlotto/screens/newsfeed_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'dynamic_link_service.dart';
 import 'gallery_screen.dart';
 import 'home_page_screen.dart';
 import 'home_screen_video.dart';
@@ -22,7 +24,10 @@ class HomeScreen extends StatefulWidget{
   _HomeScreenState createState() => new _HomeScreenState(tabnumber:this.tabnumber);
   HomeScreen({this.tabnumber});
   }
-class _HomeScreenState extends State<HomeScreen>{
+class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
+
+  final DynamicLinkService _dynamicLinkService = DynamicLinkService();
+  Timer _timerLink;
   String _customer_id;
   DateTime currentBackPressTime;
   int tabnumber;

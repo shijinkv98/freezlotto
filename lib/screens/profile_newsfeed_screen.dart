@@ -75,7 +75,7 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
 
   @override
   deactivate() {
-    _controller.pause();
+    // _controller.pause();
     super.deactivate();
   }
 
@@ -272,7 +272,7 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 5),
                                     child: Text(
-                                      galleryBloc.newsfeedList[index].createdAt,
+                                      galleryBloc.newsfeedList[index].createDate,
                                       style: style4,
                                     ),
                                   ),
