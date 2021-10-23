@@ -1,8 +1,11 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:freezlotto/blocs/gallery_bloc.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
@@ -12,7 +15,10 @@ import 'package:freezlotto/utils/app_utils.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import 'dynamic_link_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +26,6 @@ void main() async {
   runApp(ProfileNewsFeedScreen());
 }
 
-final TextStyle style = TextStyle(
-    color: white,
-    fontWeight: FontWeight.w700,
-    fontFamily: SEMI_BOLD_FONT,
-    fontSize: 22,
-    letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(
     color: textColor,
     fontWeight: FontWeight.w400,
@@ -53,29 +53,44 @@ class ProfileNewsFeedScreen extends StatefulWidget {
       new _ProfileNewsFeedScreenState();
 }
 
-class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
+class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen>with WidgetsBindingObserver {
+  final DynamicLinkService _dynamicLinkService = DynamicLinkService();
+  Timer _timerLink;
   YoutubePlayerController _controller;
   String videoUrl = " ";
   String newsFeedId = " ";
   bool isLoading = false;
   String url = "";
-  String copyLink = "";
+
   @override
   void initState() {
-    // initDynamicLinks();
-    // runYoutubePlayer();
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
-
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _timerLink = new Timer(
+        const Duration(milliseconds: 1000),
+            () {
+          _dynamicLinkService.retrieveDynamicLink(context);
+        },
+      );
+    }
+  }
   @override
   void dispose() {
     _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink != null) {
+      _timerLink.cancel();
+    }
     super.dispose();
   }
 
   @override
   deactivate() {
-    // _controller.pause();
+
     super.deactivate();
   }
 
@@ -111,12 +126,6 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
 
   Widget getMiddleContainer(GalleryBloc galleryBlocc) {
     return Container(
-        // decoration: BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage("assets/images/ellipse_5.png"),
-        //     scale:1,
-        //   ),
-        // ),
         margin: EdgeInsets.only(bottom: 10),
         child: getList(galleryBlocc));
   }
@@ -146,12 +155,9 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
         : ListView.builder(
             shrinkWrap: true,
             itemCount: galleryBloc.newsfeedList.length,
-
-            // physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               videoUrl = galleryBloc.newsfeedList[index].newsfeed;
               newsFeedId = galleryBloc.newsfeedList[index].id;
-              copyLink = galleryBloc.newsfeedList[index].newsfeed;
               _controller = YoutubePlayerController(
                   initialVideoId: YoutubePlayer.convertUrlToId(videoUrl),
                   flags: YoutubePlayerFlags(
@@ -208,51 +214,52 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
                         SizedBox(
                           width: 20,
                         ),
-                        InkWell(
-                          onTap: () async {
-                            Clipboard.setData(new ClipboardData(text: copyLink))
-                                .then((_) {
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text("Link copied to clipboard")));
-                              // try {
-                              // url = await AppUtils.buildDynamicLink();
-                              // } catch (e) {
-                              // print(e);
-                              // }
-                              // setState(() {
-                              //   Clipboard.setData(new ClipboardData(text: copyLink)).then((_){
-                              //     Scaffold.of(context).showSnackBar(
-                              //         SnackBar(content:Text("Link copied to clipboard")));
-                              //   });
-                            });
-                          },
-                          child: Container(
-                              width: 75,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Image(
-                                    image: AssetImage(
-                                      'assets/images/link.png',
-                                    ),
-                                    width: 15,
-                                    height: 14,
-                                    color: profileiconColor,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: Text(
-                                      'Copy Link',
-                                      style: style2,
-                                    ),
-                                  )
-                                ],
-                              )),
-                        ),
+                        FutureBuilder<Uri>(
+                            future: _dynamicLinkService.createDynamicLink(newsFeedId),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                Uri uri = snapshot.data;
+                                return
+                                  InkWell(
+                                    onTap: () async {
+                                      Clipboard.setData(new ClipboardData(text: uri.toString()))
+                                          .then((_) {
+                                        Scaffold.of(context).showSnackBar(SnackBar(
+                                            content: Text("Link copied to clipboard")));
+                                      });
+                                    },
+                                    child:
+                                    Container(
+                                        width: 75,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Image(
+                                              image: AssetImage(
+                                                'assets/images/link.png',
+                                              ),
+                                              width: 15,
+                                              height: 14,
+                                              color: profileiconColor,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 5),
+                                              child: Text(
+                                                'Copy Link',
+                                                style: style2,
+                                              ),
+                                            )
+                                          ],
+                                        )),
+                                  );
+                              } else {
+                                return Container();
+                              }
+                            }),
                         SizedBox(
                           width: 20,
                         ),
@@ -285,38 +292,5 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen> {
                 ],
               );
             });
-  }
-
-  // void initDynamicLinks() async {
-  //   final PendingDynamicLinkData data =
-  //       await FirebaseDynamicLinks.instance.getInitialLink();
-  //   final Uri deepLink = data?.link;
-  //
-  //   if (deepLink != null) {
-  //     handleDynamicLink(deepLink);
-  //   }
-  //   FirebaseDynamicLinks.instance.onLink(
-  //       onSuccess: (PendingDynamicLinkData dynamicLink) async {
-  //     final Uri deepLink = dynamicLink?.link;
-  //
-  //     if (deepLink != null) {
-  //       handleDynamicLink(deepLink);
-  //     }
-  //   }, onError: (OnLinkErrorException e) async {
-  //     print(e.message);
-  //   });
-  // }
-
-  handleDynamicLink(Uri url) {
-    List<String> separatedString = [];
-    separatedString.addAll(url.path.split('/'));
-    if (separatedString[1] == "post") {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfileScreen(
-                    tabnumer: 1,
-                  )));
-    }
   }
 }

@@ -59,14 +59,6 @@ class NewsFeedScreen extends StatefulWidget {
 }
 
 class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObserver{
-  String _linkMessage;
-  bool _isCreatingLink = false;
-  String _testString =
-      'To test: long press link and then copy and click from a non-browser '
-      "app. Make sure this isn't being tested on iOS simulator and iOS xcode "
-      'is properly setup. Look at firebase_dynamic_links/README.md for more '
-      'details.';
-
   final DynamicLinkService _dynamicLinkService = DynamicLinkService();
   Timer _timerLink;
   String _customer_id;
@@ -79,24 +71,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   String price;
   String category;
   StreamController<String> controllerUrl = StreamController<String>();
-  void generateLink(BranchUniversalObject buo, BranchLinkProperties lp) async {
-    BranchResponse response =
-    await FlutterBranchSdk.getShortUrl(buo: buo, linkProperties: lp);
-
-    if (response.success) {
-      print(response.result);
-      controllerUrl.sink.add('${response.result}');
-    } else {
-      controllerUrl.sink
-          .add('Error : ${response.errorCode} - ${response.errorMessage}');
-    }
-  }
   @override
   void initState()  {
     WidgetsBinding.instance.addObserver(this);
-
-    // initDynamicLinks();
-    // runYoutubePlayer();
     super.initState();
   }
   @override
@@ -119,14 +96,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
     }
     super.dispose();
   }
-  // @override
-  // void dispose() {
-  // 
-  //   super.dispose();
-  // }
 
   @override deactivate() {
-    // _controller.pause();
     super.deactivate();
   }
 
@@ -224,7 +195,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                     alignment: Alignment.topCenter,
                     child: getMiddleContainer(newsFeedBloc)
                 ),
-
               ],
             ),
           )
@@ -232,11 +202,13 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
       ),
     );
   }
+
   void updateUI() {
     setState(() {
       //You can also make changes to your state here.
     });
   }
+
   Widget getMiddleContainer(NewsFeedBloc newsFeedBloc) {
     return Container(
         margin: EdgeInsets.only(bottom: 10), child: getList(newsFeedBloc));
@@ -346,54 +318,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                             ),
                           ],
                         )),
-                    InkWell(
-                      onTap: (){
-                        // _createDynamicLink(true,newsFeedBloc.newsfeedsList[index].id);
-                        // BranchLinkProperties lp = BranchLinkProperties(
-                        //     channel: 'facebook',
-                        //     feature: 'sharing',
-                        //     //alias: 'flutterplugin' //define link url,
-                        //     stage: 'new share',
-                        //     campaign: 'xxxxx',
-                        //     tags: ['one', 'two', 'three']);
-                        //   lp.addControlParam('\$uri_redirect_mode', '1');
-                        // return generateLink(
-                        //   BranchUniversalObject(canonicalIdentifier: 'flutter/branch',
-                        //       //canonicalUrl: '',
-                        //       title: 'Flutter Branch Plugin',
-                        //       imageUrl:
-                        //       'https://flutter.dev/assets/flutter-lockup-4cb0ee072ab312e59784d9fbf4fb7ad42688a7fdaea1270ccf6bbf4f34b7e03f.svg',
-                        //       contentDescription: 'Flutter Branch Description',
-                        //       contentMetadata: BranchContentMetaData()
-                        //         ..addCustomMetadata('title', 'title')
-                        //         ..addCustomMetadata('price', 'price')
-                        //         ..addCustomMetadata('category', newsFeedBloc.newsfeedsList[index].id)
-                        //         ..addCustomMetadata('key', 1)
-                        //         ..addCustomMetadata('custom_list_number', [1, 2, 3, 4, 5])
-                        //         ..addCustomMetadata('custom_list_string', ['a', 'b', 'c']),
-                        //       keywords: ['Plugin', 'Branch', 'Flutter'],
-                        //       publiclyIndex: true,
-                        //       locallyIndex: true,
-                        //       expirationDateInMilliSec:
-                        //       DateTime.now().add(Duration(days: 365)).millisecondsSinceEpoch),
-                        //     lp,
-                        // );
-
-
-                      },
-                      // async{
-                      //   try {
-                      //     url = await AppUtils.buildDynamicLink();
-                      //
-                      //
-                      //   } catch (e) {
-                      //     print(e);
-                      //   }
-                      //   setState(() {
-                      //     share(url, 'Freezlotto newsfeeds');
-                      //   });
-                      // },
-                      child: FutureBuilder<Uri>(
+                      FutureBuilder<Uri>(
                           future: _dynamicLinkService.createDynamicLink(newsFeedId),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
@@ -433,18 +358,10 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                                         ],
                                       )),
                                 );
-                              //   FlatButton(
-                              //   color: Colors.amber,
-                              //   onPressed: () => Share.share(uri.toString()),
-                              //   child: Text('Share'),
-                              // );
                             } else {
                               return Container();
                             }
                           }),
-
-
-                      ),
                     InkWell(
                       onTap: (){
                        newsFeedBloc.reportNewsFeeds(context, newsFeedBloc.newsfeedsList[index].id);
@@ -487,88 +404,10 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                   ],
                 ),
               ),
-
             ],
           );
         });
   }
 
-  Future<void> initDynamicLinks() async {
-    FirebaseDynamicLinks.instance.onLink(
-        onSuccess: (PendingDynamicLinkData dynamicLink) async {
-          final Uri deepLink = dynamicLink?.link;
-
-
-          if (deepLink != null) {
-            // ignore: unawaited_futures
-            Navigator.pushNamed(context, deepLink.path);
-          }
-        }, onError: (OnLinkErrorException e) async {
-      print('onLinkError');
-      print(e.message);
-    });
-
-    final PendingDynamicLinkData data =
-    await FirebaseDynamicLinks.instance.getInitialLink();
-    final Uri deepLink = data?.link;
-
-    if (deepLink != null) {
-      // izzgnore: unawaited_futures
-      Navigator.pushNamed(context, deepLink.path);
-    }
-  }
-
-  // Future<void> _createDynamicLink(bool short,String newsFeedId) async {
-  //
-  //   // setState(() {
-  //   //   _isCreatingLink = true;
-  //   // });
-  //
-  //   final DynamicLinkParameters parameters = DynamicLinkParameters(
-  //     // uriPrefix: 'https://cx4k7.app.goo.gl',
-  //     uriPrefix: 'https://freezlotto.page.link',
-  //     link: Uri.parse('https://freezlotto.page.link/?newsfeed=${newsFeedId}'),
-  //     androidParameters: AndroidParameters(
-  //       packageName: 'com.freezlotto.application',
-  //       minimumVersion: 1,
-  //     ),
-  //     dynamicLinkParametersOptions: DynamicLinkParametersOptions(
-  //       shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
-  //     ),
-  //     iosParameters: IosParameters(
-  //       bundleId: 'com.freezlotto.application',
-  //       minimumVersion: '1.0',
-  //     ),
-  //   );
-  //   Uri url;
-  //   if (short) {
-  //     print('Entering Dynamic link');
-  //     final ShortDynamicLink shortLink = await parameters.buildShortLink();
-  //     url = shortLink.shortUrl;
-  //
-  //   } else {
-  //     url = await parameters.buildUrl();
-  //   }
-  //
-  //
-  //   // setState(() {
-  //     _linkMessage = url.toString();
-  //     _isCreatingLink = false;
-  //     print('my Sharing url = ' + _linkMessage);
-  //     share(_linkMessage, "Share this NewsFeed");
-  //   // });
-  // }
-
-  // handleDynamicLink(Uri url) {
-  //   List<String> separatedString = [];
-  //   separatedString.addAll(url.path.split('/'));
-  //   if (separatedString[1] == "post") {
-  //     Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => NewsFeedScreen(
-  //             )));
-  //   }
-  // }
 }
 
