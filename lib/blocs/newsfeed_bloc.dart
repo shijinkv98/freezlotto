@@ -18,12 +18,12 @@ class NewsFeedBloc extends ChangeNotifier {
   String priceMoney = "";
   String newsfeedspresent = "";
 
-  getNewsFeedData(BuildContext context)  {
+  getNewsFeedData(BuildContext context,String newsFeedId)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
       if (isConnected) {
         isLoading = true;
         notifyListeners();
-        APIService().getNewsFeedListData().then((response) {
+        APIService().getNewsFeedListData(newsFeedId).then((response) {
           isLoading = false;
           notifyListeners();
           if (response.statusCode == 200){
@@ -44,7 +44,6 @@ class NewsFeedBloc extends ChangeNotifier {
             kMoveToLogin(context);
           }else if (newsFeedListResponse.success == 1) {
             newsfeedsList = newsFeedListResponse.newsfeedsList;
-
             notifyListeners();
           }
           // }else {

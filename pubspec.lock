@@ -351,7 +351,7 @@ packages:
       name: mime
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.7"
+    version: "1.0.1"
   mime_type:
     dependency: "direct main"
     description:
@@ -491,7 +491,7 @@ packages:
       name: share
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.5+4"
+    version: "2.0.4"
   shared_preferences:
     dependency: "direct main"
     description:

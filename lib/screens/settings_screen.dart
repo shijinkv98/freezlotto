@@ -65,7 +65,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: getContent('assets/images/app.png', 'Switch to admin app')),
             InkWell(
                 onTap: () {
-                  share('www.google.com', 'test');
+                  share('${'Find Freezlotto in Playstore !'}\n${'https://play.google.com/store/apps/details?id=qa.xshop.vendor_app'}', '${'Find Freezlotto in App store !'}\n${'https://apps.apple.com/us/app/xshop-seller-application/id1552667815'}');
                 },
                 child: getContent('assets/images/share_white.png', 'Share')),
             InkWell(

@@ -1,28 +1,16 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
-import 'package:freezlotto/blocs/deeplink_bloc.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
-import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
-import 'package:freezlotto/screens/home_screen.dart';
-import 'package:freezlotto/utils/app_utils.dart';
 import 'package:freezlotto/utils/dynamic_link_service.dart';
-import 'package:freezlotto/utils/locator.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import 'dynamic_link_service.dart';
-import 'newsfeed_screen_direct.dart';
-import 'profile_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
@@ -103,7 +91,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context);
+    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,newsFeedId);
     return Scaffold(
         body: Consumer<NewsFeedBloc>(
           builder: (context, newsfeedBloc, child) =>
@@ -325,7 +313,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                               Uri uri = snapshot.data;
                               return
                                 InkWell(
-                                  onTap: ()=> Share.share(uri.toString()),
+                                  onTap: ()=> Share.share('${'Check this video on Freezlotto! '}\n${uri.toString()}'),
                                   child: Container(
                                       margin: EdgeInsets.only(left: 15),
                                       width: 96,
