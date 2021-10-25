@@ -13,9 +13,10 @@ final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_
 
 class HomeScreen extends StatefulWidget{
   int tabnumber;
+  String id;
   @override
-  _HomeScreenState createState() => new _HomeScreenState(tabnumber:this.tabnumber);
-  HomeScreen({this.tabnumber});
+  _HomeScreenState createState() => new _HomeScreenState(tabnumber:this.tabnumber,id:this.id);
+  HomeScreen({this.tabnumber,this.id});
   }
 class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
 
@@ -24,7 +25,8 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
   String _customer_id;
   DateTime currentBackPressTime;
   int tabnumber;
-  _HomeScreenState({this.tabnumber});
+  String id;
+  _HomeScreenState({this.tabnumber,this.id});
   @override
   void initState(){
     super.initState();

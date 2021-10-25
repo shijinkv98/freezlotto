@@ -14,7 +14,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
-  runApp(NewsFeedScreen());
+  runApp(NewsFeedScreenDynamic());
 }
 
 final TextStyle style = TextStyle(
@@ -36,18 +36,18 @@ final TextStyle style3 = TextStyle(
     fontSize: 14,
     letterSpacing: 0.8);
 
-class NewsFeedScreen extends StatefulWidget {
-  NewsFeedScreen({this.url,this.title,this.category,this.price,this.id});
+class NewsFeedScreenDynamic extends StatefulWidget {
+  NewsFeedScreenDynamic({this.url,this.title,this.category,this.price,this.id});
   final url;
   String title;
   String price;
   String id;
   String category;
   @override
-  _NewsFeedScreenState createState() => new _NewsFeedScreenState(id: this.id);
+  _NewsFeedScreenDynamicState createState() => new _NewsFeedScreenDynamicState(id: this.id);
 }
 
-class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObserver{
+class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with WidgetsBindingObserver{
   final DynamicLinkService _dynamicLinkService = DynamicLinkService();
   Timer _timerLink;
   String _customer_id;
@@ -61,7 +61,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   String price;
   String category;
   StreamController<String> controllerUrl = StreamController<String>();
-  _NewsFeedScreenState({this.id});
+  _NewsFeedScreenDynamicState({this.id});
   @override
   void initState()  {
     WidgetsBinding.instance.addObserver(this);
@@ -96,6 +96,41 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   Widget build(BuildContext context) {
     Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,id);
     return Scaffold(
+        appBar: new PreferredSize(
+          child:new Container(
+            padding: new EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top
+            ),
+            decoration: new BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/rectangle_33.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap:(){
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30),
+                    child: Image.asset('assets/images/back_ios.png',width: 14,height: 23,),
+                  ),
+                )      ,
+                Center(child: Text('Newsfeeds',style: appBarTitle,)),
+                Container(padding: EdgeInsets.only(right: 30),)
+              ],
+            ),
+          ),
+
+          preferredSize: new Size(
+              MediaQuery.of(context).size.width,
+              80.0
+          ),
+        ),
         body: Consumer<NewsFeedBloc>(
           builder: (context, newsfeedBloc, child) =>
               ModalProgressHUD(
