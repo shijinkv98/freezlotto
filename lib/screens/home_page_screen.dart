@@ -39,6 +39,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   String videoUrl = "";
   String videoPath = " ";
   String duration = " ";
+  int currDuration=0;
+  int currPosition=0;
   @override
   void initState() {
     super.initState();
@@ -112,6 +114,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   Widget getBannerSlider(HomeBloc homeBloc) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+    homeBloc.advertisementList.length>0?currDuration=homeBloc.advertisementList[0].duration:currDuration=0;
     return ClipRRect(
       child: CarouselSlider(
         options: CarouselOptions(
@@ -121,11 +124,17 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           scrollDirection: Axis.vertical,
           autoPlayCurve: Curves.easeIn,
           enableInfiniteScroll: false,
-          autoPlayAnimationDuration: Duration(milliseconds: 500),
+          // autoPlayAnimationDuration: Duration(milliseconds: 500),
+            onPageChanged: (index, reason) =>{
+              currDuration = homeBloc.advertisementList[index].duration,
+                  },
+          autoPlayInterval: Duration(seconds: currDuration),
           viewportFraction: 0.8,
+          pauseAutoPlayOnTouch: true,
+
+
         ),
         items: homeBloc.advertisementList.map((i) {
-          // int duration = i.duration;
           return Builder(
             builder: (BuildContext context) {
               return InkWell(
