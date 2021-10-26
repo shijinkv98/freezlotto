@@ -230,7 +230,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                 enableCaption: false,
                 isLive: false,
                 autoPlay: false,
-
+               controlsVisibleAtStart: true
               )
           );
           return Column(
@@ -253,132 +253,28 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
 
 
               ),
-              Container(
-                margin: EdgeInsets.only(left: 30, top: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                        width: 96,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: white,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: Container(
-                                  height: 40,
-                                  child: LikeButton(
-                                    size: 15,
-                                    circleColor:
-                                    CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                                    bubblesColor: BubblesColor(
-                                      dotPrimaryColor: Color(0xff33b5e5),
-                                      dotSecondaryColor: Color(0xff0099cc),
-                                    ),
-                                    likeBuilder: (bool isLiked) {
+              InkWell(
+                onTap: (){
+                  newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
+                  setState(() {
 
-                                      return Image(
-                                        image: AssetImage(
-                                          'assets/images/like_black.png',
-                                        ),color: newsFeedBloc.newsfeedsList[index].liked_status == "1" ? Colors.red : Colors.black,
-                                      );
-                                    },
-                                    onTap: (isLiked) async{
-                                      newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
-                                      setState(() {
-
-                                      });
-                                      return !isLiked;
-                                    },
-                                    likeCount: 1,
-                                    countBuilder: (int count, bool isLiked, String text) {
-                                      var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
-                                      Widget result;
-                                      if (count == 1) {
-                                        result = newsFeedBloc.newsfeedsList[index].liked_status == "0" ?Text(
-                                          "Unlike",
-                                          style: style2,
-                                        ):Text(
-                                          'Like',
-                                          style: style3,
-                                        );
-                                      } else
-                                        result = Text(
-                                          'Like',
-                                          style: style3,
-                                        );
-                                      return result;
-                                    },
-                                  )
-                              ),
-                            ),
-                          ],
-                        )),
-                    FutureBuilder<Uri>(
-                        future: _dynamicLinkService.createDynamicLink(newsFeedId),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            Uri uri = snapshot.data;
-                            return
-                              InkWell(
-                                onTap: ()=> Share.share('${'Check this video on Freezlotto! '}\n${uri.toString()}'),
-                                child: Container(
-                                    margin: EdgeInsets.only(left: 15),
-                                    width: 96,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                                      color: white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 15),
-                                          child: Container(
-                                            width: 17, height: 15,
-                                            child: Image(
-                                              image: AssetImage(
-                                                'assets/images/share.png',
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 15),
-                                          child: Text(
-                                            'Share',
-                                            style: style2,
-                                          ),
-                                        )
-                                      ],
-                                    )),
-                              );
-                          } else {
-                            return Container();
-                          }
-                        }),
-                    InkWell(
-                      onTap: (){
-                        newsFeedBloc.reportNewsFeeds(context, newsFeedBloc.newsfeedsList[index].id);
-                        setState(() {
-
-                        });
-                      },
-                      child: Container(
+                  });
+                },
+                child: Container(
+                  margin: EdgeInsets.only(left: 30, top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(left: 15),
                           width: 96,
                           height: 40,
-                          margin: EdgeInsets.only(left: 15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             color: white,
                           ),
-                          child: Row(
+                          child:
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
@@ -387,22 +283,175 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                                   width: 17, height: 15,
                                   child: Image(
                                     image: AssetImage(
-                                      'assets/images/banned.png',
-                                    ),
+                                      'assets/images/like.png',
+                                    ),color: newsFeedBloc.newsfeedsList[index].liked_status == '0'?Colors.black:Colors.red,
                                   ),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Text(
-                                  'Report',
+                                padding: const EdgeInsets.only(right: 20),
+                                child:newsFeedBloc.newsfeedsList[index].liked_status == '0'? Text(
+                                  'Un like',
                                   style: style2,
+                                ):Text(
+                                  'Like',
+                                  style: style3,
                                 ),
                               )
                             ],
                           )),
-                    ),
-                  ],
+                      // Container(
+                      //     width: 96,
+                      //     height: 40,
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.all(Radius.circular(5)),
+                      //       color: white,
+                      //     ),
+                      //     child:
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Padding(
+                          //       padding: const EdgeInsets.only(left: 15),
+                          //       child: Container(
+                          //           height: 40,
+                          //           child:
+                          //
+                          //           // LikeButton(
+                          //           //   size: 15,
+                          //           //   circleColor:
+                          //           //   CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                          //           //   bubblesColor: BubblesColor(
+                          //           //     dotPrimaryColor: Color(0xff33b5e5),
+                          //           //     dotSecondaryColor: Color(0xff0099cc),
+                          //           //   ),
+                          //           //   likeBuilder: (bool isLiked) {
+                          //           //
+                          //           //     return Image(
+                          //           //       image: AssetImage(
+                          //           //         'assets/images/like_black.png',
+                          //           //       ),color: newsFeedBloc.newsfeedsList[index].liked_status == "1" ? Colors.red : Colors.black,
+                          //           //     );
+                          //           //   },
+                          //           //   onTap: (isLiked) async{
+                          //           //     newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
+                          //           //     setState(() {
+                          //           //
+                          //           //     });
+                          //           //     return !isLiked;
+                          //           //   },
+                          //           //   likeCount: 1,
+                          //           //   countBuilder: (int count, bool isLiked, String text) {
+                          //           //     var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
+                          //           //     Widget result;
+                          //           //     if (count == 1) {
+                          //           //       result = newsFeedBloc.newsfeedsList[index].liked_status == "0" ?Text(
+                          //           //         "Unlike",
+                          //           //         style: style2,
+                          //           //       ):Text(
+                          //           //         'Like',
+                          //           //         style: style3,
+                          //           //       );
+                          //           //     } else
+                          //           //       result = Text(
+                          //           //         'Like',
+                          //           //         style: style3,
+                          //           //       );
+                          //           //     return result;
+                          //           //   },
+                          //           // )
+                          //       ),
+                          //     ),
+                          //   ],
+
+                          // ),
+                      FutureBuilder<Uri>(
+                          future: _dynamicLinkService.createDynamicLink(newsFeedId),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              Uri uri = snapshot.data;
+                              return
+                                InkWell(
+                                  onTap: ()=> Share.share('${'Check this video on Freezlotto! '}\n${uri.toString()}'),
+                                  child:
+                                  Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      width: 96,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: white,
+                                      ),
+                                      child:
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 15),
+                                            child: Container(
+                                              width: 17, height: 15,
+                                              child: Image(
+                                                image: AssetImage(
+                                                  'assets/images/share.png',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 15),
+                                            child: Text(
+                                              'Share',
+                                              style: style2,
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                );
+                            } else {
+                              return Container();
+                            }
+                          }),
+                      InkWell(
+                        onTap: (){
+                          newsFeedBloc.reportNewsFeeds(context, newsFeedBloc.newsfeedsList[index].id);
+                          setState(() {
+
+                          });
+                        },
+                        child: Container(
+                            width: 96,
+                            height: 40,
+                            margin: EdgeInsets.only(left: 15),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              color: white,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Container(
+                                    width: 17, height: 15,
+                                    child: Image(
+                                      image: AssetImage(
+                                        'assets/images/banned.png',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text(
+                                    'Report',
+                                    style: style2,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
