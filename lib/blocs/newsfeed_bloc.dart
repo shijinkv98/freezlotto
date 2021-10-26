@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:freezlotto/network/response/home_response.dart';
 import 'package:freezlotto/network/response/newsfeed_like_response.dart';
 import 'package:freezlotto/network/response/newsfeed_list_response.dart';
+import 'package:freezlotto/network/response/newsfeed_redirect_response.dart';
 import 'package:freezlotto/network/response/newsfeed_upload_response.dart';
 import 'package:freezlotto/network/response/report_newsfeed_response.dart';
 import 'package:freezlotto/network/response/response.dart';
@@ -15,7 +16,9 @@ import 'package:freezlotto/utils/alert_utils.dart';
 class NewsFeedBloc extends ChangeNotifier {
   bool isLoading = false;
   List<NewsfeedsList> newsfeedsList = new List<NewsfeedsList>();
+  List<NewsfeedsListRedirect> newsfeedsListRedirect = new List<NewsfeedsListRedirect>();
   String priceMoney = "";
+  String priceMoneyRedirect = "";
   String newsfeedspresent = "";
 
   getNewsFeedData(BuildContext context,String newsFeedId)  {
@@ -62,27 +65,27 @@ class NewsFeedBloc extends ChangeNotifier {
       if (isConnected) {
         isLoading = true;
         notifyListeners();
-        APIService().getNewsFeedListData(newsFeedId).then((response) {
+        APIService().getNewsFeedListDirectData(newsFeedId).then((response) {
           isLoading = false;
           notifyListeners();
           if (response.statusCode == 200){
-            NewsFeedListResponse newsFeedListResponse =
-            NewsFeedListResponse.fromJson(response.data);
-            priceMoney =  newsFeedListResponse.priceMoney;
-            newsfeedspresent =  newsFeedListResponse.newsfeedspresent;
-            newsfeedsList = newsFeedListResponse.newsfeedsList;
+            NewsFeedRedirectResponse newsFeedRedirectResponse =
+            NewsFeedRedirectResponse.fromJson(response.data);
+            priceMoneyRedirect =  newsFeedRedirectResponse.priceMoney;
+            newsfeedspresent =  newsFeedRedirectResponse.newsfeedspresent;
+            newsfeedsListRedirect = newsFeedRedirectResponse.newsfeedsListRedirect;
             notifyListeners();
 
-          if (newsFeedListResponse.success == 0) {
-          AlertUtils.showToast(newsFeedListResponse.message, context);
+          if (newsFeedRedirectResponse.success == 0) {
+          AlertUtils.showToast(newsFeedRedirectResponse.message, context);
 
           // advertisementList = homeScreenResponse.advertisementList;
           //   notifyListeners();
-          } else if (newsFeedListResponse.success == 3) {
+          } else if (newsFeedRedirectResponse.success == 3) {
             print("NEED TO LOGIN HERE......");
             kMoveToLogin(context);
-          }else if (newsFeedListResponse.success == 1) {
-            newsfeedsList = newsFeedListResponse.newsfeedsList;
+          }else if (newsFeedRedirectResponse.success == 1) {
+            newsfeedsListRedirect = newsFeedRedirectResponse.newsfeedsListRedirect;
             notifyListeners();
           }
           // }else {

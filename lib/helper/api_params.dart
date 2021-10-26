@@ -14,6 +14,7 @@ const String THUMB_IMAGE = "advertisement_image";
 const String FEED = "newsfeed";
 const String CUSTOMER_ID = "customerId";
 const String NEWSFEED_ID = "newsfeed_id";
+const String NEWSFEEDS_ID = "newsfeeds_id";
 const String NEWSFEED = "newsfeed";
 const String LIKEABLE = "likeable";
 const String PHONE_COUNTRY_CODE = "phone_country_code";

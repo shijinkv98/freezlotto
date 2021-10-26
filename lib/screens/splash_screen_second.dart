@@ -1,8 +1,11 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/utils/dynamic_link_service.dart';
 import 'package:freezlotto/utils/preferences.dart';
 
 class SplashScreenSecond extends StatefulWidget {
@@ -11,7 +14,9 @@ class SplashScreenSecond extends StatefulWidget {
   _SplashScreenSecondState createState() => new _SplashScreenSecondState(customerMobile : this.customerMobile);
   SplashScreenSecond({this.customerMobile});
 }
-class _SplashScreenSecondState extends State<SplashScreenSecond> {
+class _SplashScreenSecondState extends State<SplashScreenSecond> with WidgetsBindingObserver{
+  final DynamicLinkService _dynamicLinkService = DynamicLinkService();
+  Timer _timerLink;
   String userPhone = "";
   String customerMobile = " ";
   String _phone = " ";
@@ -19,9 +24,34 @@ _SplashScreenSecondState({this.customerMobile});
   @override
   void initState() {
     getUserInfo();
+    WidgetsBinding.instance.addObserver(this);
+    _dynamicLinkService.retrieveDynamicLink(context);
     super.initState();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _timerLink = new Timer(
+        const Duration(milliseconds: 1000),
+            () {
+          _dynamicLinkService.retrieveDynamicLink(context);
+        },
+      );
+    }
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink != null) {
+      _timerLink.cancel();
+    }
+    super.dispose();
+  }
+
+  @override deactivate() {
+    super.deactivate();
+  }
   @override
   Widget build(BuildContext context) {
 

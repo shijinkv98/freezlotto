@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/utils/dynamic_link_service.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -37,7 +38,7 @@ final TextStyle style3 = TextStyle(
     letterSpacing: 0.8);
 
 class NewsFeedScreenDynamic extends StatefulWidget {
-  NewsFeedScreenDynamic({this.url,this.title,this.category,this.price,this.id});
+
   final url;
   String title;
   String price;
@@ -45,6 +46,7 @@ class NewsFeedScreenDynamic extends StatefulWidget {
   String category;
   @override
   _NewsFeedScreenDynamicState createState() => new _NewsFeedScreenDynamicState(id: this.id);
+  NewsFeedScreenDynamic({this.url,this.title,this.category,this.price,this.id});
 }
 
 class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with WidgetsBindingObserver{
@@ -94,7 +96,7 @@ class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with Widg
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,id);
+    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedRedirectData(context,id);
     return Scaffold(
         appBar: new PreferredSize(
           child:new Container(
@@ -113,7 +115,7 @@ class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with Widg
               children: [
                 InkWell(
                   onTap:(){
-                    Navigator.pop(context);
+                   nextPagePushReplacement(context, HomeScreen(tabnumber: 0));
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30),
@@ -167,7 +169,7 @@ class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with Widg
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 30),
-                  child: Text('${'Rs .'}${newsFeedBloc.priceMoney}', style: style),
+                  child: Text('${'Rs .'}${newsFeedBloc.priceMoneyRedirect}', style: style),
                 ),
                 InkWell(
                   onTap: () {
@@ -196,7 +198,7 @@ class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with Widg
             height: MediaQuery
                 .of(context)
                 .size
-                .height - 261,
+                .height - 210,
             child: Stack(
               children: [
                 Align(
@@ -242,13 +244,13 @@ class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with Widg
 
   Widget getList(NewsFeedBloc newsFeedBloc) {
     return ListView.builder(
-        itemCount: newsFeedBloc.newsfeedsList.length,
+        itemCount: newsFeedBloc.newsfeedsListRedirect.length,
         shrinkWrap: true,
         // physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
 
-          videoUrl = newsFeedBloc.newsfeedsList[index].newsfeed;
-          newsFeedId = newsFeedBloc.newsfeedsList[index].id;
+          videoUrl = newsFeedBloc.newsfeedsListRedirect[index].newsfeed;
+          newsFeedId = newsFeedBloc.newsfeedsListRedirect[index].id;
           _controller = YoutubePlayerController(
               initialVideoId: YoutubePlayer.convertUrlToId(videoUrl),
               flags: YoutubePlayerFlags(
@@ -310,7 +312,7 @@ class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with Widg
                                     return Image(
                                         image: AssetImage(
                                           'assets/images/like_black.png',
-                                        ),color: newsFeedBloc.newsfeedsList[index].liked_status == "1" ? Colors.red : Colors.black,
+                                        ),color: newsFeedBloc.newsfeedsListRedirect[index].likedStatus == "1" ? Colors.red : Colors.black,
                                     );
                                   },
                                   onTap: (isLiked) async{
@@ -325,7 +327,7 @@ class _NewsFeedScreenDynamicState extends State<NewsFeedScreenDynamic> with Widg
                                     var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
                                     Widget result;
                                     if (count == 1) {
-                                      result = newsFeedBloc.newsfeedsList[index].liked_status == "0" ?Text(
+                                      result = newsFeedBloc.newsfeedsListRedirect[index].likedStatus == "0" ?Text(
                                         "Unlike",
                                           style: style2,
                                       ):Text(

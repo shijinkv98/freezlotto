@@ -26,7 +26,6 @@ class DynamicLinkService {
     return dynamicUrl;
   }
   Future<void> retrieveDynamicLink(BuildContext context) async {
-
     try {
       final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
       final Uri deepLink = data?.link;
@@ -34,14 +33,18 @@ class DynamicLinkService {
       if (deepLink != null) {
         if (deepLink.queryParameters.containsKey('newsfeed_id')) {
           String id = deepLink.queryParameters['newsfeed_id'];
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(tabnumber: 1,)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewsFeedScreenDynamic(id: id)));
+        }
+        else{
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(tabnumber: 0)));
+
         }
       }
-      String id = deepLink.queryParameters['newsfeed_id'];
-      print(deepLink.queryParameters['newsfeed_id'].toString());
-      FirebaseDynamicLinks.instance.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(tabnumber: 1,)));
-      });
+      // String id = deepLink.queryParameters['newsfeed_id'];
+      // print(deepLink.queryParameters['newsfeed_id'].toString());
+      // FirebaseDynamicLinks.instance.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
+      //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewsFeedScreenDynamic(id: id)));
+      // });
 
     } catch (e) {
       print(e.toString());

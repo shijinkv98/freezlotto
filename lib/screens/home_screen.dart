@@ -33,9 +33,34 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
   _HomeScreenState({this.tabnumber});
   @override
   void initState(){
+    WidgetsBinding.instance.addObserver(this);
+    // _dynamicLinkService.retrieveDynamicLink(context);
+    // WidgetsBinding.instance.removeObserver(this);
     super.initState();
   }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _timerLink = new Timer(
+        const Duration(milliseconds: 1000),
+            () {
+          _dynamicLinkService.retrieveDynamicLink(context);
+        },
+      );
+    }
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink != null) {
+      _timerLink.cancel();
+    }
+    super.dispose();
+  }
 
+  @override deactivate() {
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {

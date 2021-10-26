@@ -46,13 +46,15 @@ final TextStyle style3 = TextStyle(
     letterSpacing: 0.8);
 
 class NewsFeedScreen extends StatefulWidget {
-  NewsFeedScreen({this.url,this.title,this.category,this.price});
+
   final url;
   String title;
   String price;
   String category;
+  String id;
   @override
-  _NewsFeedScreenState createState() => new _NewsFeedScreenState();
+  _NewsFeedScreenState createState() => new _NewsFeedScreenState(id:this.id);
+  NewsFeedScreen({this.url,this.title,this.category,this.price,this.id});
 }
 
 class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObserver{
@@ -67,7 +69,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   String title;
   String price;
   String category;
+  String id;
   StreamController<String> controllerUrl = StreamController<String>();
+  _NewsFeedScreenState({this.id});
   @override
   void initState()  {
     WidgetsBinding.instance.addObserver(this);

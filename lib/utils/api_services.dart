@@ -176,7 +176,21 @@ class APIService {
       // CUS_ID: '58',
       NEXT:'0',
       CUS_ID: await Preferences.get(PrefKey.customerID),
-      NEWSFEED: newsFeedId,
+
+    };
+    print("URL:::" + url + queryParams.toString());
+    Response response = await dio.post(url,queryParameters: queryParams);
+    print("RESPONSE:::" + response.data.toString());
+    return response;
+  }
+  ///get Newsfeed list///
+  Future<Response> getNewsFeedListDirectData(String newsFeedId) async {
+    var url = APIClient.NEWS_FEEDS_LIST;
+    var queryParams = {
+      // CUS_ID: '58',
+      NEXT:'0',
+      CUS_ID: await Preferences.get(PrefKey.customerID),
+      NEWSFEEDS_ID: newsFeedId,
     };
     print("URL:::" + url + queryParams.toString());
     Response response = await dio.post(url,queryParameters: queryParams);

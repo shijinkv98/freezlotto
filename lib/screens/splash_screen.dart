@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
@@ -6,6 +8,7 @@ import 'package:freezlotto/main.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/register_screen.dart';
 import 'package:freezlotto/screens/splash_screen_second.dart';
+import 'package:freezlotto/utils/dynamic_link_service.dart';
 import 'package:freezlotto/utils/preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,13 +19,18 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => new _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver{
+  final DynamicLinkService _dynamicLinkService = DynamicLinkService();
+  Timer _timerLink;
   String stringValue;
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
     super.initState();
     getStringValuesSF();
-    new Future.delayed(
+    new
+    Future.delayed(
         const Duration(seconds: 2),(){
           Preferences.get(PrefKey.phone).then((userPhone) {
             if(userPhone == null){
@@ -39,6 +47,25 @@ class _SplashScreenState extends State<SplashScreen> {
           });
     }
     );
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _timerLink = new Timer(
+        const Duration(milliseconds: 1000),
+            () {
+          _dynamicLinkService.retrieveDynamicLink(context);
+        },
+      );
+    }
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    if (_timerLink != null) {
+      _timerLink.cancel();
+    }
+    super.dispose();
   }
 
   @override

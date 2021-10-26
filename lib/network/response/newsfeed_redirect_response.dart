@@ -1,24 +1,24 @@
 class NewsFeedRedirectResponse {
-  String success;
+  int success;
   String message;
-  List<NewsfeedsList> newsfeedsList;
+  List<NewsfeedsListRedirect> newsfeedsListRedirect;
   String priceMoney;
   String newsfeedspresent;
 
   NewsFeedRedirectResponse(
       {this.success,
         this.message,
-        this.newsfeedsList,
+        this.newsfeedsListRedirect,
         this.priceMoney,
         this.newsfeedspresent});
 
   NewsFeedRedirectResponse.fromJson(Map<String, dynamic> json) {
-    success = json['success'].toString();
-    message = json['message'].toString();
+    success = json['success'];
+    message = json['message'];
     if (json['newsfeeds_list'] != null) {
-      newsfeedsList = new List<NewsfeedsList>();
+      newsfeedsListRedirect = new List<NewsfeedsListRedirect>();
       json['newsfeeds_list'].forEach((v) {
-        newsfeedsList.add(new NewsfeedsList.fromJson(v));
+        newsfeedsListRedirect.add(new NewsfeedsListRedirect.fromJson(v));
       });
     }
     priceMoney = json['price_money'].toString();
@@ -29,9 +29,9 @@ class NewsFeedRedirectResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     data['message'] = this.message;
-    if (this.newsfeedsList != null) {
+    if (this.newsfeedsListRedirect != null) {
       data['newsfeeds_list'] =
-          this.newsfeedsList.map((v) => v.toJson()).toList();
+          this.newsfeedsListRedirect.map((v) => v.toJson()).toList();
     }
     data['price_money'] = this.priceMoney;
     data['newsfeedspresent'] = this.newsfeedspresent;
@@ -39,21 +39,21 @@ class NewsFeedRedirectResponse {
   }
 }
 
-class NewsfeedsList {
+class NewsfeedsListRedirect {
   String id;
   String newsfeed;
-  String likesCount;
+  int likesCount;
   String shareCount;
-  String status;
+  int status;
   String createdAt;
   String updatedAt;
-  String customerId;
+  int customerId;
   String createDate;
-  String reportCount;
-  String likedStatus;
+  int reportCount;
+  int likedStatus;
   List<NewsfeedLikes> newsfeedLikes;
 
-  NewsfeedsList(
+  NewsfeedsListRedirect(
       {this.id,
         this.newsfeed,
         this.likesCount,
@@ -67,18 +67,18 @@ class NewsfeedsList {
         this.likedStatus,
         this.newsfeedLikes});
 
-  NewsfeedsList.fromJson(Map<String, dynamic> json) {
+  NewsfeedsListRedirect.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
-    newsfeed = json['newsfeed'].toString();
-    likesCount = json['likes_count'].toString();
-    shareCount = json['share_count'].toString();
-    status = json['status'].toString();
-    createdAt = json['created_at'].toString();
-    updatedAt = json['updated_at'].toString();
-    customerId = json['customer_id'].toString();
-    createDate = json['create_date'].toString();
-    reportCount = json['report_count'].toString();
-    likedStatus = json['liked_status'].toString();
+    newsfeed = json['newsfeed'];
+    likesCount = json['likes_count'];
+    shareCount = json['share_count'];
+    status = json['status'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    customerId = json['customer_id'];
+    createDate = json['create_date'];
+    reportCount = json['report_count'];
+    likedStatus = json['liked_status'];
     if (json['newsfeed_likes'] != null) {
       newsfeedLikes = new List<NewsfeedLikes>();
       json['newsfeed_likes'].forEach((v) {
@@ -109,11 +109,11 @@ class NewsfeedsList {
 }
 
 class NewsfeedLikes {
-  String id;
-  String customerId;
-  String newsfeedId;
+  int id;
+  int customerId;
+  int newsfeedId;
   String likeable;
-  String status;
+  int status;
   String createdAt;
   String updatedAt;
 
@@ -127,13 +127,13 @@ class NewsfeedLikes {
         this.updatedAt});
 
   NewsfeedLikes.fromJson(Map<String, dynamic> json) {
-    id = json['id'].toString();
-    customerId = json['customer_id'].toString();
-    newsfeedId = json['newsfeed_id'].toString();
-    likeable = json['likeable'].toString();
-    status = json['status'].toString();
-    createdAt = json['created_at'].toString();
-    updatedAt = json['updated_at'].toString();
+    id = json['id'];
+    customerId = json['customer_id'];
+    newsfeedId = json['newsfeed_id'];
+    likeable = json['likeable'];
+    status = json['status'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -148,4 +148,3 @@ class NewsfeedLikes {
     return data;
   }
 }
-
