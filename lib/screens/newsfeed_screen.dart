@@ -255,8 +255,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
               ),
               InkWell(
                 onTap: (){
-                  newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
                   setState(() {
+                    newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
 
                   });
                 },
