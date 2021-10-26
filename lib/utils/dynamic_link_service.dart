@@ -34,13 +34,13 @@ class DynamicLinkService {
       if (deepLink != null) {
         if (deepLink.queryParameters.containsKey('newsfeed_id')) {
           String id = deepLink.queryParameters['newsfeed_id'];
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewsFeedScreenDynamic(id: id,)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(tabnumber: 1,)));
         }
       }
       String id = deepLink.queryParameters['newsfeed_id'];
       print(deepLink.queryParameters['newsfeed_id'].toString());
       FirebaseDynamicLinks.instance.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewsFeedScreenDynamic(id: id,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(tabnumber: 1,)));
       });
 
     } catch (e) {

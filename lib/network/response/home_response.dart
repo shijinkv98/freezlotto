@@ -47,7 +47,7 @@ class AdvertisementList {
   String createdAt;
   String updatedAt;
   String customerId;
-  String duration;
+  int duration;
   String category;
   String paidAmount;
   String fileType;

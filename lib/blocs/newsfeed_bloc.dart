@@ -57,6 +57,45 @@ class NewsFeedBloc extends ChangeNotifier {
       }
     });
   }
+  getNewsFeedRedirectData(BuildContext context,String newsFeedId)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        notifyListeners();
+        APIService().getNewsFeedListData(newsFeedId).then((response) {
+          isLoading = false;
+          notifyListeners();
+          if (response.statusCode == 200){
+            NewsFeedListResponse newsFeedListResponse =
+            NewsFeedListResponse.fromJson(response.data);
+            priceMoney =  newsFeedListResponse.priceMoney;
+            newsfeedspresent =  newsFeedListResponse.newsfeedspresent;
+            newsfeedsList = newsFeedListResponse.newsfeedsList;
+            notifyListeners();
+
+          if (newsFeedListResponse.success == 0) {
+          AlertUtils.showToast(newsFeedListResponse.message, context);
+
+          // advertisementList = homeScreenResponse.advertisementList;
+          //   notifyListeners();
+          } else if (newsFeedListResponse.success == 3) {
+            print("NEED TO LOGIN HERE......");
+            kMoveToLogin(context);
+          }else if (newsFeedListResponse.success == 1) {
+            newsfeedsList = newsFeedListResponse.newsfeedsList;
+            notifyListeners();
+          }
+          // }else {
+          //   AlertUtils.showToast(homeScreenResponse.message, context);
+          // }
+
+        } else {
+        AlertUtils.showToast("Login Failed", context);
+        }
+        });
+      }
+    });
+  }
 
   getNextData(BuildContext context)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
