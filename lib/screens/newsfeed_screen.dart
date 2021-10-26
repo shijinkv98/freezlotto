@@ -255,8 +255,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
               ),
               InkWell(
                 onTap: (){
-                  newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
                   setState(() {
+                    newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
 
                   });
                 },
@@ -300,71 +300,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                               )
                             ],
                           )),
-                      // Container(
-                      //     width: 96,
-                      //     height: 40,
-                      //     decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.all(Radius.circular(5)),
-                      //       color: white,
-                      //     ),
-                      //     child:
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Padding(
-                          //       padding: const EdgeInsets.only(left: 15),
-                          //       child: Container(
-                          //           height: 40,
-                          //           child:
-                          //
-                          //           // LikeButton(
-                          //           //   size: 15,
-                          //           //   circleColor:
-                          //           //   CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                          //           //   bubblesColor: BubblesColor(
-                          //           //     dotPrimaryColor: Color(0xff33b5e5),
-                          //           //     dotSecondaryColor: Color(0xff0099cc),
-                          //           //   ),
-                          //           //   likeBuilder: (bool isLiked) {
-                          //           //
-                          //           //     return Image(
-                          //           //       image: AssetImage(
-                          //           //         'assets/images/like_black.png',
-                          //           //       ),color: newsFeedBloc.newsfeedsList[index].liked_status == "1" ? Colors.red : Colors.black,
-                          //           //     );
-                          //           //   },
-                          //           //   onTap: (isLiked) async{
-                          //           //     newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
-                          //           //     setState(() {
-                          //           //
-                          //           //     });
-                          //           //     return !isLiked;
-                          //           //   },
-                          //           //   likeCount: 1,
-                          //           //   countBuilder: (int count, bool isLiked, String text) {
-                          //           //     var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
-                          //           //     Widget result;
-                          //           //     if (count == 1) {
-                          //           //       result = newsFeedBloc.newsfeedsList[index].liked_status == "0" ?Text(
-                          //           //         "Unlike",
-                          //           //         style: style2,
-                          //           //       ):Text(
-                          //           //         'Like',
-                          //           //         style: style3,
-                          //           //       );
-                          //           //     } else
-                          //           //       result = Text(
-                          //           //         'Like',
-                          //           //         style: style3,
-                          //           //       );
-                          //           //     return result;
-                          //           //   },
-                          //           // )
-                          //       ),
-                          //     ),
-                          //   ],
-
-                          // ),
                       FutureBuilder<Uri>(
                           future: _dynamicLinkService.createDynamicLink(newsFeedId),
                           builder: (context, snapshot) {
