@@ -326,7 +326,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                             Uri uri = snapshot.data;
                             return
                               InkWell(
-                                onTap: ()=> Share.share(uri.toString()),
+                                onTap: ()=> Share.share('${'Check this video on Freezlotto! '}\n${uri.toString()}'),
                                 child: Container(
                                     margin: EdgeInsets.only(left: 15),
                                     width: 96,

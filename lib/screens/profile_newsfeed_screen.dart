@@ -214,7 +214,7 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen>with Widge
                                 return
                                   InkWell(
                                     onTap: () async {
-                                      Clipboard.setData(new ClipboardData(text: uri.toString()))
+                                      Clipboard.setData(new ClipboardData(text: '${'Check this video on Freezlotto! '}\n${uri.toString()}'))
                                           .then((_) {
                                         Scaffold.of(context).showSnackBar(SnackBar(
                                             content: Text("Link copied to clipboard")));
