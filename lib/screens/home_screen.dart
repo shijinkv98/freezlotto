@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
                 AlertDialog(title: Text('Are you sure you want to quit?'), actions: <Widget>[
                   RaisedButton(
                       child: Text('OK'),
-                      onPressed: () => Navigator.of(context).pop(true)),
+                      onPressed: () => Navigator.of(context).pop(exit(0))),
                   RaisedButton(
                       child: Text('CANCEL'),
                       onPressed: () => Navigator.of(context).pop(false)),

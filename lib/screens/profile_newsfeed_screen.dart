@@ -80,9 +80,7 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen>with Widge
     super.dispose();
   }
 
-  @override
-  deactivate() {
-
+  @override deactivate() {
     super.deactivate();
   }
 
