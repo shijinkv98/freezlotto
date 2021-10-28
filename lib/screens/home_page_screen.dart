@@ -606,15 +606,23 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   }
   Future<void> resetTimer(HomeBloc homeBloc)
   async {
-    if((homeBloc.advertisementList.length-1)>scrollPosition)
-      scrollPosition=scrollPosition+1;
-   // int(pos=)
-    int totalLength=homeBloc.advertisementList.length-1;
-    //int delta=(totalLength-scrollPosition);
-    double extent=(_scrollController.position.maxScrollExtent/totalLength)*scrollPosition;
-    //Fluttertoast.showToast(msg: extent.toString());
-    //_scrollController.scrollToIndex(1);
-    _scrollController.animateTo(extent,duration: Duration(seconds: 2),curve: Curves.easeOut);
+    if((homeBloc.advertisementList.length-1)>scrollPosition) {
+      scrollPosition = scrollPosition + 1;
+      // int(pos=)
+      int totalLength = homeBloc.advertisementList.length - 1;
+      //int delta=(totalLength-scrollPosition);
+      double extent = (_scrollController.position.maxScrollExtent /
+          totalLength) * scrollPosition;
+      //Fluttertoast.showToast(msg: extent.toString());
+      //_scrollController.scrollToIndex(1);
+      await _scrollController.animateTo(
+          extent, duration: Duration(seconds: 1), curve: Curves.easeOut);
+    }
+    else {
+     await  _scrollController.animateTo(
+          0, duration: Duration(seconds: 1), curve: Curves.easeOut);
+      scrollPosition=0;
+    }
    // await _scrollController.scrollToIndex(2, preferPosition: AutoScrollPosition.begin);
     timer.cancel();
     timer=null;
