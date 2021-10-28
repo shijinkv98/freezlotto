@@ -44,6 +44,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   String duration="";
   var cus_id = "";
   Timer timer;
+  int scrollPosition=0;
+
   AutoScrollController  _scrollController = AutoScrollController ();
   CarouselController buttonCarouselController = CarouselController();
   @override
@@ -123,10 +125,15 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   Widget getBannerSlider(HomeBloc homeBloc,) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+    if(scrollPosition>homeBloc.advertisementList.length)
+    {
+      scrollPosition=0;
+    }
+    startTimer(homeBloc);
     return ClipRRect(
       child:
       CarouselSlider(
-        carouselController: buttonCarouselController,
+        carouselController: _scrollController,
         options: CarouselOptions(
           enlargeCenterPage: true,
           // autoPlay: homeBloc.advertisementList.length > 1 ? true : false,
@@ -382,218 +389,6 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     cus_id = await Preferences.get(PrefKey.customerID);
   }
 
-  Widget getHome(HomeBloc homeBloc){
-    WebViewController _controller;
-
-    return ListView.builder(
-      // scrollDirection: Axis.vertical,
-      itemCount: 1,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-            margin: EdgeInsets.only(bottom: 65),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 230,
-            child: homeBloc.advertisementList[index].fileType ==
-                "image"
-                ? Container(
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        bottom: 50,
-                        top: 40,
-                        left: 30,
-                        right: 30),
-                    height:
-                    MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(31)),
-                      // image: DecorationImage(
-                      //  image: AssetImage('assets/images/bg_dummy.png'),
-                      //     fit: BoxFit.cover),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(31)),
-                      child:
-                      FadeInImage.assetNetwork(
-                        fit: BoxFit.fitHeight,
-                        placeholder: 'assets/images/logo.png',
-                        image:
-                        '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-            )
-                :
-            Container(
-                color: white,
-                child:
-                SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
-                    child: Container(
-
-                      // height: MediaQuery.of(context).size.height,
-                      child: Column(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context)
-                                .size
-                                .width,
-                            height: 300,
-                            child: Stack(
-                              children: <Widget>[
-                                Card(
-                                  elevation:2,
-                                  shape:RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(23),
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 30,
-                                      right: 30,
-                                      top: 50),
-                                  // width:
-                                  //     MediaQuery.of(context).size.width,
-                                  // height: 300,
-                                  // decoration: BoxDecoration(
-                                  //     borderRadius:
-                                  //         BorderRadius.all(Radius.circular(23))),
-                                  child: ClipRRect(
-                                      borderRadius:BorderRadius.all(Radius.circular(23)),
-                                      child:
-                                      Container(
-                                        height: 300,
-                                        color: Colors.grey[300],
-                                        width:  MediaQuery.of(context).size.width,
-                                        // child: WebView(
-                                        //   initialUrl:videoPath,
-                                        // )
-                                        child: WebView(
-                                          initialUrl: videoPath,
-                                          javascriptMode: JavascriptMode.unrestricted,
-                                          onWebViewCreated: (WebViewController webViewController) {
-                                            _controller=webViewController;
-                                          },
-                                        ),
-                                      )
-
-                                  ),
-                                ),
-
-                              ], //<Widget>[]
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              nextPagePush(context,
-                                  SwitchToAdminScreen());
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context)
-                                  .size
-                                  .width,
-                              height: 83,
-                              margin: EdgeInsets.only(
-                                  left: 30,
-                                  right: 30,
-                                  top: 30),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.all(
-                                    Radius.circular(
-                                        15)),
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/rectangle_10.png'),
-                                    fit: BoxFit.cover),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                    'Click here to Upload Advertisement',
-                                    style: style,
-                                  )),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          getTermsBox(homeBloc.advertisementContents.conten1, 'assets/images/thumb.png'),
-                          getTermsBox(homeBloc.advertisementContents.conten2, 'assets/images/notess.png'),
-                          getTermsBox(homeBloc.advertisementContents.conten3, 'assets/images/close_round.png'),
-                          Align(
-                              alignment: Alignment.bottomRight,
-                              child: Container(
-                                  margin: EdgeInsets.only(
-                                      bottom: 30,
-                                      top: 40,
-                                      left: 30,
-                                      right: 45),
-                                  width: 72,
-                                  height: 72,
-                                  child:
-                                  FloatingActionButton(
-                                    onPressed: () {
-                                      homeBloc.commission_amount !=
-                                          "0"
-                                          ? homeBloc.addMoney(context)
-                                          : Container();
-                                      nextPagePushReplacement(
-                                          context,
-                                          HomeScreen(
-                                            tabnumber: 2,
-                                          ));
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          homeBloc.referal_count,
-                                          style: TextStyle(
-                                              color:
-                                              flottingTextColor,
-                                              fontFamily: MEDIUM_FONT,
-                                              fontWeight:
-                                              FontWeight.w400,
-                                              fontSize: 22),
-                                        ),
-                                        Padding(
-                                          padding:
-                                          const EdgeInsets.only(
-                                              bottom: 5),
-                                          child: Image.asset(
-                                            'assets/images/Vector.png',
-                                            width: 30,
-                                            height: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    mini: false,
-                                    backgroundColor:
-                                    homeBloc.commission_amount ==
-                                        "0"
-                                        ? flottingButtonColor
-                                        : flottingRedTextColor,
-                                  )))
-
-                        ],
-                      ),
-                    ))));
-      },
-    );
-  }
-  int scrollPosition=0;
   void startTimer(HomeBloc homeBloc)
   {
    // Fluttertoast.showToast(msg: scrollPosition.toString());
@@ -607,7 +402,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   }
   Future<void> resetTimer(HomeBloc homeBloc)
   async {
-    if((homeBloc.advertisementList.length-1)>scrollPosition) {
+    if((homeBloc.advertisementList.length-1)>scrollPosition ) {
       scrollPosition = scrollPosition + 1;
       // int(pos=)
       int totalLength = homeBloc.advertisementList.length - 1;
@@ -657,15 +452,11 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
             ListView.builder(
               controller: _scrollController,
                 itemCount: homeBloc.advertisementList.length,
-                // itemCount: homeBloc.advertisementList.length,
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   WebViewController _controller;
-                //  _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(seconds: int.parse(homeBloc.advertisementList[index].duration)), curve: Curves.easeOut);
-
-                  // WebView.platform = SurfaceAndroidWebView();
-                  videoPath = '${'https://freezelotto.alisonsdemo.online/videoplay/'}${homeBloc.advertisementList[index].id}';
+                  videoPath = '${'https://freezelotto.alisonsdemo.online/videoplay/'}${homeBloc.advertisementList[index].id}${'/'}${cus_id}';
                   return Container(
                       margin: EdgeInsets.only(bottom: 65),
                       width: MediaQuery.of(context).size.width,
@@ -685,7 +476,6 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                               MediaQuery.of(context).size.height,
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
-                                color: Colors.grey[300],
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(31)),
                                 // image: DecorationImage(
@@ -696,26 +486,21 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(31)),
                                 child:
-                                FadeInImage.assetNetwork(
-                                  fit: BoxFit.fitHeight,
-                                  placeholder: 'assets/images/logo.png',
-                                  image:
-                                  '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
+                                Card(
+                                  color: white,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(31.0),
+                                  ),
+                                  child: FadeInImage.assetNetwork(
+                                    fit: BoxFit.fill,
+                                    placeholder: 'assets/images/logo.png',
+                                    image:
+                                    '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
+                                  ),
                                 ),
                               ),
                             ),
-//                                     Align(
-//                                         alignment: Alignment.bottomRight,
-//                                         child: Container(
-//                                             margin: EdgeInsets.only(
-//                                                 bottom: 30,
-//                                                 top: 40,
-//                                                 left: 30,
-//                                                 right: 45),
-//                                             width: 72,
-//                                             height: 72,
-//                                             child:
-// ))
                           ],
                         ),
                       )
