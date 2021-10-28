@@ -421,11 +421,11 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
       //Fluttertoast.showToast(msg: extent.toString());
       //_scrollController.scrollToIndex(1);
       await _scrollController.animateTo(
-          extent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+          extent, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
     }
     else {
      await  _scrollController.animateTo(
-          0, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+          0, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
       scrollPosition=0;
     }
    // await _scrollController.scrollToIndex(2, preferPosition: AutoScrollPosition.begin);
