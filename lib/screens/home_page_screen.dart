@@ -58,6 +58,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
     Provider.of<HomeBloc>(context, listen: false).getAdsContentsData(context);
+    scrollPosition=0;
     return Scaffold(
       backgroundColor: white,
       floatingActionButton: Consumer<HomeBloc>(
