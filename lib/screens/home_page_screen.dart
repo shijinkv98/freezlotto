@@ -13,6 +13,7 @@ import 'package:freezlotto/utils/preferences.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'home_screen.dart';
 
@@ -43,12 +44,12 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   String duration="";
   var cus_id = "";
   Timer timer;
-  ScrollController _scrollController = ScrollController();
+  AutoScrollController  _scrollController = AutoScrollController ();
   CarouselController buttonCarouselController = CarouselController();
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => setState(() {}));
+
 
     getUserInfo();
   }
@@ -131,13 +132,13 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           autoPlay: false,
           aspectRatio: width / height,
           scrollDirection: Axis.vertical,
-          autoPlayCurve: Curves.easeIn,
-          enableInfiniteScroll: false,
-          initialPage: 2,
-          autoPlayInterval: Duration(seconds: int.parse(currDuration)),
-          autoPlayAnimationDuration: Duration(seconds: 1),
+          //autoPlayCurve: Curves.easeIn,
+          enableInfiniteScroll: true,
+          //initialPage: 2,
+          // autoPlayInterval: Duration(seconds: int.parse(currDuration)),
+          // autoPlayAnimationDuration: Duration(seconds:int.parse(currDuration)),
           viewportFraction: 0.85,
-          pauseAutoPlayOnTouch: true,
+       //   pauseAutoPlayOnTouch: true,
           onPageChanged: (index, reason) {
             setState(() {
               currDuration = homeBloc.advertisementList[index].duration; //<-- Page index
@@ -591,7 +592,40 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
       },
     );
   }
+  int scrollPosition=0;
+  void startTimer(HomeBloc homeBloc)
+  {
+   // Fluttertoast.showToast(msg: scrollPosition.toString());
+    if(homeBloc.advertisementList.length>scrollPosition) {
+      int duration=int.parse(homeBloc.advertisementList[scrollPosition].duration);
+
+      timer = Timer.periodic(Duration(seconds: duration), (Timer t) =>
+        resetTimer(homeBloc));
+
+    }
+  }
+  Future<void> resetTimer(HomeBloc homeBloc)
+  async {
+    if((homeBloc.advertisementList.length-1)>scrollPosition)
+      scrollPosition=scrollPosition+1;
+   // int(pos=)
+    int totalLength=homeBloc.advertisementList.length-1;
+    //int delta=(totalLength-scrollPosition);
+    double extent=(_scrollController.position.maxScrollExtent/totalLength)*scrollPosition;
+    //Fluttertoast.showToast(msg: extent.toString());
+    //_scrollController.scrollToIndex(1);
+    _scrollController.animateTo(extent,duration: Duration(seconds: 2),curve: Curves.easeOut);
+   // await _scrollController.scrollToIndex(2, preferPosition: AutoScrollPosition.begin);
+    timer.cancel();
+    timer=null;
+    startTimer(homeBloc);
+  }
   Widget homePageImage(HomeBloc homeBloc) {
+    if(scrollPosition>homeBloc.advertisementList.length)
+      {
+        scrollPosition=0;
+      }
+    startTimer(homeBloc);
   return Container(
     height: MediaQuery.of(context).size.height,
     child: Stack(
@@ -619,7 +653,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   WebViewController _controller;
-                  _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(seconds: int.parse(homeBloc.advertisementList[index].duration)), curve: Curves.easeOut);
+                //  _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(seconds: int.parse(homeBloc.advertisementList[index].duration)), curve: Curves.easeOut);
 
                   // WebView.platform = SurfaceAndroidWebView();
                   videoPath = '${'https://freezelotto.alisonsdemo.online/videoplay/'}${homeBloc.advertisementList[index].id}';
