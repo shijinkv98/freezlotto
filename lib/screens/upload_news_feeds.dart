@@ -39,12 +39,30 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds> {
   }
 
   Widget getHOMEpage() {
-    return TabBarView(
-      children: [
-        HomePageScreen(),
-        getMiddleContainer(),
-        GalleryScreen(),
-      ],
+    return WillPopScope(
+      onWillPop: () {
+        nextPagePush(context, HomeScreen(tabnumber: 1));
+      },
+      // async =>
+      //     showDialog(
+      //     context: context,
+      //     builder: (context) =>
+      //         AlertDialog(title: Text('Are you sure you want to quit?'), actions: <Widget>[
+      //           RaisedButton(
+      //               child: Text('OK'),
+      //               onPressed: () => Navigator.of(context).pop(true)),
+      //           RaisedButton(
+      //               child: Text('CANCEL'),
+      //               onPressed: () => Navigator.of(context).pop(false)),
+      //         ])
+      // ),
+      child: TabBarView(
+        children: [
+          HomePageScreen(),
+          getMiddleContainer(),
+          GalleryScreen(),
+        ],
+      ),
     );
   }
   Widget getLinkForm() {

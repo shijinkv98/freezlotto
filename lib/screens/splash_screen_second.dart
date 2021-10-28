@@ -76,7 +76,7 @@ _SplashScreenSecondState({this.customerMobile});
                     ),
                     InkWell(
                       onTap: (){
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => HomeScreen(tabnumber: 0,)),
                         );

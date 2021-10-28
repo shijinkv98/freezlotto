@@ -70,6 +70,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   String price;
   String category;
   String id;
+
   StreamController<String> controllerUrl = StreamController<String>();
   _NewsFeedScreenState({this.id});
   @override
@@ -261,7 +262,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                   });
                 },
                 child: Container(
-                  margin: EdgeInsets.only(left: 30, top: 15),
+                  margin: EdgeInsets.only(left: 20, top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

@@ -47,11 +47,11 @@ class AdvertisementList {
   String createdAt;
   String updatedAt;
   String customerId;
-  int duration;
   String category;
   String paidAmount;
   String fileType;
   String transactionId;
+  String duration;
 
   AdvertisementList(
       {this.id,
@@ -63,10 +63,10 @@ class AdvertisementList {
         this.createdAt,
         this.updatedAt,
         this.customerId,
-        this.duration,
         this.category,
         this.paidAmount,
         this.fileType,
+        this.duration,
         this.transactionId});
 
   AdvertisementList.fromJson(Map<String, dynamic> json) {
@@ -76,10 +76,10 @@ class AdvertisementList {
     likesCount = json['likes_count'].toString();
     shareCount = json['share_count'].toString();
     status = json['status'].toString();
+    duration = json['duration'].toString();
     createdAt = json['created_at'].toString();
     updatedAt = json['updated_at'].toString();
     customerId = json['customer_id'].toString();
-    duration = json['duration'];
     category = json['category'].toString();
     paidAmount = json['paid_amount'].toString();
     fileType = json['file_type'].toString();

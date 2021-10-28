@@ -1,20 +1,20 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/switch_to_admin_screen.dart';
+import 'package:freezlotto/utils/preferences.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'home_screen.dart';
-import 'package:freezlotto/utils/dynamic_link_service.dart';
 
 final TextStyle style = TextStyle(
     color: white,
@@ -38,12 +38,19 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   Future<void> _initializeVideoPlayerFuture;
   String videoUrl = "";
   String videoPath = " ";
-  String duration = " ";
-  int currDuration=0;
+  String currDuration;
   int currPosition=0;
+  String duration="";
+  var cus_id = "";
+  Timer timer;
+  ScrollController _scrollController = ScrollController();
+  CarouselController buttonCarouselController = CarouselController();
   @override
   void initState() {
     super.initState();
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => setState(() {}));
+
+    getUserInfo();
   }
 
   @override
@@ -96,53 +103,57 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                       : flottingRedTextColor,
                 ),
               )),
-      body: WillPopScope(
-          onWillPop: onWillPop,
-          child: Consumer<HomeBloc>(
-            builder: (context, homeBloc, child) => ModalProgressHUD(
-                inAsyncCall: homeBloc.isLoading,
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: getBannerSlider(homeBloc))
-                // homePageImage(homeBloc)
-                ),
-          )),
+      body: Consumer<HomeBloc>(
+        builder: (context, homeBloc, child) => ModalProgressHUD(
+            inAsyncCall: homeBloc.isLoading,
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child:
+                homePageImage(homeBloc)
+                // getBannerSlider(homeBloc)
+            )
+            ),
+      ),
     );
   }
 
-  Widget getBannerSlider(HomeBloc homeBloc) {
+  Widget getBannerSlider(HomeBloc homeBloc,) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    homeBloc.advertisementList.length>0?currDuration=homeBloc.advertisementList[0].duration:currDuration=0;
     return ClipRRect(
-      child: CarouselSlider(
+      child:
+      CarouselSlider(
+        carouselController: buttonCarouselController,
         options: CarouselOptions(
           enlargeCenterPage: true,
-          autoPlay: homeBloc.advertisementList.length > 1 ? true : false,
+          // autoPlay: homeBloc.advertisementList.length > 1 ? true : false,
+          autoPlay: false,
           aspectRatio: width / height,
           scrollDirection: Axis.vertical,
           autoPlayCurve: Curves.easeIn,
           enableInfiniteScroll: false,
-          // autoPlayAnimationDuration: Duration(milliseconds: 500),
-            onPageChanged: (index, reason) =>{
-              currDuration = homeBloc.advertisementList[index].duration,
-                  },
-          autoPlayInterval: Duration(seconds: currDuration),
-          viewportFraction: 0.8,
+          initialPage: 2,
+          autoPlayInterval: Duration(seconds: int.parse(currDuration)),
+          autoPlayAnimationDuration: Duration(seconds: 1),
+          viewportFraction: 0.85,
           pauseAutoPlayOnTouch: true,
-
-
+          onPageChanged: (index, reason) {
+            setState(() {
+              currDuration = homeBloc.advertisementList[index].duration; //<-- Page index
+            });
+          },
         ),
+
         items: homeBloc.advertisementList.map((i) {
+
           return Builder(
             builder: (BuildContext context) {
-              return InkWell(
-                onTap: () {},
-                child: i.fileType == "image"
-                    ? getImageBanner(i.advertisement)
-                    : getVideo(i.id, homeBloc),
-              );
+              currDuration = i.duration;
+              // buttonCarouselController.nextPage(duration: Duration(seconds: int.parse(i.duration)));
+              return i.fileType == "image"
+                  ? getImageBanner(i.advertisement)
+                  : getVideo(i.id, homeBloc);
             },
           );
         }).toList(),
@@ -209,7 +220,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                             width: MediaQuery.of(context).size.width,
                             child: WebView(
                               initialUrl:
-                                  '${'https://freezelotto.alisonsdemo.online/videoplay/'}${url}',
+                                  '${'https://freezelotto.alisonsdemo.online/videoplay/'}${url}${'/'}${cus_id}',
                               javascriptMode: JavascriptMode.unrestricted,
                               onWebViewCreated:
                                   (WebViewController webViewController) {
@@ -364,239 +375,292 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           ],
         ),
       );
-}
-// Widget homePageImage(HomeBloc homeBloc) {
-//   return Container(
-//     height: MediaQuery.of(context).size.height,
-//     child: Stack(
-//       children: [
-//         Align(
-//           alignment: Alignment.center,
-//           child: Container(
-//             margin: EdgeInsets.only(bottom: 65),
-//             height: MediaQuery.of(context).size.height / 2.3,
-//             width: MediaQuery.of(context).size.width,
-//             child: Image.asset(
-//               "assets/images/bg.png",
-//               fit: BoxFit.fill,
-//             ),
-//           ),
-//         ),
-//         Align(
-//             alignment: Alignment.topCenter,
-//             child:
-//             ListView.builder(
-//                 itemCount: homeBloc.advertisementList.length,
-//                 // itemCount: homeBloc.advertisementList.length,
-//                 shrinkWrap: true,
-//                 physics: ScrollPhysics(),
-//                 itemBuilder: (BuildContext context, int index) {
-//                   WebViewController _controller;
-//                   // WebView.platform = SurfaceAndroidWebView();
-//                   videoPath = '${'https://freezelotto.alisonsdemo.online/videoplay/'}${homeBloc.advertisementList[index].id}';
-//                   return Container(
-//                       margin: EdgeInsets.only(bottom: 65),
-//                       width: MediaQuery.of(context).size.width,
-//                       height: MediaQuery.of(context).size.height - 230,
-//                       child: homeBloc.advertisementList[index].fileType ==
-//                           "image"
-//                           ? Container(
-//                         child: Stack(
-//                           children: [
-//                             Container(
-//                               margin: EdgeInsets.only(
-//                                   bottom: 50,
-//                                   top: 40,
-//                                   left: 30,
-//                                   right: 30),
-//                               height:
-//                               MediaQuery.of(context).size.height,
-//                               width: MediaQuery.of(context).size.width,
-//                               decoration: BoxDecoration(
-//                                 color: Colors.grey[300],
-//                                 borderRadius: BorderRadius.all(
-//                                     Radius.circular(31)),
-//                                 // image: DecorationImage(
-//                                 //  image: AssetImage('assets/images/bg_dummy.png'),
-//                                 //     fit: BoxFit.cover),
-//                               ),
-//                               child: ClipRRect(
-//                                 borderRadius: BorderRadius.all(
-//                                     Radius.circular(31)),
-//                                 child:
-//                                 FadeInImage.assetNetwork(
-//                                   fit: BoxFit.fitHeight,
-//                                   placeholder: 'assets/images/logo.png',
-//                                   image:
-//                                   '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
-//                                 ),
-//                               ),
-//                             ),
-// //                                     Align(
-// //                                         alignment: Alignment.bottomRight,
-// //                                         child: Container(
-// //                                             margin: EdgeInsets.only(
-// //                                                 bottom: 30,
-// //                                                 top: 40,
-// //                                                 left: 30,
-// //                                                 right: 45),
-// //                                             width: 72,
-// //                                             height: 72,
-// //                                             child:
-// // ))
-//                           ],
-//                         ),
-//                       )
-//                           :
-//                       Container(
-//                           color: white,
-//                           child:
-//                           SingleChildScrollView(
-//                               physics: NeverScrollableScrollPhysics(),
-//                               child: Container(
-//
-//                                 // height: MediaQuery.of(context).size.height,
-//                                 child: Column(
-//                                   mainAxisAlignment:
-//                                   MainAxisAlignment.start,
-//                                   crossAxisAlignment:
-//                                   CrossAxisAlignment.start,
-//                                   children: [
-//                                     Container(
-//                                       width: MediaQuery.of(context)
-//                                           .size
-//                                           .width,
-//                                       height: 300,
-//                                       child: Stack(
-//                                         children: <Widget>[
-//                                           Card(
-//                                             elevation:2,
-//                                             shape:RoundedRectangleBorder(
-//                                               borderRadius: BorderRadius.circular(23),
-//                                             ),
-//                                             margin: EdgeInsets.only(
-//                                                 left: 30,
-//                                                 right: 30,
-//                                                 top: 50),
-//                                             // width:
-//                                             //     MediaQuery.of(context).size.width,
-//                                             // height: 300,
-//                                             // decoration: BoxDecoration(
-//                                             //     borderRadius:
-//                                             //         BorderRadius.all(Radius.circular(23))),
-//                                             child: ClipRRect(
-//                                                 borderRadius:BorderRadius.all(Radius.circular(23)),
-//                                                 child:
-//                                                 Container(
-//                                                   height: 300,
-//                                                   color: Colors.grey[300],
-//                                                   width:  MediaQuery.of(context).size.width,
-//                                                   // child: WebView(
-//                                                   //   initialUrl:videoPath,
-//                                                   // )
-//                                                   child: WebView(
-//                                                     initialUrl: videoPath,
-//                                                     javascriptMode: JavascriptMode.unrestricted,
-//                                                     onWebViewCreated: (WebViewController webViewController) {
-//                                                       _controller=webViewController;
-//                                                     },
-//                                                   ),
-//                                                 )
-//
-//                                             ),
-//                                           ),
-//                                           //       Align(
-//                                           //         alignment: Alignment.bottomRight,
-//                                           //         child: Container(
-//                                           //           margin: EdgeInsets.only(bottom: 5,top: 40,left: 30,right: 45),
-//                                           //           height: 60,width: 60,
-//                                           //           child: FloatingActionButton(
-//                                           //   onPressed: () {
-//                                           //     homeBloc.commission_amount !=
-//                                           //         "0"
-//                                           //         ? homeBloc.addMoney(context)
-//                                           //         : Container();
-//                                           //     nextPagePushReplacement(
-//                                           //         context,
-//                                           //         HomeScreen(
-//                                           //           tabnumber: 2,
-//                                           //         ));
-//                                           //   },
-//                                           //   child: Column(
-//                                           //     crossAxisAlignment:
-//                                           //     CrossAxisAlignment.center,
-//                                           //     mainAxisAlignment:
-//                                           //     MainAxisAlignment.center,
-//                                           //     children: [
-//                                           //       Text(
-//                                           //         homeBloc.referal_count,
-//                                           //         style: TextStyle(
-//                                           //             color:
-//                                           //             flottingTextColor,
-//                                           //             fontFamily: MEDIUM_FONT,
-//                                           //             fontWeight:
-//                                           //             FontWeight.w400,
-//                                           //             fontSize: 22),
-//                                           //       ),
-//                                           //       Padding(
-//                                           //         padding:
-//                                           //         const EdgeInsets.only(
-//                                           //             bottom: 5),
-//                                           //         child: Image.asset(
-//                                           //           'assets/images/Vector.png',
-//                                           //           width: 30,
-//                                           //           height: 20,
-//                                           //         ),
-//                                           //       ),
-//                                           //     ],
-//                                           //   ),
-//                                           //   mini: false,
-//                                           //   backgroundColor:
-//                                           //   homeBloc.commission_amount ==
-//                                           //       "0"
-//                                           //       ? flottingButtonColor
-//                                           //       : flottingRedTextColor,
-//                                           // ),
-//                                           //         ),
-//                                           //       )
-//                                         ], //<Widget>[]
-//                                       ),
-//                                     ),
-//                                     InkWell(
-//                                       onTap: () {
-//                                         nextPagePush(context,
-//                                             SwitchToAdminScreen());
-//                                       },
-//                                       child: Container(
-//                                         width: MediaQuery.of(context)
-//                                             .size
-//                                             .width,
-//                                         height: 83,
-//                                         margin: EdgeInsets.only(
-//                                             left: 30,
-//                                             right: 30,
-//                                             top: 30),
-//                                         decoration: BoxDecoration(
-//                                           borderRadius:
-//                                           BorderRadius.all(
-//                                               Radius.circular(
-//                                                   15)),
-//                                           image: DecorationImage(
-//                                               image: AssetImage(
-//                                                   'assets/images/rectangle_10.png'),
-//                                               fit: BoxFit.cover),
-//                                         ),
-//                                         child: Center(
-//                                             child: Text(
-//                                               'Click here to Upload Advertisement',
-//                                               style: style,
-//                                             )),
-//                                       ),
-//                                     ),
-//                                     SizedBox(height: 20),
-//                                     getTermsBox(homeBloc.advertisementContents.conten1, 'assets/images/thumb.png'),
-//                                     getTermsBox(homeBloc.advertisementContents.conten2, 'assets/images/notess.png'),
-//                                     getTermsBox(homeBloc.advertisementContents.conten3, 'assets/images/close_round.png'),
+
+  void getUserInfo()async{
+    cus_id = await Preferences.get(PrefKey.customerID);
+  }
+
+  Widget getHome(HomeBloc homeBloc){
+    WebViewController _controller;
+
+    return ListView.builder(
+      // scrollDirection: Axis.vertical,
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+            margin: EdgeInsets.only(bottom: 65),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 230,
+            child: homeBloc.advertisementList[index].fileType ==
+                "image"
+                ? Container(
+              child: Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(
+                        bottom: 50,
+                        top: 40,
+                        left: 30,
+                        right: 30),
+                    height:
+                    MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(31)),
+                      // image: DecorationImage(
+                      //  image: AssetImage('assets/images/bg_dummy.png'),
+                      //     fit: BoxFit.cover),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(31)),
+                      child:
+                      FadeInImage.assetNetwork(
+                        fit: BoxFit.fitHeight,
+                        placeholder: 'assets/images/logo.png',
+                        image:
+                        '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            )
+                :
+            Container(
+                color: white,
+                child:
+                SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: Container(
+
+                      // height: MediaQuery.of(context).size.height,
+                      child: Column(
+                        mainAxisAlignment:
+                        MainAxisAlignment.start,
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context)
+                                .size
+                                .width,
+                            height: 300,
+                            child: Stack(
+                              children: <Widget>[
+                                Card(
+                                  elevation:2,
+                                  shape:RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(23),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                      left: 30,
+                                      right: 30,
+                                      top: 50),
+                                  // width:
+                                  //     MediaQuery.of(context).size.width,
+                                  // height: 300,
+                                  // decoration: BoxDecoration(
+                                  //     borderRadius:
+                                  //         BorderRadius.all(Radius.circular(23))),
+                                  child: ClipRRect(
+                                      borderRadius:BorderRadius.all(Radius.circular(23)),
+                                      child:
+                                      Container(
+                                        height: 300,
+                                        color: Colors.grey[300],
+                                        width:  MediaQuery.of(context).size.width,
+                                        // child: WebView(
+                                        //   initialUrl:videoPath,
+                                        // )
+                                        child: WebView(
+                                          initialUrl: videoPath,
+                                          javascriptMode: JavascriptMode.unrestricted,
+                                          onWebViewCreated: (WebViewController webViewController) {
+                                            _controller=webViewController;
+                                          },
+                                        ),
+                                      )
+
+                                  ),
+                                ),
+
+                              ], //<Widget>[]
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              nextPagePush(context,
+                                  SwitchToAdminScreen());
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context)
+                                  .size
+                                  .width,
+                              height: 83,
+                              margin: EdgeInsets.only(
+                                  left: 30,
+                                  right: 30,
+                                  top: 30),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.all(
+                                    Radius.circular(
+                                        15)),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/rectangle_10.png'),
+                                    fit: BoxFit.cover),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                    'Click here to Upload Advertisement',
+                                    style: style,
+                                  )),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          getTermsBox(homeBloc.advertisementContents.conten1, 'assets/images/thumb.png'),
+                          getTermsBox(homeBloc.advertisementContents.conten2, 'assets/images/notess.png'),
+                          getTermsBox(homeBloc.advertisementContents.conten3, 'assets/images/close_round.png'),
+                          Align(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                  margin: EdgeInsets.only(
+                                      bottom: 30,
+                                      top: 40,
+                                      left: 30,
+                                      right: 45),
+                                  width: 72,
+                                  height: 72,
+                                  child:
+                                  FloatingActionButton(
+                                    onPressed: () {
+                                      homeBloc.commission_amount !=
+                                          "0"
+                                          ? homeBloc.addMoney(context)
+                                          : Container();
+                                      nextPagePushReplacement(
+                                          context,
+                                          HomeScreen(
+                                            tabnumber: 2,
+                                          ));
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          homeBloc.referal_count,
+                                          style: TextStyle(
+                                              color:
+                                              flottingTextColor,
+                                              fontFamily: MEDIUM_FONT,
+                                              fontWeight:
+                                              FontWeight.w400,
+                                              fontSize: 22),
+                                        ),
+                                        Padding(
+                                          padding:
+                                          const EdgeInsets.only(
+                                              bottom: 5),
+                                          child: Image.asset(
+                                            'assets/images/Vector.png',
+                                            width: 30,
+                                            height: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    mini: false,
+                                    backgroundColor:
+                                    homeBloc.commission_amount ==
+                                        "0"
+                                        ? flottingButtonColor
+                                        : flottingRedTextColor,
+                                  )))
+
+                        ],
+                      ),
+                    ))));
+      },
+    );
+  }
+  Widget homePageImage(HomeBloc homeBloc) {
+  return Container(
+    height: MediaQuery.of(context).size.height,
+    child: Stack(
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 65),
+            height: MediaQuery.of(context).size.height / 2.3,
+            width: MediaQuery.of(context).size.width,
+            child: Image.asset(
+              "assets/images/bg.png",
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+        Align(
+            alignment: Alignment.topCenter,
+            child:
+            ListView.builder(
+              controller: _scrollController,
+                itemCount: homeBloc.advertisementList.length,
+                // itemCount: homeBloc.advertisementList.length,
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  WebViewController _controller;
+                  _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(seconds: int.parse(homeBloc.advertisementList[index].duration)), curve: Curves.easeOut);
+
+                  // WebView.platform = SurfaceAndroidWebView();
+                  videoPath = '${'https://freezelotto.alisonsdemo.online/videoplay/'}${homeBloc.advertisementList[index].id}';
+                  return Container(
+                      margin: EdgeInsets.only(bottom: 65),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 230,
+                      child: homeBloc.advertisementList[index].fileType ==
+                          "image"
+                          ? Container(
+                        child: Stack(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                  bottom: 50,
+                                  top: 40,
+                                  left: 30,
+                                  right: 30),
+                              height:
+                              MediaQuery.of(context).size.height,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(31)),
+                                // image: DecorationImage(
+                                //  image: AssetImage('assets/images/bg_dummy.png'),
+                                //     fit: BoxFit.cover),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(31)),
+                                child:
+                                FadeInImage.assetNetwork(
+                                  fit: BoxFit.fitHeight,
+                                  placeholder: 'assets/images/logo.png',
+                                  image:
+                                  '${APIClient.Ad_Asset_Location}${homeBloc.advertisementList[index].advertisement}',
+                                ),
+                              ),
+                            ),
 //                                     Align(
 //                                         alignment: Alignment.bottomRight,
 //                                         child: Container(
@@ -608,78 +672,245 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
 //                                             width: 72,
 //                                             height: 72,
 //                                             child:
-//                                             FloatingActionButton(
-//                                               onPressed: () {
-//                                                 homeBloc.commission_amount !=
-//                                                     "0"
-//                                                     ? homeBloc.addMoney(context)
-//                                                     : Container();
-//                                                 nextPagePushReplacement(
-//                                                     context,
-//                                                     HomeScreen(
-//                                                       tabnumber: 2,
-//                                                     ));
-//                                               },
-//                                               child: Column(
-//                                                 crossAxisAlignment:
-//                                                 CrossAxisAlignment.center,
-//                                                 mainAxisAlignment:
-//                                                 MainAxisAlignment.center,
-//                                                 children: [
-//                                                   Text(
-//                                                     homeBloc.referal_count,
-//                                                     style: TextStyle(
-//                                                         color:
-//                                                         flottingTextColor,
-//                                                         fontFamily: MEDIUM_FONT,
-//                                                         fontWeight:
-//                                                         FontWeight.w400,
-//                                                         fontSize: 22),
-//                                                   ),
-//                                                   Padding(
-//                                                     padding:
-//                                                     const EdgeInsets.only(
-//                                                         bottom: 5),
-//                                                     child: Image.asset(
-//                                                       'assets/images/Vector.png',
-//                                                       width: 30,
-//                                                       height: 20,
-//                                                     ),
-//                                                   ),
-//                                                 ],
-//                                               ),
-//                                               mini: false,
-//                                               backgroundColor:
-//                                               homeBloc.commission_amount ==
-//                                                   "0"
-//                                                   ? flottingButtonColor
-//                                                   : flottingRedTextColor,
-//                                             )))
-//
-//                                   ],
-//                                 ),
-//                               ))));
-//                 })),
-//
-//         Align(
-//           alignment: Alignment.bottomCenter,
-//           child: InkWell(
-//             onTap: (){
-//               // nextPagePushReplacement(context, MainScreen());
-//             },
-//             child: Container(
-//               height: 73,
-//               width: MediaQuery.of(context).size.width,
-//               decoration: buttongradient,
-//               child: Center(
-//                   child: Text(
-//                     'GIFT BOARD',
-//                     style: style,
-//                   )),
-//             ),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
+// ))
+                          ],
+                        ),
+                      )
+                          :
+                      Container(
+                          color: white,
+                          child:
+                          SingleChildScrollView(
+                              physics: NeverScrollableScrollPhysics(),
+                              child: Container(
+
+                                // height: MediaQuery.of(context).size.height,
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width,
+                                      height: 300,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Card(
+                                            elevation:2,
+                                            shape:RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(23),
+                                            ),
+                                            margin: EdgeInsets.only(
+                                                left: 30,
+                                                right: 30,
+                                                top: 50),
+                                            // width:
+                                            //     MediaQuery.of(context).size.width,
+                                            // height: 300,
+                                            // decoration: BoxDecoration(
+                                            //     borderRadius:
+                                            //         BorderRadius.all(Radius.circular(23))),
+                                            child: ClipRRect(
+                                                borderRadius:BorderRadius.all(Radius.circular(23)),
+                                                child:
+                                                Container(
+                                                  height: 300,
+                                                  color: Colors.grey[300],
+                                                  width:  MediaQuery.of(context).size.width,
+                                                  // child: WebView(
+                                                  //   initialUrl:videoPath,
+                                                  // )
+                                                  child: WebView(
+                                                    initialUrl: videoPath,
+                                                    javascriptMode: JavascriptMode.unrestricted,
+                                                    onWebViewCreated: (WebViewController webViewController) {
+                                                      _controller=webViewController;
+                                                    },
+                                                  ),
+                                                )
+
+                                            ),
+                                          ),
+                                          //       Align(
+                                          //         alignment: Alignment.bottomRight,
+                                          //         child: Container(
+                                          //           margin: EdgeInsets.only(bottom: 5,top: 40,left: 30,right: 45),
+                                          //           height: 60,width: 60,
+                                          //           child: FloatingActionButton(
+                                          //   onPressed: () {
+                                          //     homeBloc.commission_amount !=
+                                          //         "0"
+                                          //         ? homeBloc.addMoney(context)
+                                          //         : Container();
+                                          //     nextPagePushReplacement(
+                                          //         context,
+                                          //         HomeScreen(
+                                          //           tabnumber: 2,
+                                          //         ));
+                                          //   },
+                                          //   child: Column(
+                                          //     crossAxisAlignment:
+                                          //     CrossAxisAlignment.center,
+                                          //     mainAxisAlignment:
+                                          //     MainAxisAlignment.center,
+                                          //     children: [
+                                          //       Text(
+                                          //         homeBloc.referal_count,
+                                          //         style: TextStyle(
+                                          //             color:
+                                          //             flottingTextColor,
+                                          //             fontFamily: MEDIUM_FONT,
+                                          //             fontWeight:
+                                          //             FontWeight.w400,
+                                          //             fontSize: 22),
+                                          //       ),
+                                          //       Padding(
+                                          //         padding:
+                                          //         const EdgeInsets.only(
+                                          //             bottom: 5),
+                                          //         child: Image.asset(
+                                          //           'assets/images/Vector.png',
+                                          //           width: 30,
+                                          //           height: 20,
+                                          //         ),
+                                          //       ),
+                                          //     ],
+                                          //   ),
+                                          //   mini: false,
+                                          //   backgroundColor:
+                                          //   homeBloc.commission_amount ==
+                                          //       "0"
+                                          //       ? flottingButtonColor
+                                          //       : flottingRedTextColor,
+                                          // ),
+                                          //         ),
+                                          //       )
+                                        ], //<Widget>[]
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        nextPagePush(context,
+                                            SwitchToAdminScreen());
+                                      },
+                                      child: Container(
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width,
+                                        height: 83,
+                                        margin: EdgeInsets.only(
+                                            left: 30,
+                                            right: 30,
+                                            top: 30),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.all(
+                                              Radius.circular(
+                                                  15)),
+                                          image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/rectangle_10.png'),
+                                              fit: BoxFit.cover),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                              'Click here to Upload Advertisement',
+                                              style: style,
+                                            )),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    getTermsBox(homeBloc.advertisementContents.conten1, 'assets/images/thumb.png'),
+                                    getTermsBox(homeBloc.advertisementContents.conten2, 'assets/images/notess.png'),
+                                    getTermsBox(homeBloc.advertisementContents.conten3, 'assets/images/close_round.png'),
+                                    Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Container(
+                                            margin: EdgeInsets.only(
+                                                bottom: 30,
+                                                top: 40,
+                                                left: 30,
+                                                right: 45),
+                                            width: 72,
+                                            height: 72,
+                                            child:
+                                            FloatingActionButton(
+                                              onPressed: () {
+                                                homeBloc.commission_amount !=
+                                                    "0"
+                                                    ? homeBloc.addMoney(context)
+                                                    : Container();
+                                                nextPagePushReplacement(
+                                                    context,
+                                                    HomeScreen(
+                                                      tabnumber: 2,
+                                                    ));
+                                              },
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    homeBloc.referal_count,
+                                                    style: TextStyle(
+                                                        color:
+                                                        flottingTextColor,
+                                                        fontFamily: MEDIUM_FONT,
+                                                        fontWeight:
+                                                        FontWeight.w400,
+                                                        fontSize: 22),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                    const EdgeInsets.only(
+                                                        bottom: 5),
+                                                    child: Image.asset(
+                                                      'assets/images/Vector.png',
+                                                      width: 30,
+                                                      height: 20,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              mini: false,
+                                              backgroundColor:
+                                              homeBloc.commission_amount ==
+                                                  "0"
+                                                  ? flottingButtonColor
+                                                  : flottingRedTextColor,
+                                            )))
+
+                                  ],
+                                ),
+                              ))));
+                })),
+
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: InkWell(
+            onTap: (){
+              // nextPagePushReplacement(context, MainScreen());
+            },
+            child: Container(
+              height: 73,
+              width: MediaQuery.of(context).size.width,
+              decoration: buttongradient,
+              child: Center(
+                  child: Text(
+                    'GIFT BOARD',
+                    style: style,
+                  )),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+}

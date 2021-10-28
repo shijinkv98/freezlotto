@@ -68,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
     return getTabController(getHOMEpage(),tabnumber,3,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
   Widget getHOMEpage() {
-    return WillPopScope(
+    return
+      WillPopScope(
         onWillPop: () async => showDialog(
             context: context,
             builder: (context) =>
