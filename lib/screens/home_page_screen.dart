@@ -55,6 +55,14 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
 
     getUserInfo();
   }
+  @override
+  void dispose()
+  {
+    scrollPosition=0;
+    if(timer!=null)
+      timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +133,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   Widget getBannerSlider(HomeBloc homeBloc,) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     if(scrollPosition>homeBloc.advertisementList.length)
     {
       scrollPosition=0;
@@ -412,11 +421,11 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
       //Fluttertoast.showToast(msg: extent.toString());
       //_scrollController.scrollToIndex(1);
       await _scrollController.animateTo(
-          extent, duration: Duration(seconds: 1), curve: Curves.easeOut);
+          extent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     }
     else {
      await  _scrollController.animateTo(
-          0, duration: Duration(seconds: 1), curve: Curves.easeOut);
+          0, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       scrollPosition=0;
     }
    // await _scrollController.scrollToIndex(2, preferPosition: AutoScrollPosition.begin);
@@ -426,9 +435,9 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   }
   Widget homePageImage(HomeBloc homeBloc) {
     if(scrollPosition>homeBloc.advertisementList.length)
-      {
-        scrollPosition=0;
-      }
+    {
+      scrollPosition=0;
+    }
     startTimer(homeBloc);
   return Container(
     height: MediaQuery.of(context).size.height,
