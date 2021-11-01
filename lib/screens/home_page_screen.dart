@@ -50,6 +50,13 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   CarouselController buttonCarouselController = CarouselController();
   @override
   void initState() {
+
+    scrollPosition=0;
+    if(timer!=null)
+      timer.cancel();
+    if(_scrollController.hasClients)
+        _scrollController.animateTo(
+        0, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
     super.initState();
 
 
@@ -58,6 +65,9 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   @override
   void dispose()
   {
+    if(_scrollController.hasClients)
+        _scrollController.animateTo(
+        0, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
     scrollPosition=0;
     if(timer!=null)
       timer.cancel();
@@ -403,7 +413,12 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
    // Fluttertoast.showToast(msg: scrollPosition.toString());
     if(homeBloc.advertisementList.length>scrollPosition) {
       int duration=int.parse(homeBloc.advertisementList[scrollPosition].duration);
+      if(timer!=null)
+        {
 
+         timer.cancel();
+          timer=null;
+        }
       timer = Timer.periodic(Duration(seconds: duration), (Timer t) =>
         resetTimer(homeBloc));
 
@@ -411,7 +426,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   }
   Future<void> resetTimer(HomeBloc homeBloc)
   async {
-    if((homeBloc.advertisementList.length-1)>scrollPosition ) {
+    if((homeBloc.advertisementList.length-1)>scrollPosition&& (_scrollController.hasClients) ) {
       scrollPosition = scrollPosition + 1;
       // int(pos=)
       int totalLength = homeBloc.advertisementList.length - 1;
@@ -420,17 +435,18 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           totalLength) * scrollPosition;
       //Fluttertoast.showToast(msg: extent.toString());
       //_scrollController.scrollToIndex(1);
-      await _scrollController.animateTo(
+
+        await _scrollController.animateTo(
           extent, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
     }
     else {
-     await  _scrollController.animateTo(
+      if(_scrollController.hasClients)
+        await  _scrollController.animateTo(
           0, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
       scrollPosition=0;
     }
    // await _scrollController.scrollToIndex(2, preferPosition: AutoScrollPosition.begin);
-    timer.cancel();
-    timer=null;
+
     startTimer(homeBloc);
   }
   Widget homePageImage(HomeBloc homeBloc) {

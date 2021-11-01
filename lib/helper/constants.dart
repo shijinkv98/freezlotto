@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 
@@ -46,7 +47,8 @@ const Color dropdowndividerColor = const Color(0xFFE5E5E5);
 const Color profileiconColor = const Color(0xFFAB1616);
 final TextStyle style2 = TextStyle(fontWeight: FontWeight.w400,fontFamily: SEMI_BOLD_FONT,fontSize: 12,letterSpacing: 0.8);
 final TextStyle appBarTitle = TextStyle(fontWeight: FontWeight.w500,fontFamily: SEMI_BOLD_FONT,fontSize: 21,letterSpacing: 0.8,color: white);
-
+int homeScrolPosition=0;
+ Timer timerHome =null;
 Future<void> share(dynamic link, String title) async{
   await FlutterShare.share(
       title: title,

@@ -23,16 +23,23 @@ class HomeScreen extends StatefulWidget{
   _HomeScreenState createState() => new _HomeScreenState(tabnumber:this.tabnumber);
   HomeScreen({this.tabnumber});
   }
-class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
+class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver
+// ,SingleTickerProviderStateMixin
+{
 
   final DynamicLinkService _dynamicLinkService = DynamicLinkService();
   Timer _timerLink;
   String _customer_id;
   DateTime currentBackPressTime;
   int tabnumber;
+   TabController _tabController;
   _HomeScreenState({this.tabnumber});
   @override
   void initState(){
+    // _tabController = TabController(
+    //   length: 3,
+    //   initialIndex: 0, vsync: this,
+    // );
     WidgetsBinding.instance.addObserver(this);
     // _dynamicLinkService.retrieveDynamicLink(context);
     // WidgetsBinding.instance.removeObserver(this);
@@ -40,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+
     if (state == AppLifecycleState.resumed) {
       _timerLink = new Timer(
         const Duration(milliseconds: 1000),
@@ -82,15 +90,30 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver{
                       onPressed: () => Navigator.of(context).pop(false)),
                 ])),
         child:
-        TabBarView(
-          physics: ScrollPhysics(),
-          children: [
-            HomePageScreen(),
-            NewsFeedScreen(),
-            GalleryScreen(),
-          ],
+        NotificationListener(
+          onNotification: (scrollNotification) {
+            if (scrollNotification is ScrollEndNotification) _onTabChanged();
+            return false;
+          },
+          child: TabBarView(
+            //controller: _tabController,
+            physics: ScrollPhysics(),
+            children: [
+              HomePageScreen(),
+              NewsFeedScreen(),
+              GalleryScreen(),
+            ],
+
+          ),
         )
     );
   }
+  int currentPosition=0;
+  void _onTabChanged() {
+    // if (_tabController.index!=currentPosition) {
+    //   Fluttertoast.showToast(msg: 'Press Back Button again to exit');
+    //   currentPosition=_tabController.index;
+    // }
 
+  }
 }
