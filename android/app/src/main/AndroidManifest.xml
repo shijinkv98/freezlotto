@@ -2,7 +2,8 @@
     package="com.freezlotto.application">
    <application
         android:label="FreezLotto"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
        <activity
            android:name="com.yalantis.ucrop.UCropActivity"
            android:screenOrientation="portrait"

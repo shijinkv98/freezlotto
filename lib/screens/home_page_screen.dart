@@ -216,7 +216,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   }
 
   Widget getVideo(String url, HomeBloc homeBloc) {
-    WebViewController _controller;
+    //WebViewController _controller;
+
     return Container(
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
@@ -252,7 +253,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                               javascriptMode: JavascriptMode.unrestricted,
                               onWebViewCreated:
                                   (WebViewController webViewController) {
-                                _controller = webViewController;
+                                //_controller = webViewController;
                               },
                             ),
                           )),
@@ -480,8 +481,10 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  WebViewController _controller;
-                  videoPath = '${'https://freezelotto.alisonsdemo.online/videoplay/'}${homeBloc.advertisementList[index].id}${'/'}${cus_id}';
+                  //WebViewController _controller;
+                  videoPath = '${homeBloc.adUrl}${homeBloc.advertisementList[index].advertisement}';
+                  //Fluttertoast.showToast(msg: videoPath);
+                  print(videoPath);
                   return Container(
                       margin: EdgeInsets.only(bottom: 65),
                       width: MediaQuery.of(context).size.width,
@@ -580,7 +583,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                                     initialUrl: videoPath,
                                                     javascriptMode: JavascriptMode.unrestricted,
                                                     onWebViewCreated: (WebViewController webViewController) {
-                                                      _controller=webViewController;
+                                                    //  _controller=webViewController;
                                                     },
                                                   ),
                                                 )

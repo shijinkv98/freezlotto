@@ -28,6 +28,7 @@ class HomeBloc extends ChangeNotifier {
   String conten2 = "";
   String conten3 = "";
   Pagecontents pagecontents;
+  String adUrl="https://freezelotto.alisonsdemo.online/images/advertisement/";
   List<AdvertisementList> advertisementList = new List<AdvertisementList>();
   AdvertisementContents advertisementContents;
 
@@ -45,18 +46,21 @@ class HomeBloc extends ChangeNotifier {
             advertisementList = homeScreenResponse.advertisementList;
             referal_count = homeScreenResponse.referal_count;
             commission_amount = homeScreenResponse.commission_amount;
+            adUrl=homeScreenResponse.advertisement_url;
             // notifyListeners();
 
-          if (homeScreenResponse.success == 0) {
+          if (homeScreenResponse.success ==" 0") {
           AlertUtils.showToast(homeScreenResponse.message, context);
 
           // advertisementList = homeScreenResponse.advertisementList;
           //   notifyListeners();
-          } else if (homeScreenResponse.success == 3) {
+          } else if (homeScreenResponse.success == "3") {
             print("NEED TO LOGIN HERE......");
             kMoveToLogin(context);
-          }else if (homeScreenResponse.success == 1) {
+
+          }else if (homeScreenResponse.success ==" 1") {
             advertisementList = homeScreenResponse.advertisementList;
+            adUrl=homeScreenResponse.advertisement_url;
             notifyListeners();
           }
           // }else {
