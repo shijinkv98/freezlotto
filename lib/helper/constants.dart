@@ -21,7 +21,9 @@ const APP_TAG = "FREEEZLOTTO";
 
 
 //Color Related
-
+String rules_one = 'Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.';
+String rules_two = 'Only funny and happy videos within 10 minutes will be considered.';
+String rules_three = 'Accounts that post sex and hate contents will be banned.';
 const Color primaryTextColor = const Color(0xFF929292);
 const Color BoldTextColor = const Color(0xFF474747);
 const Color BoldTextColor2 = const Color(0xFF575757);
@@ -300,9 +302,11 @@ Widget getProfileTabController(BuildContext context,Widget page,int number,int t
     ),
   );
 }
+
 Widget getTabController(Widget page,int number,int tabCount,double top,double width){
   return DefaultTabController(
     length: tabCount,
+
     initialIndex: number,
     child: Scaffold(
       appBar: new PreferredSize(

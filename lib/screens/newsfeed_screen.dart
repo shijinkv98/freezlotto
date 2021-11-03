@@ -10,6 +10,7 @@ import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_screen.dart';
+import 'package:freezlotto/screens/newsfeed_screen_dynamic.dart';
 import 'package:freezlotto/utils/app_utils.dart';
 import 'package:freezlotto/utils/dynamic_link_service.dart';
 import 'package:freezlotto/utils/locator.dart';
@@ -19,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import 'newsfeed_video_dynamic.dart';
 import 'profile_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,9 +54,10 @@ class NewsFeedScreen extends StatefulWidget {
   String price;
   String category;
   String id;
+  String vdoid;
   @override
-  _NewsFeedScreenState createState() => new _NewsFeedScreenState(id:this.id);
-  NewsFeedScreen({this.url,this.title,this.category,this.price,this.id});
+  _NewsFeedScreenState createState() => new _NewsFeedScreenState(id:this.id,vdoid: this.vdoid);
+  NewsFeedScreen({this.url,this.title,this.category,this.price,this.id,this.vdoid});
 }
 
 class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObserver{
@@ -70,11 +73,14 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   String price;
   String category;
   String id;
+  String vdoid;
 
   StreamController<String> controllerUrl = StreamController<String>();
-  _NewsFeedScreenState({this.id});
+  _NewsFeedScreenState({this.id,this.vdoid});
   @override
   void initState()  {
+    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,'id');
+
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -105,7 +111,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,'id');
     return Scaffold(
         body: Consumer<NewsFeedBloc>(
           builder: (context, newsfeedBloc, child) =>
@@ -210,28 +215,28 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
       //You can also make changes to your state here.
     });
   }
-
-  Widget getMiddleContainer(NewsFeedBloc newsFeedBloc) {
+  Widget getLandScapeContainer(NewsFeedBloc newsFeedBloc,String vdoid) {
+    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedRedirectData(context,vdoid);
     return Container(
-        margin: EdgeInsets.only(bottom: 10), child: getList(newsFeedBloc));
+        margin: EdgeInsets.only(bottom: 10), child: getLandList(newsFeedBloc));
   }
-
-  Widget getList(NewsFeedBloc newsFeedBloc) {
+  Widget getLandList(NewsFeedBloc newsFeedBloc) {
     return ListView.builder(
-        itemCount: newsFeedBloc.newsfeedsList.length,
+        itemCount: newsFeedBloc.newsfeedsListRedirect.length,
         shrinkWrap: true,
         // physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
 
-          videoUrl = newsFeedBloc.newsfeedsList[index].newsfeed;
-          newsFeedId = newsFeedBloc.newsfeedsList[index].id;
+          videoUrl = newsFeedBloc.newsfeedsListRedirect[index].newsfeed;
+          newsFeedId = newsFeedBloc.newsfeedsListRedirect[index].id;
           _controller = YoutubePlayerController(
               initialVideoId: YoutubePlayer.convertUrlToId(videoUrl),
               flags: YoutubePlayerFlags(
-                enableCaption: false,
-                isLive: false,
-                autoPlay: false,
-               controlsVisibleAtStart: true
+                  enableCaption: false,
+                  isLive: false,
+                  autoPlay: true,
+                  controlsVisibleAtStart: true
+
               )
           );
           return Column(
@@ -253,6 +258,153 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                   )
 
 
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget getMiddleContainer(NewsFeedBloc newsFeedBloc) {
+    return Container(
+        margin: EdgeInsets.only(bottom: 10), child: getList(newsFeedBloc));
+  }
+
+  Widget getList(NewsFeedBloc newsFeedBloc) {
+    return ListView.builder(
+
+        itemCount: newsFeedBloc.newsfeedsList.length,
+        shrinkWrap: true,
+        // physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) {
+
+          String convertUrlToId(String url, {bool trimWhitespaces = true}) {
+            if (!url.contains("http") && (url.length == 11)) return url;
+            if (trimWhitespaces) url = url.trim();
+
+            for (var exp in [
+              RegExp(
+                  r"^https:\/\/(?:www\.|m\.)?youtube\.com\/watch\?v=([_\-a-zA-Z0-9]{11}).*$"),
+              RegExp(
+                  r"^https:\/\/(?:www\.|m\.)?youtube(?:-nocookie)?\.com\/embed\/([_\-a-zA-Z0-9]{11}).*$"),
+              RegExp(r"^https:\/\/youtu\.be\/([_\-a-zA-Z0-9]{11}).*$")
+            ]) {
+              Match match = exp.firstMatch(url);
+              if (match != null && match.groupCount >= 1) return match.group(1);
+            }
+
+            return null;
+          }
+
+          String getThumbnail({
+            String videoId,
+            String quality = ThumbnailQuality.standard,
+            bool webp = true,
+          }) =>
+              webp
+                  ? 'https://i3.ytimg.com/vi_webp/$videoId/$quality.webp'
+                  : 'https://i3.ytimg.com/vi/$videoId/$quality.jpg';
+
+          String videoId = convertUrlToId(
+              newsFeedBloc.newsfeedsList[index].newsfeed);
+
+          String thumbnailUrl = getThumbnail(videoId: videoId ?? "");
+          print(thumbnailUrl);
+          videoUrl = newsFeedBloc.newsfeedsList[index].newsfeed;
+          newsFeedId = newsFeedBloc.newsfeedsList[index].id;
+          _controller = YoutubePlayerController(
+              initialVideoId: YoutubePlayer.convertUrlToId(videoUrl),
+              flags: YoutubePlayerFlags(
+                enableCaption: false,
+                isLive: false,
+                autoPlay: false,
+               controlsVisibleAtStart: true
+              )
+          );
+          return Column(
+            children: [
+              InkWell(
+                onTap: (){
+
+                  showGeneralDialog(
+                    barrierLabel: "Label",
+                    barrierDismissible: true,
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    transitionDuration: Duration(milliseconds: 700),
+                    context: context,
+                    pageBuilder: (context, anim1, anim2) {
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: SizedBox.expand(child: getLandScapeContainer(newsFeedBloc,newsFeedBloc.newsfeedsList[index].id)),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                        ),
+                      );
+                    },
+                    transitionBuilder: (context, anim1, anim2, child) {
+                      return SlideTransition(
+                        position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+                        child: child,
+                      );
+                    },
+                  );
+                  // Navigator.push(
+                  //   context,
+                  //   PageRouteBuilder(
+                  //     transitionsBuilder:
+                  //         (context, animation, secondaryAnimation, child) {
+                  //       return ScaleTransition(
+                  //         alignment: Alignment.center,
+                  //         scale: Tween<double>(begin: 0.5, end: 1).animate(
+                  //           CurvedAnimation(
+                  //             parent: animation,
+                  //             curve: Curves.fastOutSlowIn,
+                  //           ),
+                  //         ),
+                  //         child: child,
+                  //       );
+                  //     },
+                  //     transitionDuration: Duration(milliseconds: 600),
+                  //     pageBuilder: (BuildContext context,
+                  //         Animation<double> animation,
+                  //         Animation<double> secondaryAnimation) {
+                  //       return NewsFeedVideoDynamic(id: newsFeedBloc.newsfeedsList[index].id);
+                  //     },
+                  //   ),
+                  // );
+                },
+                child: Container(
+            height: 260,
+
+            child: Stack(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only( left:30,right:30,top: 20),
+                    width: MediaQuery.of(context).size.width,
+                    height: 260,
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(23))),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(23)),
+                        child: Image.network(thumbnailUrl,fit: BoxFit.fill,)),
+                  ),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Container(height: 45,width:45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(60)),
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/play.png'),
+                                fit: BoxFit.cover),
+
+                          ))),
+                ], //<Widget>[]
+            ),
+                ),
               ),
               InkWell(
                 onTap: (){

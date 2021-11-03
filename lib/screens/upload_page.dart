@@ -67,7 +67,7 @@ class _UploadPageState extends State<UploadPage> {
               children: <Widget>[
                 Expanded(
                   child: fileMedia == null
-                      ? Icon(Icons.photo, size: 120)
+                      ? Image.asset('assets/images/switchupload.png', width: 216,height: 216,)
                       : (source == MediaSource.image
                       ? Image.file(fileMedia)
                       : VideoWidget(fileMedia)),

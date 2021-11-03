@@ -22,17 +22,17 @@ class HomeScreen extends StatefulWidget{
   @override
   _HomeScreenState createState() => new _HomeScreenState(tabnumber:this.tabnumber);
   HomeScreen({this.tabnumber});
-  }
+}
 class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver
 // ,SingleTickerProviderStateMixin
-{
+    {
 
   final DynamicLinkService _dynamicLinkService = DynamicLinkService();
   Timer _timerLink;
   String _customer_id;
   DateTime currentBackPressTime;
   int tabnumber;
-   TabController _tabController;
+  TabController _tabController;
   _HomeScreenState({this.tabnumber});
   @override
   void initState(){
@@ -78,35 +78,35 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver
   Widget getHOMEpage() {
     return
       WillPopScope(
-        onWillPop: () async => showDialog(
-            context: context,
-            builder: (context) =>
-                AlertDialog(title: Text('Are you sure you want to quit?'), actions: <Widget>[
-                  RaisedButton(
-                      child: Text('OK'),
-                      onPressed: () => Navigator.of(context).pop(exit(0))),
-                  RaisedButton(
-                      child: Text('CANCEL'),
-                      onPressed: () => Navigator.of(context).pop(false)),
-                ])),
-        child:
-        NotificationListener(
-          onNotification: (scrollNotification) {
-            if (scrollNotification is ScrollEndNotification) _onTabChanged();
-            return false;
-          },
-          child: TabBarView(
-            //controller: _tabController,
-            physics: ScrollPhysics(),
-            children: [
-              HomePageScreen(),
-              NewsFeedScreen(),
-              GalleryScreen(),
-            ],
+          onWillPop: () async => showDialog(
+              context: context,
+              builder: (context) =>
+                  AlertDialog(title: Text('Are you sure you want to quit?'), actions: <Widget>[
+                    RaisedButton(
+                        child: Text('OK'),
+                        onPressed: () => Navigator.of(context).pop(exit(0))),
+                    RaisedButton(
+                        child: Text('CANCEL'),
+                        onPressed: () => Navigator.of(context).pop(false)),
+                  ])),
+          child:
+          NotificationListener(
+            onNotification: (scrollNotification) {
+              if (scrollNotification is ScrollEndNotification) _onTabChanged();
+              return false;
+            },
+            child: TabBarView(
+              //controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                HomePageScreen(),
+                NewsFeedScreen(),
+                GalleryScreen(),
 
-          ),
-        )
-    );
+              ],
+            ),
+          )
+      );
   }
   int currentPosition=0;
   void _onTabChanged() {

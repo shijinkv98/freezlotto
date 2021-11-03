@@ -3,10 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/blocs/gallery_bloc.dart';
+import 'package:freezlotto/screens/register_screen.dart';
 import 'package:freezlotto/screens/splash_screen.dart';
+import 'package:freezlotto/screens/splash_screen_first.dart';
+import 'package:freezlotto/screens/splash_screen_second.dart';
 import 'package:freezlotto/utils/dynamic_link_service.dart';
+import 'package:freezlotto/utils/preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
+
+import 'helper/constants.dart';
 
 void main() {
 
@@ -58,10 +64,11 @@ class _MyAppState extends State<MyApp>with WidgetsBindingObserver{
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
-        home:SplashScreen(),
+        home:SplashScreenFirst(),
       ),
     );
   }
+
 }
 
 

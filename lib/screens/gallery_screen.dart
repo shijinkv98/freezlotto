@@ -74,12 +74,13 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   void initState() {
+    Provider.of<GalleryBloc>(context, listen: false).getGalleryData(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext mainContext) {
-    Provider.of<GalleryBloc>(context, listen: false).getGalleryData(context);
+
     return Scaffold(
       floatingActionButton: Container(
         width: 72,

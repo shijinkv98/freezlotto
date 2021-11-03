@@ -27,6 +27,21 @@ _SplashScreenSecondState({this.customerMobile});
     WidgetsBinding.instance.addObserver(this);
     _dynamicLinkService.retrieveDynamicLink(context);
     super.initState();
+    Future.delayed(
+        const Duration(seconds: 2),(){
+          nextPagePushReplacement(context, HomeScreen(tabnumber: 0,));
+        }
+        // else{
+          // nextPagePushReplacement(context,
+          //     HomeScreen(tabnumber: 0)
+          // );
+          // nextPagePushReplacement(context,
+          //     SplashScreenSecond(customerMobile:userPhone)
+          // );
+        // }
+      );
+    // }
+    // );
   }
 
   @override

@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
@@ -157,135 +158,10 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      height: 67,
-                      margin: EdgeInsets.only(left: 30, right: 30, top: 24),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Color(0xFFB1B1B1),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/dotted.png',),
-                            fit: BoxFit.fill),
-                      ),
-                      child: Center(child: Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width - 61.5,
-                          height: 65.5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: white,
-
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(left: 26),
-                                  width: 30, height: 30, child: Image.asset(
-                                'assets/images/thumb.png', color: iconColor,
-                                fit: BoxFit.fill,)),
-                              Container(
-                                  margin: EdgeInsets.only(left: 14),
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width - 140, child: Text(
-                                'Chance to won Rs 1,00,000 per week for top like "NEWSFEED" post.',
-                                style: style2,)),
-                            ],
-                          ))),
-                    ),
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      height: 67,
-                      margin: EdgeInsets.only(left: 30, right: 30, top: 15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Color(0xFFB1B1B1),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/dotted.png',),
-                            fit: BoxFit.fill),
-                      ),
-                      child: Center(child: Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width - 61.5,
-                          height: 65.5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: white,
-
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(left: 26),
-                                  width: 30, height: 30, child: Image.asset(
-                                'assets/images/notess.png', color: iconColor,
-                                fit: BoxFit.fill,)),
-                              Container(
-                                  margin: EdgeInsets.only(left: 14),
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width - 140, child: Text(
-                                'Only funny and happy videos within 10 minutes will be considered.',
-                                style: style2,)),
-                            ],
-                          ))),
-                    ),
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      height: 67,
-                      margin: EdgeInsets.only(left: 30, right: 30, top: 15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Color(0xFFB1B1B1),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/dotted.png',),
-                            fit: BoxFit.fill),
-                      ),
-                      child: Center(child: Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width - 61.5,
-                          height: 65.5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: white,
-
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(left: 26),
-                                  width: 30, height: 30, child: Image.asset(
-                                'assets/images/close_round.png',
-                                color: iconColor, fit: BoxFit.fill,)),
-                              Container(
-                                  margin: EdgeInsets.only(left: 14),
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width - 140, child: Text(
-                                'Accounts that post sex and hate contents will be banned.',
-                                style: style2,)),
-                            ],
-                          ))),
-                    ),
+                    SizedBox(height: 10),
+                    getTermsBox('assets/images/thumb.png', rules_one),
+                    getTermsBox('assets/images/notess.png', rules_two),
+                    getTermsBox('assets/images/close_round.png', rules_two),
                     SizedBox(height: 24)
 
 
@@ -299,6 +175,54 @@ class _UploadNewsFeedsState extends State<UploadNewsFeeds> {
 
   bool _validateFields() {
     return true;
+  }
+  Widget getTermsBox(String image,String content){
+    return Container(
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      height: 67,
+      margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Color(0xFFB1B1B1),
+        image: DecorationImage(
+            image: AssetImage('assets/images/dotted.png',),
+            fit: BoxFit.fill),
+      ),
+      child: Center(
+        child: Container(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width - 61.5,
+            height: 65.5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: white,
+
+            ),
+            child:
+            Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 26),
+                    width: 30, height: 30, child: Image.asset(
+                  image, color: iconColor,
+                  fit: BoxFit.fill,)),
+                Container(
+                    margin: EdgeInsets.only(left: 14),
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width - 140, child: Text(
+                  content,
+                  style: style2,)),
+              ],
+            )),
+      ),
+    );
   }
 
   uploadButtonTapped(BuildContext context,NewsFeedBloc newsFeedBloc) {
