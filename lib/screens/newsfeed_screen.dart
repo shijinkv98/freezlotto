@@ -5,10 +5,13 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/network/response/newsfeed_list_response.dart';
+import 'package:freezlotto/network/response/newsfeed_redirect_response.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/newsfeed_screen_dynamic.dart';
 import 'package:freezlotto/utils/app_utils.dart';
@@ -216,9 +219,54 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
     });
   }
   Widget getLandScapeContainer(NewsFeedBloc newsFeedBloc,String vdoid) {
-    Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedRedirectData(context,vdoid);
+   // Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedRedirectData(context,vdoid);
     return Container(
         margin: EdgeInsets.only(bottom: 10), child: getLandList(newsFeedBloc));
+  }
+
+  Widget getListContentNew(NewsfeedsList newsfeedsListRedirect) {
+    String videoUrl =newsfeedsListRedirect.newsfeed;
+    newsFeedId = newsfeedsListRedirect.id;
+    if(_controller!=null)
+    {
+      _controller.dispose();
+    }
+    _controller=null;
+    _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(videoUrl),
+        flags: YoutubePlayerFlags(
+            enableCaption: false,
+            isLive: false,
+            autoPlay: true,
+            controlsVisibleAtStart: true
+
+        )
+    );
+    return Container(
+      margin: EdgeInsets.only(bottom: 10,top: 30),
+      child: Column(
+        children: [
+          Container(
+              margin: EdgeInsets.only(top: 20),
+              height: 221,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                child:
+                YoutubePlayerBuilder(
+                  player: YoutubePlayer(
+                    controller: _controller,
+                  ),
+                  builder: (context, player) {
+                    return;
+                  },
+                ),
+              )
+
+
+          ),
+        ],
+      ),
+    );
   }
   Widget getLandList(NewsFeedBloc newsFeedBloc) {
     return ListView.builder(
@@ -239,28 +287,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
 
               )
           );
-          return Column(
-            children: [
-              Container(
-                  margin: EdgeInsets.only(left: 30, right: 30, top: 20),
-                  height: 221,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(23)),
-                    child:
-                    YoutubePlayerBuilder(
-                      player: YoutubePlayer(
-                        controller: _controller,
-                      ),
-                      builder: (context, player) {
-                        return;
-                      },
-                    ),
-                  )
-
-
-              ),
-            ],
-          );
+          return getListContent(newsFeedBloc.newsfeedsListRedirect[index]);
         });
   }
 
@@ -268,7 +295,47 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
     return Container(
         margin: EdgeInsets.only(bottom: 10), child: getList(newsFeedBloc));
   }
+  Widget getListContent(NewsfeedsListRedirect newsfeedsListRedirect) {
+    String videoUrl =newsfeedsListRedirect.newsfeed;
+    newsFeedId = newsfeedsListRedirect.id;
+    if(_controller!=null)
+      {
+        _controller.dispose();
+      }
+    _controller=null;
+    _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(videoUrl),
+        flags: YoutubePlayerFlags(
+            enableCaption: false,
+            isLive: false,
+            autoPlay: true,
+            controlsVisibleAtStart: true
 
+        )
+    );
+    return Column(
+      children: [
+        Container(
+            margin: EdgeInsets.only(left: 30, right: 30, top: 20),
+            height: 221,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(23)),
+              child:
+              YoutubePlayerBuilder(
+                player: YoutubePlayer(
+                  controller: _controller,
+                ),
+                builder: (context, player) {
+                  return;
+                },
+              ),
+            )
+
+
+        ),
+      ],
+    );
+  }
   Widget getList(NewsFeedBloc newsFeedBloc) {
     return ListView.builder(
 
@@ -323,7 +390,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
           return Column(
             children: [
               InkWell(
-                onTap: (){
+                onTap: () async {
+                  await Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedRedirectData(context,newsFeedBloc.newsfeedsList[index].id);
+                  //Fluttertoast.showToast(msg: newsFeedBloc.newsfeedsListRedirect.length.toString());
 
                   showGeneralDialog(
                     barrierLabel: "Label",
@@ -336,7 +405,10 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                         alignment: Alignment.bottomCenter,
                         child: Container(
                           height: MediaQuery.of(context).size.height,
-                          child: SizedBox.expand(child: getLandScapeContainer(newsFeedBloc,newsFeedBloc.newsfeedsList[index].id)),
+                          child: SizedBox.expand(child:
+                          getListContentNew(newsFeedBloc.newsfeedsList[index])
+                         // getLandScapeContainer(newsFeedBloc,newsFeedBloc.newsfeedsList[index].id)
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(40),
