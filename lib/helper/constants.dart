@@ -413,8 +413,8 @@ Widget progressBar = InkWell(
     child: Center(
       child: SizedBox(
         child: CircularProgressIndicator(),
-        width: 60,
-        height: 60,
+        width: 30,
+        height: 30,
       ),
     ),
   ),

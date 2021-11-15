@@ -25,7 +25,7 @@ _SplashScreenSecondState({this.customerMobile});
   void initState() {
     getUserInfo();
     WidgetsBinding.instance.addObserver(this);
-    _dynamicLinkService.retrieveDynamicLink(context);
+    // _dynamicLinkService.retrieveDynamicLink(context);
     super.initState();
     Future.delayed(
         const Duration(seconds: 2),(){
@@ -69,7 +69,7 @@ _SplashScreenSecondState({this.customerMobile});
   }
   @override
   Widget build(BuildContext context) {
-
+    _dynamicLinkService.retrieveDynamicLink(context);
     return Scaffold(
       backgroundColor: white,
       // use Scaffold also in order to provide material app widgets

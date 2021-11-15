@@ -8,6 +8,7 @@ import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/network/response/ads_uploaded_response.dart';
+import 'package:freezlotto/notifier/progress_notifier.dart';
 import 'package:freezlotto/screens/payment_details_screen.dart';
 import 'package:freezlotto/screens/source_page.dart';
 import 'package:freezlotto/screens/upload_advertisement.dart';
@@ -101,30 +102,31 @@ class _UploadPageState extends State<UploadPage> {
                         ),
                       ],
                     ),
-                    InkWell(
-                      onTap: () {
-                       fileMedia == null ? Fluttertoast.showToast(
-                           msg: "Please select atleast one file to upload",
-                           toastLength: Toast.LENGTH_LONG,
-                           gravity: ToastGravity.CENTER,
-                           timeInSecForIosWeb: 2,
-                           backgroundColor: Colors.red,
-                           textColor: Colors.white,
-                           fontSize: 16.0
-                       ):
-                         source == MediaSource.image ?
-                         homeBloc.uploadAdsImage(context,fileMedia,type,duration,category):homeBloc.uploadAdsVideo(context,fileMedia,type,duration,category);
+                   InkWell(
+                     onTap: () {
 
-                        },
+                      fileMedia == null ? Fluttertoast.showToast(
+                          msg: "Please select atleast one file to upload",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 2,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      ):
+                        source == MediaSource.image ?
+                        homeBloc.uploadAdsImage(context,fileMedia,type,duration,category):homeBloc.uploadAdsVideo(context,fileMedia,type,duration,category);
 
-                      child: Container(
-                        height: 115,
-                        width: MediaQuery.of(context).size.width/2.5,
-                        decoration: iconGradient,
-                        child: Center(child: Text('UPLOAD',style: style2,)),
-                      ),
-                    ),
-                  ],
+                       },
+
+                     child: Container(
+                       height: 115,
+                       width: MediaQuery.of(context).size.width/2.5,
+                       decoration: iconGradient,
+                       child: Center(child: Text('UPLOAD',style: style2,)),
+                     ),
+                   ),
+                  ]
                 ),
                 const SizedBox(height: 20),
 
@@ -136,7 +138,6 @@ class _UploadPageState extends State<UploadPage> {
         ),
       ));
     }
-
   Future capture(MediaSource source) async {
     setState(() {
       this.source = source;

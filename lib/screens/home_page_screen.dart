@@ -750,7 +750,12 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
             alignment: Alignment.bottomCenter,
             child: InkWell(
               onTap: (){
-                // nextPagePushReplacement(context, MainScreen());
+                Fluttertoast.showToast(
+                    msg: "Hi , this will available only on next version",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER
+
+                );
               },
               child: Container(
                 height: 73,

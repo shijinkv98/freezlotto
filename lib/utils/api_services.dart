@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:freezlotto/helper/constants.dart';
-import 'package:freezlotto/screens/payment_details_screen.dart';
-import 'package:freezlotto/screens/upload_successfull.dart';
+import 'package:flutter/material.dart';
+import 'package:freezlotto/notifier/progress_notifier.dart';
 import 'package:http/http.dart'as http;
 import 'package:dio/dio.dart';
 import 'package:freezlotto/helper/api_params.dart';
@@ -17,6 +16,7 @@ class APIService {
   String customerId;
   String phone;
   String name;
+  ProgressLoadNotifier _updatedNotifier;
   factory APIService() {
     return _singleton;
   }
@@ -128,6 +128,22 @@ class APIService {
     // response.statusCode == 200 ? nextPagePushReplacement(context, type=="free"?UploadSuccess(): PaymentDetailsScreen()):Container();
     return response;
   }
+  showLoaderDialog(BuildContext context,String text){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text(text)),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
   Future<Response> uploadImage(BuildContext context,File file,String type,String duration,String category) async {
     String fileName = file.path.split('/').last;
     var url = APIClient.ADD;
@@ -139,12 +155,14 @@ class APIService {
       CUS_ID: await Preferences.get(PrefKey.customerID)
     });
     print("URL:::" + url + formData.toString());
+    showLoaderDialog(context,'Uploading...');
     Response response = await dio.post(url, data: formData);
     print("RESPONSE:::" + response.data.toString());
 
     // response.statusCode == 200 ? nextPagePushReplacement(context, type=="free"?UploadSuccess(): PaymentDetailsScreen()):Container();
     return response;
   }
+
   ///get ads ///
   Future<Response> getAdsData(String addId,String paid_amount) async {
     var url = APIClient.ADD_Get;
@@ -255,7 +273,7 @@ class APIService {
     return response;
   }
   ///Signup user///
-  Future<Response> signUpUser(String name,String phone,String ref,String phone_code,String re_phone_code) async {
+  Future<Response> signUpUser(BuildContext context,String name,String phone,String ref,String phone_code,String re_phone_code) async {
     var url = APIClient.Register_URL;
     var queryParams = {
       USER_NAME:"$name",
@@ -265,6 +283,8 @@ class APIService {
       REFERAL_COUNTRY_CODE:"$re_phone_code",
     };
     print("URL:::" + url + queryParams.toString());
+    showLoaderDialog(context,"Log in...");
+
     Response response = await dio.post(url, queryParameters: queryParams);
     print("RESPONSE:::" + response.data.toString());
     return response;

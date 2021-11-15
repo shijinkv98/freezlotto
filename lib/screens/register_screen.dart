@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/network/response/register_response.dart';
@@ -333,6 +334,9 @@ class _RegisterScreenState extends State<RegisterScreen>{
     return Form(
       key: _usermobileKey,
       child:  TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(10),
+        ],
         obscureText: false,
         onSaved: (value) {
           _Phone = value;
@@ -341,14 +345,13 @@ class _RegisterScreenState extends State<RegisterScreen>{
         validator: (value) {
           if (value.trim().isEmpty) {
             return 'This field is required';
-            // } else if (!RegExp(
-            //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            //     .hasMatch(value)) {
-            //   return 'Invalid email';
+            } else if (value.length != 10) {
+              return 'Invalid Phone number';
           } else {
             return null;
           }
         },
+        maxLengthEnforced: true,
         maxLines: 1,
         minLines: 1,
         keyboardType: TextInputType.phone,
@@ -452,7 +455,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
         AppUtils.isConnectedToInternet(context).then((isConnected) {
           if (isConnected) {
             setState(() => _isLoading = true);
-            APIService().signUpUser(_Name,_Phone,_Reference,'91','91').then((response) {
+            APIService().signUpUser(context,_Name,_Phone,_Reference,'91','91').then((response) {
               setState(() => _isLoading = false);
               if (response.statusCode == 200) {
                 RegisterResponse _signupResponse = RegisterResponse.fromJson(response.data);

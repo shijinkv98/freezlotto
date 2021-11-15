@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:freezlotto/network/response/AdsGetResponse.dart';
 import 'package:freezlotto/network/response/ads_uploaded_response.dart';
 import 'package:freezlotto/network/response/home_response.dart';
 import 'package:freezlotto/network/response/payment_success_response.dart';
 import 'package:freezlotto/network/response/response.dart';
 import 'package:freezlotto/network/response/upload_add_contents_response.dart';
+import 'package:freezlotto/notifier/progress_notifier.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/payment_details_screen.dart';
 import 'package:freezlotto/screens/upload_successfull.dart';
@@ -17,6 +19,7 @@ import 'package:freezlotto/utils/alert_utils.dart';
 
 class HomeBloc extends ChangeNotifier {
   bool isLoading = false;
+  ProgressLoadNotifier _updatedNotifier;
   String referal_count = "";
   String commission_amount = "";
   String advertisment_id = "";
@@ -27,6 +30,7 @@ class HomeBloc extends ChangeNotifier {
   String conten1 = "";
   String conten2 = "";
   String conten3 = "";
+  String weekly = "";
   Pagecontents pagecontents;
   String adUrl="https://freezelotto.alisonsdemo.online/images/advertisement/";
   List<AdvertisementList> advertisementList = new List<AdvertisementList>();
@@ -47,6 +51,7 @@ class HomeBloc extends ChangeNotifier {
             referal_count = homeScreenResponse.referal_count;
             commission_amount = homeScreenResponse.commission_amount;
             adUrl=homeScreenResponse.advertisement_url;
+            weekly=homeScreenResponse.weekly_common_status;
             // notifyListeners();
 
           if (homeScreenResponse.success ==" 0") {
@@ -169,10 +174,10 @@ class HomeBloc extends ChangeNotifier {
               // nextPagePushReplacement(context, UploadSuccess());
               // getAddressList(context);
               // Navigator.of(context).pop();
-            } else if (uploadResponse.success == '3') {
-              kMoveToLogin(context);
+            } else if (uploadResponse.success == 0) {
+              AlertUtils.showToast('uploadResponse.message', context);
             } else {
-
+              showLoaderDialog(context,uploadResponse.message);
               AlertUtils.showToast(uploadResponse.message, context);
             }
           } else {
@@ -183,6 +188,21 @@ class HomeBloc extends ChangeNotifier {
         );
       }
     });
+  }
+  showLoaderDialog(BuildContext context,String text){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          // CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text(text)),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
   }
   getAdsData(BuildContext context)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {

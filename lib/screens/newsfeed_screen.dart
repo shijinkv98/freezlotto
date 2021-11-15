@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/blocs/newsfeed_bloc.dart';
@@ -27,6 +28,8 @@ import 'newsfeed_video_dynamic.dart';
 import 'profile_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp]);
   // await Firebase.initializeApp();
   runApp(NewsFeedScreen());
 }
@@ -101,6 +104,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   @override
   void dispose() {
     _controller.dispose();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     WidgetsBinding.instance.removeObserver(this);
     if (_timerLink != null) {
       _timerLink.cancel();
@@ -114,6 +120,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp]);
     return Scaffold(
         body: Consumer<NewsFeedBloc>(
           builder: (context, newsfeedBloc, child) =>
@@ -227,6 +235,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
   Widget getListContentNew(NewsfeedsList newsfeedsListRedirect) {
     String videoUrl =newsfeedsListRedirect.newsfeed;
     newsFeedId = newsfeedsListRedirect.id;
+    String liked_status = newsfeedsListRedirect.liked_status;
     if(_controller!=null)
     {
       _controller.dispose();
@@ -243,12 +252,12 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
         )
     );
     return Container(
-      margin: EdgeInsets.only(bottom: 10,top: 30),
+      margin: EdgeInsets.only(bottom: 10),
       child: Column(
         children: [
           Container(
-              margin: EdgeInsets.only(top: 20),
-              height: 221,
+              margin: EdgeInsets.only(top: 10),
+              height: 250,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(4)),
                 child:
@@ -261,10 +270,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                   },
                 ),
               )
-
-
-          ),
-        ],
+          ),],
       ),
     );
   }
@@ -398,23 +404,65 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                     barrierLabel: "Label",
                     barrierDismissible: true,
                     barrierColor: Colors.black.withOpacity(0.5),
-                    transitionDuration: Duration(milliseconds: 700),
+                    transitionDuration: Duration(milliseconds: 500),
                     context: context,
                     pageBuilder: (context, anim1, anim2) {
-                      return Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height,
-                          child: SizedBox.expand(child:
-                          getListContentNew(newsFeedBloc.newsfeedsList[index])
-                         // getLandScapeContainer(newsFeedBloc,newsFeedBloc.newsfeedsList[index].id)
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                        ),
-                      );
+                        return
+                          GestureDetector(
+                            onVerticalDragUpdate: (details) {
+                              int sensitivity = 10;
+                              if (details.delta.dy > sensitivity ||
+                                  details.delta.dy < -sensitivity) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Column(
+
+                                children: [
+                                  Container(
+                                    height: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height,
+                                    child: SizedBox.expand(child:
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .start,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 50),
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                SystemChrome.setPreferredOrientations(
+                                                    [DeviceOrientation.portraitUp]);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Icon(
+                                                Icons.keyboard_arrow_down,
+                                                size: 30,)),
+                                        ),
+                                        getListContentNew(
+                                            newsFeedBloc.newsfeedsList[index]),
+
+                                      ],
+                                    )
+                                      // getLandScapeContainer(newsFeedBloc,newsFeedBloc.newsfeedsList[index].id)
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(40),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+
                     },
                     transitionBuilder: (context, anim1, anim2, child) {
                       return SlideTransition(
@@ -480,12 +528,13 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
               ),
               InkWell(
                 onTap: (){
-                  setState(() {
                     newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
-
-                  });
+                    setState(() {
+                     Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,'id');
+                    });
                 },
-                child: Container(
+                child:
+                Container(
                   margin: EdgeInsets.only(left: 20, top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,

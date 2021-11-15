@@ -27,7 +27,7 @@ class _SplashScreenFirstState extends State<SplashScreenFirst> with WidgetsBindi
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-
+    // _dynamicLinkService.retrieveDynamicLink(context);
     super.initState();
     getStringValuesSF();
     new
@@ -35,12 +35,14 @@ class _SplashScreenFirstState extends State<SplashScreenFirst> with WidgetsBindi
         const Duration(seconds: 2),(){
           Preferences.get(PrefKey.phone).then((userPhone) {
             if(userPhone == null){
+              // _dynamicLinkService.retrieveDynamicLink(context);
               nextPagePushReplacement(context, SplashScreen());
             }
             else{
               // nextPagePushReplacement(context,
               //     HomeScreen(tabnumber: 0)
               // );
+              // _dynamicLinkService.retrieveDynamicLink(context);
               nextPagePushReplacement(context,
                   SplashScreenSecond(customerMobile:userPhone)
               );

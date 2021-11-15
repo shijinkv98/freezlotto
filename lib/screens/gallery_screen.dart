@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/blocs/gallery_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
@@ -210,21 +211,31 @@ class _GalleryScreenState extends State<GalleryScreen> {
               ),
             ),
             getMiddleContainer(galleryBloc),
-            Container(
-              height: 49,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(left: 55, right: 55, top: 50, bottom: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-                image: DecorationImage(
-                    image: AssetImage('assets/images/rectangle_10.png'),
-                    fit: BoxFit.cover),
+            InkWell(
+              onTap: (){
+                Fluttertoast.showToast(
+                    msg: "Hi , this will available only on next version",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER
+
+                );
+              },
+              child: Container(
+                height: 49,
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(left: 55, right: 55, top: 50, bottom: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/rectangle_10.png'),
+                      fit: BoxFit.cover),
+                ),
+                child: Center(
+                    child: Text(
+                  "ACTIVITY LOG",
+                  style: style3,
+                )),
               ),
-              child: Center(
-                  child: Text(
-                "ACTIVITY LOG",
-                style: style3,
-              )),
             )
           ],
         ),
@@ -254,7 +265,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
           itemBuilder: (BuildContext ctx, index) {
             return   InkWell(
               onTap: (){
-                nextPagePush(context, CouponScreen());
+                // nextPagePush(context, CouponScreen());
               },
               child: Container(
                 margin: EdgeInsets.all(0.3),

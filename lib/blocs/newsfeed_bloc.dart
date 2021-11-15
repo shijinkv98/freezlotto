@@ -212,14 +212,14 @@ class NewsFeedBloc extends ChangeNotifier {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
       if (isConnected) {
         isLoading = true;
-        // notifyListeners();
+        notifyListeners();
         APIService().likeUpdate(newsfeedid).then((response) {
           isLoading = false;
-          // notifyListeners();
+          notifyListeners();
           if (response.statusCode == 200) {
             NewsFeedLikeResponse newsFeedLikeResponse = NewsFeedLikeResponse.fromJson(response.data);
             if (newsFeedLikeResponse.success == 1) {
-              AlertUtils.showToast("Address successfully updated", context);
+              AlertUtils.showToast("Liked successfully", context);
               // getAddressList(context);
             nextPagePushReplacement(context, HomeScreen(tabnumber: 1,));
             } else if (newsFeedLikeResponse.success == 3) {
