@@ -25,7 +25,6 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
 
   @override
   void initState() {
-    Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
     super.initState();
   }
 

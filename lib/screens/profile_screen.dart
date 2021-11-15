@@ -38,18 +38,30 @@ _ProfileScreenState({this.tabnumer});
     return getProfileTabController(context,getBody(),tabnumer,2,MediaQuery.of(context).padding.top,MediaQuery.of(context).size.width);
   }
   Widget getBody(){
-    return TabBarView(
-      children: [
-        Center(
-            child: ProfileAdsScreen()
-        ),
-        Center(
-          child: ProfileNewsFeedScreen()
-        )
-      ],
+    return NotificationListener(
+      onNotification: (scrollNotification) {
+        if (scrollNotification is ScrollEndNotification) _onTabChanged();
+        return false;
+      },
+      child: TabBarView(
+        children: [
+          Center(
+              child: ProfileAdsScreen()
+          ),
+          Center(
+            child: ProfileNewsFeedScreen()
+          )
+        ],
+      ),
     );
 }
+  void _onTabChanged() {
+    // if (_tabController.index!=currentPosition) {
+    //   Fluttertoast.showToast(msg: 'Press Back Button again to exit');
+    //   currentPosition=_tabController.index;
+    // }
 
+  }
   Widget getContentVideo(){
     return getListVideo();
   }

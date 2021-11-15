@@ -122,6 +122,7 @@ class APIService {
       CUS_ID: await Preferences.get(PrefKey.customerID)
     });
     print("URL:::" + url + formData.toString());
+    showLoaderDialog(context,'Uploading...');
     Response response = await dio.post(url, data: formData);
     print("RESPONSE:::" + response.data.toString());
 

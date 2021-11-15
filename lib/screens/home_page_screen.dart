@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
@@ -48,10 +49,10 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
 
   AutoScrollController  _scrollController = AutoScrollController ();
   CarouselController buttonCarouselController = CarouselController();
+
   @override
   void initState() {
-    Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
-    Provider.of<HomeBloc>(context, listen: false).getAdsContentsData(context);
+
     scrollPosition=0;
     if(timer!=null)
       timer.cancel();
@@ -60,12 +61,14 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
           0, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
     super.initState();
 
-
+    Provider.of<HomeBloc>(context, listen: false).getHomeData(context);
+    Provider.of<HomeBloc>(context, listen: false).getAdsContentsData(context);
     getUserInfo();
   }
   @override
   void dispose()
   {
+
     if(_scrollController.hasClients)
       _scrollController.animateTo(
           0, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
@@ -247,7 +250,8 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                             height: MediaQuery.of(context).size.height / 4,
                             color: Colors.grey[300],
                             width: MediaQuery.of(context).size.width,
-                            child: WebView(
+                            child:
+                            WebView(
                               initialUrl:
                               '${'https://freezelotto.alisonsdemo.online/videoplay/'}${url}${'/'}${cus_id}',
                               javascriptMode: JavascriptMode.unrestricted,
@@ -261,7 +265,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      nextPagePush(context, SwitchToAdminScreen());
+                      nextPagePushReplacement(context, SwitchToAdminScreen());
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
@@ -740,7 +744,6 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                                     ? flottingButtonColor
                                                     : flottingRedTextColor,
                                               )))
-
                                     ],
                                   ),
                                 ))));
@@ -754,7 +757,6 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                     msg: "Hi , this will available only on next version",
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER
-
                 );
               },
               child: Container(
@@ -773,5 +775,4 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
       ),
     );
   }
-
 }

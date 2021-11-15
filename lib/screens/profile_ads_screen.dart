@@ -11,6 +11,7 @@ import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/profile_screen.dart';
 import 'package:freezlotto/utils/app_utils.dart';
+import 'package:freezlotto/utils/preferences.dart';
 import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:photo_view/photo_view.dart';
@@ -28,21 +29,17 @@ class ProfileAdsScreen extends StatefulWidget {
 }
 
 class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
-
+  var cus_id = "";
   String videoPath = " ";
   @override
   void initState() {
+
     super.initState();
-
+    getUserInfo();
   }
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    Provider.of<GalleryBloc>(context, listen: false).getProfileNewsFeedData(context);
+    Provider.of<GalleryBloc>(context, listen: false).getProfileAdsData(context);
     return Scaffold(
       backgroundColor: white,
         body: Consumer<GalleryBloc>(
@@ -88,7 +85,7 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
             WebViewController _controller;
             // WebView.platform = SurfaceAndroidWebView();
             // videoPath = APIClient.Ad_Asset_Location + galleryBloc.advertisementList[index].advertisement;
-            videoPath= '${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}';
+            // videoPath= '${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${26}';
             return Column(
               children: [
                 galleryBloc.advertisementList[index].fileType == "image"?
@@ -127,11 +124,14 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                     //   initialUrl:videoPath,
                     //   allowsInlineMediaPlayback: true,
                     // )
-                    child: WebView(
-                      initialUrl: videoPath,
-                      javascriptMode: JavascriptMode.unrestricted,
-                      onWebViewCreated: (WebViewController webViewController) {
-                        _controller=webViewController;
+                    child:
+                    WebView(
+                      initialUrl:
+                      '${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}$cus_id',
+                      javascriptMode: JavascriptMode.disabled,
+                      onWebViewCreated:
+                          (WebViewController webViewController) {
+                        //_controller = webViewController;
                       },
                     ),
                   ),
@@ -171,8 +171,12 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                                     // )
                                         :
                                     WebView(
-
-                                      initialUrl:'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}',
+                                      javascriptMode: JavascriptMode.unrestricted,
+                                      onWebViewCreated:
+                                          (WebViewController webViewController) {
+                                        //_controller = webViewController;
+                                      },
+                                      initialUrl:'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${cus_id}',
                                     ),
                                   );
                                 },
@@ -332,6 +336,9 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
             );
           }),
     );
+  }
+  void getUserInfo()async{
+    cus_id = await Preferences.get(PrefKey.customerID);
   }
 
 }

@@ -72,11 +72,10 @@ class _ProfileNewsFeedScreenState extends State<ProfileNewsFeedScreen>with Widge
   }
   @override
   void dispose() {
-    _controller.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-    if (_timerLink != null) {
-      _timerLink.cancel();
-    }
+    // _controller.dispose();
+    // if (_timerLink != null) {
+    //   _timerLink.cancel();
+    // }
     super.dispose();
   }
 
