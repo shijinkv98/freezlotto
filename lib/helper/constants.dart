@@ -204,6 +204,51 @@ Widget getAppBar(BuildContext context,String title,Widget body){
     backgroundColor: white,
   );
 }
+Widget getSwitchToAdminAppBar(BuildContext context,String title,Widget body){
+  return Scaffold(
+
+    appBar: new PreferredSize(
+
+      child:new Container(
+
+      padding: new EdgeInsets.only(
+      top: MediaQuery.of(context).padding.top
+  ),
+  decoration: new BoxDecoration(
+  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight:Radius.circular(60) ),
+  image: DecorationImage(
+  image: AssetImage('assets/images/rectangle_33.png'),
+  fit: BoxFit.cover),
+  ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap:(){
+                nextPagePushReplacement(context, HomeScreen(tabnumber: 0));
+
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Image.asset('assets/images/back_ios.png',width: 14,height: 23,),
+              ),
+            )      ,
+            Center(child: Text(title,style: appBarTitle,)),
+            Container(padding: EdgeInsets.only(right: 30),)
+          ],
+        ),
+      ),
+
+      preferredSize: new Size(
+        MediaQuery.of(context).size.width,
+       80.0
+    ),
+    ),
+    body: body,
+    backgroundColor: white,
+  );
+}
 
 final GlobalKey<ScaffoldState> drawerScaffoldKey =new GlobalKey<ScaffoldState>();
 
@@ -398,6 +443,15 @@ void nextPagePushReplacement(BuildContext context,Widget nextPage){
   Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: (context) => nextPage),
+  );
+}
+void pushAndRemoveUntil(BuildContext context,Widget nextPage){
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => nextPage,
+    ),
+        (route) => false,
   );
 }
 

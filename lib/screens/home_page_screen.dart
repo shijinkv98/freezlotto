@@ -46,7 +46,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
   var cus_id = "";
   Timer timer;
   int scrollPosition=0;
-
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
   AutoScrollController  _scrollController = AutoScrollController ();
   CarouselController buttonCarouselController = CarouselController();
 
@@ -143,54 +143,55 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     );
   }
 
-  Widget getBannerSlider(HomeBloc homeBloc,) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-
-    if(scrollPosition>homeBloc.advertisementList.length)
-    {
-      scrollPosition=0;
-    }
-    startTimer(homeBloc);
-    return ClipRRect(
-      child:
-      CarouselSlider(
-        carouselController: _scrollController,
-        options: CarouselOptions(
-          enlargeCenterPage: true,
-          // autoPlay: homeBloc.advertisementList.length > 1 ? true : false,
-          autoPlay: false,
-          aspectRatio: width / height,
-          scrollDirection: Axis.vertical,
-          //autoPlayCurve: Curves.easeIn,
-          enableInfiniteScroll: true,
-          //initialPage: 2,
-          // autoPlayInterval: Duration(seconds: int.parse(currDuration)),
-          // autoPlayAnimationDuration: Duration(seconds:int.parse(currDuration)),
-          viewportFraction: 0.85,
-          //   pauseAutoPlayOnTouch: true,
-          onPageChanged: (index, reason) {
-            setState(() {
-              currDuration = homeBloc.advertisementList[index].duration; //<-- Page index
-            });
-          },
-        ),
-
-        items: homeBloc.advertisementList.map((i) {
-
-          return Builder(
-            builder: (BuildContext context) {
-              currDuration = i.duration;
-              // buttonCarouselController.nextPage(duration: Duration(seconds: int.parse(i.duration)));
-              return i.fileType == "image"
-                  ? getImageBanner(i.advertisement)
-                  : getVideo(i.id, homeBloc);
-            },
-          );
-        }).toList(),
-      ),
-    );
-  }
+  // Widget getBannerSlider(HomeBloc homeBloc,) {
+  //   var width = MediaQuery.of(context).size.width;
+  //   var height = MediaQuery.of(context).size.height;
+  //
+  //   if(scrollPosition>homeBloc.advertisementList.length)
+  //   {
+  //     scrollPosition=0;
+  //   }
+  //   startTimer(homeBloc);
+  //   return ClipRRect(
+  //     child:
+  //     CarouselSlider(
+  //       carouselController: _scrollController,
+  //       options: CarouselOptions(
+  //         enlargeCenterPage: true,
+  //         // autoPlay: homeBloc.advertisementList.length > 1 ? true : false,
+  //         autoPlay: false,
+  //         aspectRatio: width / height,
+  //         scrollDirection: Axis.vertical,
+  //         //autoPlayCurve: Curves.easeIn,
+  //         enableInfiniteScroll: true,
+  //         //initialPage: 2,
+  //         // autoPlayInterval: Duration(seconds: int.parse(currDuration)),
+  //         // autoPlayAnimationDuration: Duration(seconds:int.parse(currDuration)),
+  //         viewportFraction: 0.85,
+  //         //   pauseAutoPlayOnTouch: true,
+  //         onPageChanged: (index, reason) {
+  //           setState(() {
+  //             currDuration = homeBloc.advertisementList[index].duration;
+  //             //<-- Page index
+  //           });
+  //         },
+  //       ),
+  //
+  //       items: homeBloc.advertisementList.map((i) {
+  //
+  //         return Builder(
+  //           builder: (BuildContext context) {
+  //             currDuration = i.duration;
+  //             // buttonCarouselController.nextPage(duration: Duration(seconds: int.parse(i.duration)));
+  //             return i.fileType == "image"
+  //                 ? getImageBanner(i.advertisement)
+  //                 : getVideo(i.id, homeBloc);
+  //           },
+  //         );
+  //       }).toList(),
+  //     ),
+  //   );
+  // }
 
   Widget getImageBanner(String url) {
     return Padding(
@@ -218,85 +219,88 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
     );
   }
 
-  Widget getVideo(String url, HomeBloc homeBloc) {
-    //WebViewController _controller;
-
-    return Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        color: white,
-        child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(23),
-                      ),
-                      margin: EdgeInsets.only(
-                        left: 30,
-                        right: 30,
-                      ),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(23)),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height / 4,
-                            color: Colors.grey[300],
-                            width: MediaQuery.of(context).size.width,
-                            child:
-                            WebView(
-                              initialUrl:
-                              '${'https://freezelotto.alisonsdemo.online/videoplay/'}${url}${'/'}${cus_id}',
-                              javascriptMode: JavascriptMode.unrestricted,
-                              onWebViewCreated:
-                                  (WebViewController webViewController) {
-                                //_controller = webViewController;
-                              },
-                            ),
-                          )),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      nextPagePushReplacement(context, SwitchToAdminScreen());
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(left: 30, right: 30, top: 30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/rectangle_10.png'),
-                            fit: BoxFit.cover),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Center(
-                            child: Text(
-                              'Click here to Upload Advertisement',
-                              style: style,
-                            )),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  getTermsBox(homeBloc.advertisementContents.conten1,
-                      'assets/images/thumb.png'),
-                  getTermsBox(homeBloc.advertisementContents.conten2,
-                      'assets/images/notess.png'),
-                  getTermsBox(homeBloc.advertisementContents.conten3,
-                      'assets/images/close_round.png'),
-                ],
-              ),
-            )));
-  }
+  // Widget getVideo(String url, HomeBloc homeBloc) {
+  //   //WebViewController _controller;
+  //
+  //   return Container(
+  //       width: double.infinity,
+  //       height: MediaQuery.of(context).size.height,
+  //       color: white,
+  //       child: SingleChildScrollView(
+  //           physics: NeverScrollableScrollPhysics(),
+  //           child: Container(
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.start,
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Container(
+  //                   width: MediaQuery.of(context).size.width,
+  //                   height: MediaQuery.of(context).size.height / 4,
+  //                   child: Card(
+  //                     elevation: 2,
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(23),
+  //                     ),
+  //                     margin: EdgeInsets.only(
+  //                       left: 30,
+  //                       right: 30,
+  //                     ),
+  //                     child: ClipRRect(
+  //                         borderRadius: BorderRadius.all(Radius.circular(23)),
+  //                         child: Container(
+  //                           height: MediaQuery.of(context).size.height / 4,
+  //                           color: Colors.grey[300],
+  //                           width: MediaQuery.of(context).size.width,
+  //                           child:
+  //                           WebView(
+  //                             initialUrl:
+  //                             '${'https://freezelotto.alisonsdemo.online/videoplay/'}${url}${'/'}${cus_id}',
+  //                             javascriptMode: JavascriptMode.unrestricted,
+  //                             onWebViewCreated:
+  //                                 (WebViewController webViewController) {
+  //                               _controller.complete(webViewController);
+  //                             },
+  //                             onPageFinished:(String url) {
+  //                               print('Page finished loading: $url');
+  //                             },
+  //                           ),
+  //                         )),
+  //                   ),
+  //                 ),
+  //                 InkWell(
+  //                   onTap: () {
+  //                     // pushAndRemoveUntil(context, SwitchToAdminScreen());
+  //                   },
+  //                   child: Container(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+  //                     decoration: BoxDecoration(
+  //                       borderRadius: BorderRadius.all(Radius.circular(15)),
+  //                       image: DecorationImage(
+  //                           image: AssetImage('assets/images/rectangle_10.png'),
+  //                           fit: BoxFit.cover),
+  //                     ),
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.all(25.0),
+  //                       child: Center(
+  //                           child: Text(
+  //                             'Click here to Upload Advertisement',
+  //                             style: style,
+  //                           )),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 20),
+  //                 getTermsBox(homeBloc.advertisementContents.conten1,
+  //                     'assets/images/thumb.png'),
+  //                 getTermsBox(homeBloc.advertisementContents.conten2,
+  //                     'assets/images/notess.png'),
+  //                 getTermsBox(homeBloc.advertisementContents.conten3,
+  //                     'assets/images/close_round.png'),
+  //               ],
+  //             ),
+  //           )));
+  // }
 
   Widget getTermsBox(String content, String asset) {
     return Padding(
@@ -594,66 +598,13 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
 
                                               ),
                                             ),
-                                            //       Align(
-                                            //         alignment: Alignment.bottomRight,
-                                            //         child: Container(
-                                            //           margin: EdgeInsets.only(bottom: 5,top: 40,left: 30,right: 45),
-                                            //           height: 60,width: 60,
-                                            //           child: FloatingActionButton(
-                                            //   onPressed: () {
-                                            //     homeBloc.commission_amount !=
-                                            //         "0"
-                                            //         ? homeBloc.addMoney(context)
-                                            //         : Container();
-                                            //     nextPagePushReplacement(
-                                            //         context,
-                                            //         HomeScreen(
-                                            //           tabnumber: 2,
-                                            //         ));
-                                            //   },
-                                            //   child: Column(
-                                            //     crossAxisAlignment:
-                                            //     CrossAxisAlignment.center,
-                                            //     mainAxisAlignment:
-                                            //     MainAxisAlignment.center,
-                                            //     children: [
-                                            //       Text(
-                                            //         homeBloc.referal_count,
-                                            //         style: TextStyle(
-                                            //             color:
-                                            //             flottingTextColor,
-                                            //             fontFamily: MEDIUM_FONT,
-                                            //             fontWeight:
-                                            //             FontWeight.w400,
-                                            //             fontSize: 22),
-                                            //       ),
-                                            //       Padding(
-                                            //         padding:
-                                            //         const EdgeInsets.only(
-                                            //             bottom: 5),
-                                            //         child: Image.asset(
-                                            //           'assets/images/Vector.png',
-                                            //           width: 30,
-                                            //           height: 20,
-                                            //         ),
-                                            //       ),
-                                            //     ],
-                                            //   ),
-                                            //   mini: false,
-                                            //   backgroundColor:
-                                            //   homeBloc.commission_amount ==
-                                            //       "0"
-                                            //       ? flottingButtonColor
-                                            //       : flottingRedTextColor,
-                                            // ),
-                                            //         ),
-                                            //       )
+
                                           ], //<Widget>[]
                                         ),
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          nextPagePush(context,
+                                          nextPagePushReplacement(context,
                                               SwitchToAdminScreen());
                                         },
                                         child: Container(

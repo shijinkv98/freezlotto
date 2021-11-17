@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:freezlotto/blocs/home_bloc.dart';
+import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
@@ -31,7 +32,7 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return getAppBar(context, " Switch to Admin App",getBody());
+    return getSwitchToAdminAppBar(context, " Switch to Admin App",getBody());
   }
   Widget getBody(){
     return SingleChildScrollView(
@@ -72,7 +73,8 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
               onTap: (){
                 // nextPagePush(context, UploadAdvertisement());
                homeBloc.weekly== '0'? nextPagePush(context,
-                    UploadPage(duration: "",category: "",type: "free",)):Fluttertoast.showToast(msg: 'You Already Added Advertisement in this Week',fontSize: 20,toastLength: Toast.LENGTH_LONG);
+                    UploadPage(duration: "",category: "",type: "free",))
+                   :Fluttertoast.showToast(msg: 'You Already Added Advertisement in this Week',fontSize: 20,toastLength: Toast.LENGTH_LONG);
                ;
               },
               child: Container(
