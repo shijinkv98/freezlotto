@@ -18,7 +18,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:video_player_360/video_player_360.dart';
+
 final TextStyle style2 = TextStyle(color:textColor,fontWeight: FontWeight.w400,fontFamily: MEDIUM_FONT,fontSize:14,letterSpacing: 0.8);
 final TextStyle style3 = TextStyle(color:textColor,fontWeight: FontWeight.w800,fontFamily: MEDIUM_FONT,fontSize:18,letterSpacing: 0.8);
 
@@ -33,13 +34,18 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
   String videoPath = " ";
   @override
   void initState() {
-
+    Provider.of<GalleryBloc>(context, listen: false).getProfileAdsData(context);
     super.initState();
     getUserInfo();
+    // Provider.of<GalleryBloc>(context, listen: false).getProfileAdsData(context);
+
+  }
+  @override
+  void dispose() {
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
-    Provider.of<GalleryBloc>(context, listen: false).getProfileAdsData(context);
     return Scaffold(
       backgroundColor: white,
         body: Consumer<GalleryBloc>(
@@ -83,6 +89,8 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
           physics: ScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             WebViewController _controller;
+
+            // initializeVideoPlayer();
             // WebView.platform = SurfaceAndroidWebView();
             // videoPath = APIClient.Ad_Asset_Location + galleryBloc.advertisementList[index].advertisement;
             // videoPath= '${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${26}';
@@ -90,52 +98,64 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
               children: [
                 galleryBloc.advertisementList[index].fileType == "image"?
                 Container(
-                  margin: EdgeInsets.only(left: 30,right: 30,top: 5),
+                  margin: EdgeInsets.only(left: 15,right: 15,top: 5),
                   width: MediaQuery.of(context).size.width,
 
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(31)),
-                    color: Colors.grey[300],
                   ),
-                  child: ClipRRect(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(31)),
-                    child: FadeInImage.assetNetwork(
-                      fit: BoxFit.fitWidth,
-                      placeholder: 'assets/images/logo.png',
-                      image:
-                      '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
+                  child: Card(
+                    elevation: 5,
+                    color: white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(31.0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(31)),
+                      child: FadeInImage.assetNetwork(
+                        fit: BoxFit.fitHeight,
+                        placeholder: 'assets/images/logo.png',
+                        image:
+                        '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
+                      ),
                     ),
                   ),
                   height: 221,
                 ):
                 Container(
-                  margin: EdgeInsets.only(left: 30,right: 30,top: 5),
+                  margin: EdgeInsets.only(left: 15,right: 15,top: 5),
                   width: MediaQuery.of(context).size.width,
-
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(31)),
-                    color: Colors.grey[300],
-                  ),
-                  child: ClipRRect(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(31)),
-                    // child:WebView(
-                    //   initialUrl:videoPath,
-                    //   allowsInlineMediaPlayback: true,
-                    // )
-                    child:
-                    WebView(
-                      initialUrl:
-                      '${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}$cus_id',
-                      javascriptMode: JavascriptMode.disabled,
-                      onWebViewCreated:
-                          (WebViewController webViewController) {
-                        //_controller = webViewController;
-                      },
+                  child: Card(
+                    elevation: 5,
+                    color: white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(31.0),
                     ),
+                    child: Container(
+                      height: 200,
+                      // decoration: BoxDecoration(
+                      //   color: Colors.grey,
+                      //   borderRadius: BorderRadius.all(Radius.circular(15)),
+                      // ),
+
+                      child:
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(31.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: WebView(
+                            javascriptMode: JavascriptMode.unrestricted,
+                            onWebViewCreated:
+                                (WebViewController webViewController) {
+                              //_controller = webViewController;
+                            },
+                            initialUrl:'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${cus_id}',
+                          ),
+                        ),
+                      ),
                   ),
-                  height: 221,
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 10,bottom: 17,left: 30,right: 30),

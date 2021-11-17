@@ -6,6 +6,7 @@ import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
 import 'package:freezlotto/screens/home_page_screen.dart';
+import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/payment_screen.dart';
 import 'package:freezlotto/screens/upload_advertisement.dart';
 import 'package:freezlotto/screens/upload_page.dart';
@@ -35,9 +36,15 @@ class _SwitchToAdminScreenState extends State<SwitchToAdminScreen> {
     return getSwitchToAdminAppBar(context, " Switch to Admin App",getBody());
   }
   Widget getBody(){
-    return SingleChildScrollView(
-      child: Container(
-        child: Center(child: getContentVideo()),
+    return WillPopScope(
+      onWillPop: () {
+        nextPagePushReplacement(context, HomeScreen(tabnumber: 0,));
+
+      } ,
+      child: SingleChildScrollView(
+        child: Container(
+          child: Center(child: getContentVideo()),
+        ),
       ),
     );
 }

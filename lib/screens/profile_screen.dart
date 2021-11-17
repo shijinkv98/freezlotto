@@ -10,6 +10,7 @@ import 'package:freezlotto/screens/profile_newsfeed_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'newsfeed_screen.dart';
+import 'teat_page.dart';
 
 final TextStyle style = TextStyle(color: white,fontWeight: FontWeight.w700,fontFamily: SEMI_BOLD_FONT,fontSize: 14,letterSpacing: 0.8);
 final TextStyle style2 = TextStyle(color:textColor,fontWeight: FontWeight.w400,fontFamily: MEDIUM_FONT,fontSize:14,letterSpacing: 0.8);
@@ -46,7 +47,8 @@ _ProfileScreenState({this.tabnumer});
       child: TabBarView(
         children: [
           Center(
-              child: ProfileAdsScreen()
+              child:
+              ProfileAdsScreen()
           ),
           Center(
             child: ProfileNewsFeedScreen()
