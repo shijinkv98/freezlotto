@@ -151,7 +151,7 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                               print("VideoPlayUrl:::::"+'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${cus_id}');
                               //_controller = webViewController;
                             },
-                            initialUrl:'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${cus_id}',
+                            initialUrl:'${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
                           ),
                         ),
                       ),
@@ -197,7 +197,7 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                                           (WebViewController webViewController) {
                                         //_controller = webViewController;
                                       },
-                                      initialUrl:'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${cus_id}',
+                                      initialUrl:'${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
                                     ),
                                   );
                                 },
