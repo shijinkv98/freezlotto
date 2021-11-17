@@ -148,8 +148,6 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                             javascriptMode: JavascriptMode.unrestricted,
                             onWebViewCreated:
                                 (WebViewController webViewController) {
-                              print("VideoPlayUrl:::::"+'${'https://freezelotto.alisonsdemo.online/videoplay/'}${galleryBloc.advertisementList[index].id}${'/'}${cus_id}');
-                              //_controller = webViewController;
                             },
                             initialUrl:'${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
                           ),

@@ -120,8 +120,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp]);
+    // SystemChrome.setPreferredOrientations(
+    //     [DeviceOrientation.portraitUp]);
     return Scaffold(
         body: Consumer<NewsFeedBloc>(
           builder: (context, newsfeedBloc, child) =>
