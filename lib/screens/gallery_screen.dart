@@ -8,7 +8,6 @@ import 'package:freezlotto/screens/coupon_page.dart';
 import 'package:freezlotto/screens/home_screen_video.dart';
 import 'package:freezlotto/screens/settings_screen.dart';
 import 'package:freezlotto/screens/upload_news_feeds.dart';
-import 'package:freezlotto/widget/fl_toast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
