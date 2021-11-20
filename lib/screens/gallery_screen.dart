@@ -8,7 +8,9 @@ import 'package:freezlotto/screens/coupon_page.dart';
 import 'package:freezlotto/screens/home_screen_video.dart';
 import 'package:freezlotto/screens/settings_screen.dart';
 import 'package:freezlotto/screens/upload_news_feeds.dart';
+import 'package:freezlotto/widget/fl_toast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/widget/fl_Dropdown.dart';
@@ -213,12 +215,30 @@ class _GalleryScreenState extends State<GalleryScreen> {
             getMiddleContainer(galleryBloc),
             InkWell(
               onTap: (){
-                Fluttertoast.showToast(
-                    msg: "Hi , this will available only on next version",
-                    toastLength: Toast.LENGTH_LONG,
-                    gravity: ToastGravity.CENTER
-
-                );
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      Future.delayed(Duration(seconds: 2), () {
+                        Navigator.of(context).pop(true);
+                      });
+                      return
+                        AlertDialog(
+                          contentPadding: EdgeInsets.all(0.0),
+                        content: Container(
+                            padding: const EdgeInsets.all(15.0),
+                            decoration: bgFullgradient,
+                            child: Text('Hi , This Feature Will Available Only on Next Version !!',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),)),
+                      );
+                    });
+                // Fluttertoast.showToast(
+                //     msg: "Hi , this will available only on next version",
+                //     toastLength: Toast.LENGTH_LONG,
+                //     gravity: ToastGravity.CENTER,
+                //     timeInSecForIosWeb: 1,
+                //     backgroundColor: Colors.red,
+                //     textColor: Colors.white,
+                //     fontSize: 16.0
+                // );
               },
               child: Container(
                 height: 49,
@@ -265,7 +285,36 @@ class _GalleryScreenState extends State<GalleryScreen> {
           itemBuilder: (BuildContext ctx, index) {
             return   InkWell(
               onTap: (){
-                // nextPagePush(context, CouponScreen());
+                showDialog(
+                    context: context,
+                    builder: (ctx) =>
+                AlertDialog(
+                  backgroundColor: Colors.white,
+                  content:  Builder(
+                    builder: (context) {
+                      // Get available height and width of the build area of this widget. Make a choice depending on the size.
+                      double height = MediaQuery.of(context).size.height/2;
+                      double width = MediaQuery.of(context).size.width;
+                      return Container(
+                        height: height,
+                        color: white,
+                        width: width,
+                        child: PhotoView(
+                          customSize: MediaQuery.of(context).size/2,
+                          backgroundDecoration:BoxDecoration(color: Colors.white),
+                          imageProvider: NetworkImage('${APIClient.Coupon_Asset_Location}${galleryBloc.coupens[index].coupenImage}'),
+                        )
+                        // FadeInImage.assetNetwork(
+                        //   fit: BoxFit.fitHeight,
+                        //   placeholder: 'assets/images/logo.png',
+                        //   image:
+                        //   '${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}',
+                        // )
+                      );
+                    },
+                  ),
+                )
+                );
               },
               child: Container(
                 margin: EdgeInsets.all(0.3),

@@ -637,64 +637,7 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                       getTermsBox(homeBloc.advertisementContents.conten1, 'assets/images/thumb.png'),
                                       getTermsBox(homeBloc.advertisementContents.conten2, 'assets/images/notess.png'),
                                       getTermsBox(homeBloc.advertisementContents.conten3, 'assets/images/close_round.png'),
-                                      Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Container(
-                                              margin: EdgeInsets.only(
-                                                  bottom: 30,
-                                                  top: 40,
-                                                  left: 30,
-                                                  right: 45),
-                                              width: 72,
-                                              height: 72,
-                                              child:
-                                              FloatingActionButton(
-                                                onPressed: () {
-                                                  homeBloc.commission_amount !=
-                                                      "0"
-                                                      ? homeBloc.addMoney(context)
-                                                      : Container();
-                                                  nextPagePushReplacement(
-                                                      context,
-                                                      HomeScreen(
-                                                        tabnumber: 2,
-                                                      ));
-                                                },
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      homeBloc.referal_count,
-                                                      style: TextStyle(
-                                                          color:
-                                                          flottingTextColor,
-                                                          fontFamily: MEDIUM_FONT,
-                                                          fontWeight:
-                                                          FontWeight.w400,
-                                                          fontSize: 22),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 5),
-                                                      child: Image.asset(
-                                                        'assets/images/Vector.png',
-                                                        width: 30,
-                                                        height: 20,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                mini: false,
-                                                backgroundColor:
-                                                homeBloc.commission_amount ==
-                                                    "0"
-                                                    ? flottingButtonColor
-                                                    : flottingRedTextColor,
-                                              )))
+
                                     ],
                                   ),
                                 ))));
@@ -704,11 +647,21 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
             alignment: Alignment.bottomCenter,
             child: InkWell(
               onTap: (){
-                Fluttertoast.showToast(
-                    msg: "Hi , this will available only on next version",
-                    toastLength: Toast.LENGTH_LONG,
-                    gravity: ToastGravity.CENTER
-                );
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      Future.delayed(Duration(seconds: 2), () {
+                        Navigator.of(context).pop(true);
+                      });
+                      return
+                        AlertDialog(
+                          contentPadding: EdgeInsets.all(0.0),
+                          content: Container(
+                              padding: const EdgeInsets.all(15.0),
+                              decoration: bgFullgradient,
+                              child: Text('Hi , This Feature Will Available Only on Next Version !!',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),)),
+                        );
+                    });
               },
               child: Container(
                 height: 73,

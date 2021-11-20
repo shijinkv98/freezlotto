@@ -11,10 +11,13 @@ import 'package:freezlotto/blocs/newsfeed_bloc.dart';
 import 'package:freezlotto/helper/api_url_data.dart';
 import 'package:freezlotto/helper/constants.dart';
 import 'package:freezlotto/helper/font_styles.dart';
+import 'package:freezlotto/network/response/newsfeed_like_response.dart';
 import 'package:freezlotto/network/response/newsfeed_list_response.dart';
 import 'package:freezlotto/network/response/newsfeed_redirect_response.dart';
 import 'package:freezlotto/screens/home_screen.dart';
 import 'package:freezlotto/screens/newsfeed_screen_dynamic.dart';
+import 'package:freezlotto/utils/alert_utils.dart';
+import 'package:freezlotto/utils/api_services.dart';
 import 'package:freezlotto/utils/app_utils.dart';
 import 'package:freezlotto/utils/dynamic_link_service.dart';
 import 'package:freezlotto/utils/locator.dart';
@@ -528,10 +531,40 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
               ),
               InkWell(
                 onTap: (){
-                    newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
-                    setState(() {
-                     Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,'id');
-                    });
+                  AppUtils.isConnectedToInternet(context).then((isConnected) {
+                    if (isConnected) {
+                      isLoading = true;
+                      // notifyListeners();
+                      APIService().likeUpdate(newsFeedBloc.newsfeedsList[index].id).then((response) {
+                        isLoading = false;
+                        // notifyListeners();
+                        if (response.statusCode == 200) {
+                          NewsFeedLikeResponse newsFeedLikeResponse = NewsFeedLikeResponse.fromJson(response.data);
+                          setState(() {
+                            Provider.of<NewsFeedBloc>(context, listen: false).getNewsFeedData(context,'id');
+
+                            // nextPagePushReplacement(context, HomeScreen(tabnumber: 1,));
+                          });
+                          if (newsFeedLikeResponse.success == 1) {
+                            AlertUtils.showToast("Liked successfully", context);
+
+                            // getAddressList(context);
+                          } else if (newsFeedLikeResponse.success == 3) {
+                            kMoveToLogin(context);
+                          } else {
+                            AlertUtils.showToast(newsFeedLikeResponse.message, context);
+                          }
+                        } else {
+                          AlertUtils.showToast("Failed", context);
+                        }
+                      });
+                    }
+                  });
+                  // setState(() {
+                  // });
+                  // newsFeedBloc.onLikeButtonTapped(context, newsFeedBloc.newsfeedsList[index].id);
+                    // setState(() {
+                    // });
                 },
                 child:
                 Container(
@@ -541,7 +574,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                     children: [
                       Container(
                           margin: EdgeInsets.only(left: 15),
-                          width: 96,
                           height: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -565,10 +597,12 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> with WidgetsBindingObse
                               Padding(
                                 padding: const EdgeInsets.only(right: 20),
                                 child:newsFeedBloc.newsfeedsList[index].liked_status == '0'? Text(
-                                  'Un like',
+                                  // ' ${newsFeedBloc.newsfeedsList[index].likesCount}${' Likes'}',
+                                  ' ${newsFeedBloc.newsfeedsList[index].likesCount}',
                                   style: style2,
                                 ):Text(
-                                  'Like',
+                                  // ' ${newsFeedBloc.newsfeedsList[index].likesCount}${' Likes'}',
+                                  ' ${newsFeedBloc.newsfeedsList[index].likesCount}',
                                   style: style3,
                                 ),
                               )

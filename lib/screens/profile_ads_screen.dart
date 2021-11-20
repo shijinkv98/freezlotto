@@ -180,6 +180,7 @@ class _ProfileAdsScreenState extends State<ProfileAdsScreen> {
                                     child:
                                     galleryBloc.advertisementList[index].fileType == "image"?
                                     PhotoView(
+                                      backgroundDecoration:BoxDecoration(color: Colors.white),
                                       imageProvider: NetworkImage('${APIClient.Ad_Asset_Location}${galleryBloc.advertisementList[index].advertisement}'),
                                     )
                                     // FadeInImage.assetNetwork(

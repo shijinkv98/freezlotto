@@ -41,6 +41,7 @@ class FLDropdown extends StatelessWidget {
               new FLText(
                 text: hintText,
                 color: Colors.white,
+                overflow: TextOverflow.visible,
                 // fontWeight: FontWeight.w700,
                 // fontFamily: SEMI_BOLD_FONT,
                 fontSize: 18,
@@ -50,6 +51,7 @@ class FLDropdown extends StatelessWidget {
                   ? FLText(
                       text: " $subHint",
                 color: Colors.white,
+                overflow: TextOverflow.ellipsis,
                 // fontWeight: FontWeight.w700,
                 // fontFamily: SEMI_BOLD_FONT,
                 fontSize: 18,

@@ -75,6 +75,20 @@ BoxDecoration buttongradient= BoxDecoration(
   borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight:Radius.circular(16) ),
 
 );
+BoxDecoration bgFullgradient= BoxDecoration(
+  gradient:  LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [0.1, 0.5, 0.9],
+    colors: [
+      Color(0xFF1FA2FF),
+      Color(0xFF12D8FA),
+      Color(0xFFA6FFE6),
+    ],
+  ),
+  borderRadius: BorderRadius.circular(2),
+
+);
 BoxDecoration iconGradient = BoxDecoration(
   borderRadius: BorderRadius.all(Radius.circular(6))   ,
       gradient: LinearGradient(
