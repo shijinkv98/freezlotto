@@ -634,9 +634,9 @@ class _NewsFeedScreenState extends State<HomePageScreen> {
                                         ),
                                       ),
                                       SizedBox(height: 20),
-                                      getTermsBox(homeBloc.advertisementContents.conten1, 'assets/images/thumb.png'),
-                                      getTermsBox(homeBloc.advertisementContents.conten2, 'assets/images/notess.png'),
-                                      getTermsBox(homeBloc.advertisementContents.conten3, 'assets/images/close_round.png'),
+                                      getTermsBox(homeBloc.conten1, 'assets/images/thumb.png'),
+                                      getTermsBox(homeBloc.conten2, 'assets/images/notess.png'),
+                                      getTermsBox(homeBloc.conten3, 'assets/images/close_round.png'),
 
                                     ],
                                   ),

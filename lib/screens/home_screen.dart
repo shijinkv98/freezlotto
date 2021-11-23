@@ -96,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen>with WidgetsBindingObserver
               return false;
             },
             child: TabBarView(
+
               //controller: _tabController,
               physics: ScrollPhysics(),
               children: [

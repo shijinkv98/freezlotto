@@ -5,9 +5,13 @@ class HomeScreenResponse {
   String advertisement_url;
   String referal_count;
   String commission_amount;
+  String content1;
+  String content2;
+  String content3;
   List<AdvertisementList> advertisementList;
 
-  HomeScreenResponse({this.success, this.message, this.advertisementList,this.advertisement_url,this.commission_amount,this.referal_count,this.weekly_common_status});
+  HomeScreenResponse({this.success, this.message, this.advertisementList,this.advertisement_url,this.commission_amount,this.referal_count,this.weekly_common_status, this.content1,this.content3,this.content2
+  });
 
   HomeScreenResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'].toString();
@@ -15,6 +19,9 @@ class HomeScreenResponse {
     referal_count = json['referal_count'].toString();
     weekly_common_status = json['weekly_common_status'].toString();
     commission_amount = json['commission_amount'].toString();
+    content1 = json['content1'];
+    content2 = json['content2'];
+    content3 = json['content3'];
     advertisement_url = json['advertisement_url'].toString();
     if (json['advertisement_list'] != null) {
       advertisementList = new List<AdvertisementList>();
@@ -32,6 +39,9 @@ class HomeScreenResponse {
     data['referal_count'] = this.referal_count;
     data['commission_amount'] = this.commission_amount;
     data['advertisement_url'] = this.advertisement_url;
+    data['content1'] = this.content1;
+    data['content2'] = this.content2;
+    data['content3'] = this.content3;
     if (this.advertisementList != null) {
       data['advertisement_list'] =
           this.advertisementList.map((v) => v.toJson()).toList();

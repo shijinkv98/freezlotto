@@ -127,7 +127,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   Widget getFullView() {
-    return  Consumer<GalleryBloc>(
+    return
+      Consumer<GalleryBloc>(
       builder: (context, galleryBloc, child) => ModalProgressHUD(
         inAsyncCall: galleryBloc.isLoading,
         child:SingleChildScrollView(

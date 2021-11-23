@@ -52,6 +52,9 @@ class HomeBloc extends ChangeNotifier {
             commission_amount = homeScreenResponse.commission_amount;
             adUrl=homeScreenResponse.advertisement_url;
             weekly=homeScreenResponse.weekly_common_status;
+            conten1=homeScreenResponse.content1;
+            conten2=homeScreenResponse.content2;
+            conten3=homeScreenResponse.content3;
             // notifyListeners();
 
           if (homeScreenResponse.success ==" 0") {

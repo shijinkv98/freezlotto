@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:freezlotto/network/response/coupon_list_response.dart';
 import 'package:freezlotto/network/response/home_response.dart';
 import 'package:freezlotto/network/response/newsfeed_like_response.dart';
 import 'package:freezlotto/network/response/newsfeed_list_response.dart';
@@ -17,9 +18,14 @@ class NewsFeedBloc extends ChangeNotifier {
   bool isLoading = false;
   List<NewsfeedsList> newsfeedsList = new List<NewsfeedsList>();
   List<NewsfeedsListRedirect> newsfeedsListRedirect = new List<NewsfeedsListRedirect>();
+
+  List<Coupens> coupens = new List<Coupens>();
+  List<PrizeList> prizeList = new List<PrizeList>();
+
   String priceMoney = "";
   String priceMoneyRedirect = "";
   String newsfeedspresent = "";
+  String imagePathUrl = "";
 
   getNewsFeedData(BuildContext context,String newsFeedId)  {
     AppUtils.isConnectedToInternet(context).then((isConnected) {
@@ -145,7 +151,7 @@ class NewsFeedBloc extends ChangeNotifier {
       if (isConnected) {
         isLoading = true;
         // notifyListeners();
-        APIService().uploadNewsfeed(_Link).then((response) {
+        APIService().uploadNewsfeed(_Link,context).then((response) {
           isLoading = false;
           // notifyListeners();
           if (response.statusCode == 200) {
@@ -235,6 +241,46 @@ class NewsFeedBloc extends ChangeNotifier {
     });
 
   }
+  getGalleryData(BuildContext context)  {
+    AppUtils.isConnectedToInternet(context).then((isConnected) {
+      if (isConnected) {
+        isLoading = true;
+        notifyListeners();
+        APIService().getGalleryData().then((response) {
+          isLoading = false;
+          notifyListeners();
+          if (response.statusCode == 200){
+            CouponListResponse couponListResponse = CouponListResponse.fromJson(response.data);
+            coupens = couponListResponse.coupens;
+            prizeList = couponListResponse.prizeList;
+            imagePathUrl = couponListResponse.imagePathUrl;
+            notifyListeners();
+
+            if (couponListResponse.success == 0) {
+              AlertUtils.showToast(couponListResponse.message, context);
+
+              // advertisementList = homeScreenResponse.advertisementList;
+              //   notifyListeners();
+            } else if (couponListResponse.success == 3) {
+              print("NEED TO LOGIN HERE......");
+              kMoveToLogin(context);
+            }else if (couponListResponse.success == 1) {
+              coupens = couponListResponse.coupens;
+              prizeList = couponListResponse.prizeList;
+              notifyListeners();
+            }
+            // }else {
+            //   AlertUtils.showToast(homeScreenResponse.message, context);
+            // }
+
+          } else {
+            AlertUtils.showToast("Login Failed", context);
+          }
+        });
+      }
+    });
+  }
+
 
 
 }

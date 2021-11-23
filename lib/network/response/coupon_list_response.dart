@@ -2,6 +2,7 @@ class CouponListResponse {
   int success;
   String message;
   String accountMoney;
+  String imagePathUrl;
   List<PrizeList> prizeList;
   List<Coupens> coupens;
 
@@ -10,12 +11,14 @@ class CouponListResponse {
         this.message,
         this.accountMoney,
         this.prizeList,
+        this.imagePathUrl,
         this.coupens});
 
   CouponListResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     accountMoney = json['account_money'];
+    imagePathUrl = json['prize_image_url'];
     if (json['prize_list'] != null) {
       prizeList = new List<PrizeList>();
       json['prize_list'].forEach((v) {
@@ -35,6 +38,7 @@ class CouponListResponse {
     data['success'] = this.success;
     data['message'] = this.message;
     data['account_money'] = this.accountMoney;
+    data['prize_image_url'] = this.imagePathUrl;
     if (this.prizeList != null) {
       data['prize_list'] = this.prizeList.map((v) => v.toJson()).toList();
     }
@@ -48,16 +52,18 @@ class CouponListResponse {
 class PrizeList {
   String id;
   String priceName;
+  String priceImage;
   String status;
   String createdAt;
   String updatedAt;
 
   PrizeList(
-      {this.id, this.priceName, this.status, this.createdAt, this.updatedAt});
+      {this.id, this.priceName, this.status, this.createdAt, this.updatedAt,this.priceImage});
 
   PrizeList.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
     priceName = json['price_name'].toString();
+    priceImage = json['prize_image'].toString();
     status = json['status'].toString();
     createdAt = json['created_at'].toString();
     updatedAt = json['updated_at'].toString();
@@ -67,6 +73,7 @@ class PrizeList {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['price_name'] = this.priceName;
+    data['prize_image'] = this.priceImage;
     data['status'] = this.status;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

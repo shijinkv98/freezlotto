@@ -65,7 +65,7 @@ class APIService {
     return response;
   }
    ///upload newsfeed///
-  Future<Response> uploadNewsfeed(String newsfeed) async {
+  Future<Response> uploadNewsfeed(String newsfeed,BuildContext context) async {
     var url = APIClient.FEEDS;
     var queryParams = {
       // CUS_ID: '57',
@@ -73,6 +73,8 @@ class APIService {
       CUS_ID: await Preferences.get(PrefKey.customerID)
     };
     print("URL:::" + url + queryParams.toString());
+    showLoaderDialog(context,"Uploading...");
+
     Response response = await dio.post(url,queryParameters: queryParams);
     print("RESPONSE:::" + response.data.toString());
     return response;
