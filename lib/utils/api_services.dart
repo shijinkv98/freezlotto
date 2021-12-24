@@ -16,6 +16,7 @@ class APIService {
   String customerId;
   String phone;
   String name;
+  String access_token;
   ProgressLoadNotifier _updatedNotifier;
   factory APIService() {
     return _singleton;
@@ -33,6 +34,7 @@ class APIService {
 
   updateHeader(String authToken) async {
     dio.options.headers["Content-Type"] = "application/json";
+    dio.options.headers[CUSTOMER_ID] = authToken;
     dio.options.headers[CUSTOMER_ID] = authToken;
     customerId = await Preferences.get(PrefKey.customerID);
     phone = await Preferences.get(PrefKey.phone);
